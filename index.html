@@ -43,7 +43,7 @@ var config = {
 
 var player;
 var stars;
-var bombs;
+var bombs, mobs;
 var platforms;
 var cursors;
 var wasd;
@@ -63,6 +63,9 @@ function preload () {
     this.load.image('platform2', 'assets/platform2.png');
     this.load.image('platform3', 'assets/platform3.png');
     this.load.image('star', 'assets/star.png');
+    this.load.image('healthPot', 'assets/healthPot.png');
+    this.load.image('mob0', 'assets/mob0.png');    
+    this.load.image('mob1', 'assets/mob1.png');
     this.load.image('bomb', 'assets/bomb.png');
     this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 51.888, frameHeight: 98 });
 }
@@ -78,10 +81,10 @@ function create () {
     platforms.create(420, 250, 'platform0').setOrigin(0, 0).refreshBody();
     platforms.create(744, 370, 'platform1').setOrigin(0, 0).refreshBody();
     platforms.create(5, 410, 'platform2').setOrigin(0, 0).refreshBody();
-    platforms.create(460, 560, 'platform3').setOrigin(0, 0).refreshBody();
+    platforms.create(460, 550, 'platform3').setOrigin(0, 0).refreshBody();
 
     // The player and its settings
-    player = this.physics.add.sprite(100, 450, 'dude');
+    player = this.physics.add.sprite(100, 650, 'dude');
 
     //  Player physics properties. Give the little guy a slight bounce.
     player.setBounce(0.2);
@@ -91,7 +94,7 @@ function create () {
     this.anims.create({
         key: 'left',
         frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 2 }),
-        frameRate: 10,
+        frameRate: 8,
         repeat: -1
     });
 
@@ -104,7 +107,7 @@ function create () {
     this.anims.create({
         key: 'right',
         frames: this.anims.generateFrameNumbers('dude', { start: 4, end: 6 }),
-        frameRate: 10,
+        frameRate: 8,
         repeat: -1
     });
 
@@ -112,7 +115,7 @@ function create () {
     stars = this.physics.add.group({
         key: 'star',
         repeat: 11,
-        setXY: { x: 20, y: 0, stepX: 85 }
+        setXY: { x: 25, y: 0, stepX: 85 }
     });
 
     stars.children.iterate(function (child) {
@@ -121,6 +124,7 @@ function create () {
     });
 
     bombs = this.physics.add.group();
+    mobs = this.physics.add.group();
 
     //  The score
     scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#FFF' });
@@ -129,10 +133,13 @@ function create () {
     this.physics.add.collider(player, platforms);
     this.physics.add.collider(stars, platforms);
     this.physics.add.collider(bombs, platforms);
+    this.physics.add.collider(mobs, platforms);
+    this.physics.add.collider(mobs, player);
 
     //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
     this.physics.add.overlap(player, stars, collectStar, null, this);
-    this.physics.add.overlap(player, bombs, hitBomb, null, this);
+    this.physics.add.overlap(player, bombs, hitMob, null, this);
+    this.physics.add.overlap(player, mobs, hitMob, null, this);
 
     //  Input Events
     cursors = this.input.keyboard.createCursorKeys();
@@ -150,8 +157,7 @@ function create () {
     }, this);
 }
 
-function update ()
-{
+function update () {
     if (gameOver) {
         const button = this.add.text(470, 384, 'retry', {
             color:'white', fontSize:'xx-large', fixedWidth: 100, fixedHeight: 35
@@ -202,8 +208,7 @@ function update ()
     }
 }
 
-function collectStar (player, star)
-{
+function collectStar (player, star) {
     star.disableBody(true, true);
 
     //  Add and update the score
@@ -219,17 +224,29 @@ function collectStar (player, star)
 
         var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
 
-        var bomb = bombs.create(x, 16, 'bomb');
-        bomb.setBounce(1);
-        bomb.setCollideWorldBounds(true);
-        bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
-        bomb.allowGravity = false;
-
+        if(score === 120) {
+            var mob = mobs.create(x, 16, 'mob0');
+            mob.setBounce(0.2);
+            mob.setCollideWorldBounds(true);
+            mob.setVelocity(Phaser.Math.Between(-200, 200), 20);
+            mob.allowGravity = true;
+        } else if(score === 240) {
+            var mob = mobs.create(x, 16, 'mob1');
+            mob.setBounce(0.2);
+            mob.setCollideWorldBounds(true);
+            mob.setVelocity(Phaser.Math.Between(-200, 200), 20);
+            mob.allowGravity = false;
+        } else {
+            var bomb = bombs.create(x, 16, 'bomb');
+            bomb.setBounce(1);
+            bomb.setCollideWorldBounds(true);
+            bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+            bomb.allowGravity = false;
+        }
     }
 }
 
-function hitBomb (player, bomb)
-{
+function hitMob (player, mob) {
     this.physics.pause();
     player.setTint(0xff0000);
     player.anims.play('turn');
