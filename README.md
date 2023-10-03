@@ -1,13 +1,14 @@
-# phaserTutorial
+# Description
 
-My experiments with phaser.io
+ASCII-art platformer as a study in Phaser.io
 
-Complete tutorial found here: https://phaser.io/tutorials/making-your-first-phaser-3-game/part1
-
-## CHANGELOG
-- responsiveness. See https://newdocs.phaser.io/docs/3.60.0/Phaser.Scale
-- WASD controls. See https://newdocs.phaser.io/docs/3.60.0/Phaser.Input.Keyboard.KeyboardPlugin#addKeys
-- Touch input. See https://newdocs.phaser.io/docs/3.60.0/Phaser.Input.Pointer
-- Fullscreen button. See https://github.com/photonstorm/phaser3-examples/blob/master/public/src/scalemanager/full%20screen%20game.js
-- Retry button. See https://newdocs.phaser.io/docs/3.60.0/Phaser.Scenes.ScenePlugin#restart
+## References
+- tutorial: https://phaser.io/tutorials/making-your-first-phaser-3-game/part1
+- responsiveness: https://newdocs.phaser.io/docs/3.60.0/Phaser.Scale
+- WASD controls: https://newdocs.phaser.io/docs/3.60.0/Phaser.Input.Keyboard.KeyboardPlugin#addKeys
+- Touch input: https://newdocs.phaser.io/docs/3.60.0/Phaser.Input.Pointer
+- Fullscreen button: https://github.com/photonstorm/phaser3-examples/blob/master/public/src/scalemanager/full%20screen%20game.js
+- Retry button: https://newdocs.phaser.io/docs/3.60.0/Phaser.Scenes.ScenePlugin#restart
     and https://newdocs.phaser.io/docs/3.60.0/Phaser.GameObjects.Text
+- scenes: https://blog.ourcade.co/posts/2020/phaser3-how-to-communicate-between-scenes/
+    and https://www.youtube.com/watch?v=7cpZ5Y7THmo&ab_channel=Gamefromscratch
