@@ -14,9 +14,8 @@ var config = {
             debug: false
         }
     },
-    scene: [ LVL_0, UI_SCENE ]
+    scene: [ LVL_0, LVL_1, UI_SCENE ]
 };
 
 const eventsCenter = new Phaser.Events.EventEmitter();
-
 var game = new Phaser.Game(config);
