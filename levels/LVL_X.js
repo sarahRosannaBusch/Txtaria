@@ -1,6 +1,6 @@
-class LVL_1 extends Phaser.Scene {
+class LVL_X extends Phaser.Scene {
     constructor() {
-        super({key:"LVL_1"});
+        super({key:"LVL_X"});
     }
 
     preload() {

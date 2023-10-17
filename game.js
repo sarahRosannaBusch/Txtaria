@@ -1,4 +1,5 @@
-var config = {
+const config = {
+    parent: "game",
     type: Phaser.AUTO,
     width: 1024, 
     height: 768,    
@@ -14,8 +15,7 @@ var config = {
             debug: false
         }
     },
-    scene: [ LVL_0, LVL_1, UI_SCENE ]
+    scene: [ LVL_0, LVL_X ]
 };
 
-const eventsCenter = new Phaser.Events.EventEmitter();
-var game = new Phaser.Game(config);
+const game = new Phaser.Game(config);
