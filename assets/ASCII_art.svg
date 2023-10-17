@@ -29,9 +29,9 @@
      showgrid="false"
      units="px"
      inkscape:snap-page="true"
-     inkscape:zoom="2.1378932"
-     inkscape:cx="1072.7851"
-     inkscape:cy="1269.708"
+     inkscape:zoom="0.75585939"
+     inkscape:cx="443.86562"
+     inkscape:cy="996.87853"
      inkscape:current-layer="layer1"
      fit-margin-top="0"
      fit-margin-left="0"
@@ -44,6 +44,10 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(-1.7679317,-9.2510713)">
+    <path
+       id="rect6633"
+       style="fill:#121212;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.984314;fill-opacity:1"
+       d="M -17.484436,322.53961 H 201.29247 V 462.90688 H -17.484436 Z" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.58611px;line-height:1.1;font-family:monospace;-inkscape-font-specification:monospace;fill:#ececec;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.984314"
@@ -596,69 +600,6 @@
          x="-11.077804"
          y="458.67007"
          id="tspan1414">   \./                                       \../</tspan></text>
-    <path
-       d="m 264.96548,334.15617 -0.31798,0.84646 h -0.43219 l -0.38516,-1.57424 q -0.1254,-0.007 -0.19034,-0.0694 -0.0627,-0.0649 -0.0627,-0.16123 0,-0.10077 0.0694,-0.16347 0.0717,-0.0649 0.23736,-0.0649 h 0.42771 q 0.16571,0 0.23513,0.0649 0.0717,0.0627 0.0717,0.1657 0,0.10301 -0.0806,0.17467 -0.0605,0.0537 -0.23736,0.0537 l 0.17466,0.72778 0.28439,-0.74569 h 0.40756 l 0.28663,0.74569 0.17914,-0.72778 q -0.17018,0 -0.22393,-0.0336 -0.10748,-0.0694 -0.10748,-0.19705 0,-0.10077 0.0694,-0.16347 0.0717,-0.0649 0.23737,-0.0649 h 0.43219 q 0.16571,0 0.23512,0.0649 0.0717,0.0627 0.0717,0.1657 0,0.0918 -0.0627,0.15676 -0.0605,0.0627 -0.18138,0.0716 l -0.37621,1.57424 h -0.42546 z"
-       id="path50199"
-       style="font-weight:bold;font-size:4.5861px;line-height:1.1;font-family:'Courier New';-inkscape-font-specification:'Courier New Bold';fill:#ececec;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.984314"
-       inkscape:export-filename="C:\Users\annar\code\myApps\phaser\ASCII_Platformer\assets\header.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <path
-       d="m 268.86635,334.21887 h -1.88326 q 0.0717,0.17914 0.25304,0.28887 0.18363,0.10973 0.49489,0.10973 0.25528,0 0.67851,-0.10973 0.17467,-0.0448 0.24185,-0.0448 0.0918,0 0.15451,0.0649 0.0627,0.0649 0.0627,0.16347 0,0.0896 -0.0672,0.15228 -0.0896,0.0829 -0.43666,0.15899 -0.3471,0.0739 -0.66732,0.0739 -0.55087,0 -0.88228,-0.31126 -0.32918,-0.31126 -0.32918,-0.76584 0,-0.48369 0.35605,-0.786 0.35829,-0.30455 0.82406,-0.30455 0.27992,0 0.5128,0.0985 0.23513,0.0985 0.34933,0.21274 0.16123,0.16571 0.26648,0.40979 0.0717,0.17019 0.0717,0.39412 z m -0.50832,-0.45906 q -0.10525,-0.19706 -0.27544,-0.29335 -0.17018,-0.0985 -0.40531,-0.0985 -0.23289,0 -0.40308,0.0985 -0.17018,0.0963 -0.27767,0.29335 z"
-       id="path50201"
-       style="font-weight:bold;font-size:4.5861px;line-height:1.1;font-family:'Courier New';-inkscape-font-specification:'Courier New Bold';fill:#ececec;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.984314"
-       inkscape:export-filename="C:\Users\annar\code\myApps\phaser\ASCII_Platformer\assets\header.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <path
-       d="m 270.69587,332.09825 v 2.44532 h 0.55086 q 0.16571,0 0.23513,0.0649 0.0717,0.0627 0.0717,0.16571 0,0.10077 -0.0717,0.16571 -0.0694,0.0627 -0.23513,0.0627 h -1.56079 q -0.16571,0 -0.23737,-0.0627 -0.0694,-0.0649 -0.0694,-0.16795 0,-0.10077 0.0694,-0.16347 0.0717,-0.0649 0.23737,-0.0649 h 0.55087 v -1.98627 h -0.36949 q -0.16347,0 -0.23513,-0.0627 -0.0716,-0.0649 -0.0716,-0.16795 0,-0.10076 0.0694,-0.16346 0.0717,-0.0649 0.23736,-0.0649 z"
-       id="path50203"
-       style="font-weight:bold;font-size:4.5861px;line-height:1.1;font-family:'Courier New';-inkscape-font-specification:'Courier New Bold';fill:#ececec;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.984314"
-       inkscape:export-filename="C:\Users\annar\code\myApps\phaser\ASCII_Platformer\assets\header.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <path
-       d="m 273.9339,333.05219 q 0.0829,-0.0784 0.17019,-0.0784 0.0985,0 0.16123,0.0717 0.0649,0.0694 0.0649,0.23289 v 0.29559 q 0,0.16571 -0.0649,0.23513 -0.0627,0.0694 -0.16571,0.0694 -0.094,0 -0.15899,-0.0537 -0.047,-0.0403 -0.0739,-0.16347 -0.0269,-0.1254 -0.12988,-0.18586 -0.18138,-0.10749 -0.46353,-0.10749 -0.3247,0 -0.52176,0.19034 -0.19482,0.19034 -0.19482,0.48145 0,0.26872 0.1881,0.42547 0.1881,0.15452 0.62477,0.15452 0.28663,0 0.46801,-0.0582 0.10749,-0.0358 0.20378,-0.12092 0.0963,-0.0873 0.17466,-0.0873 0.094,0 0.16123,0.0694 0.0694,0.0694 0.0694,0.16347 0,0.15227 -0.20825,0.28887 -0.30903,0.20377 -0.90468,0.20377 -0.5352,0 -0.83303,-0.22169 -0.40307,-0.29783 -0.40307,-0.81511 0,-0.4904 0.32694,-0.81063 0.32694,-0.32246 0.85317,-0.32246 0.19034,0 0.35381,0.0358 0.16347,0.0358 0.30231,0.10749 z"
-       id="path50205"
-       style="font-weight:bold;font-size:4.5861px;line-height:1.1;font-family:'Courier New';-inkscape-font-specification:'Courier New Bold';fill:#ececec;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.984314"
-       inkscape:export-filename="C:\Users\annar\code\myApps\phaser\ASCII_Platformer\assets\header.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <path
-       d="m 277.16298,334.02405 q 0,0.26424 -0.14779,0.5128 -0.14556,0.24632 -0.43667,0.39412 -0.28887,0.14555 -0.60461,0.14555 -0.3135,0 -0.60013,-0.14331 -0.28663,-0.14556 -0.43667,-0.39412 -0.15003,-0.24856 -0.15003,-0.51952 0,-0.27543 0.15227,-0.53967 0.15227,-0.26648 0.43667,-0.41875 0.28663,-0.15228 0.59789,-0.15228 0.3135,0 0.60237,0.15676 0.29111,0.15451 0.43891,0.41875 0.14779,0.262 0.14779,0.53967 z m -0.45906,0.002 q 0,-0.22169 -0.15899,-0.40756 -0.21721,-0.2508 -0.57102,-0.2508 -0.31126,0 -0.51952,0.1993 -0.20825,0.1993 -0.20825,0.4613 0,0.21497 0.21049,0.40307 0.2105,0.18587 0.51728,0.18587 0.30902,0 0.51952,-0.18587 0.21049,-0.1881 0.21049,-0.40531 z"
-       id="path50207"
-       style="font-weight:bold;font-size:4.5861px;line-height:1.1;font-family:'Courier New';-inkscape-font-specification:'Courier New Bold';fill:#ececec;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.984314"
-       inkscape:export-filename="C:\Users\annar\code\myApps\phaser\ASCII_Platformer\assets\header.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <path
-       d="m 278.01392,332.96934 v 0.12988 q 0.11196,-0.10973 0.20153,-0.15004 0.0918,-0.0425 0.2105,-0.0425 0.10077,0 0.1993,0.0493 0.0985,0.0493 0.19258,0.14779 0.11868,-0.0985 0.2396,-0.14555 0.12317,-0.0493 0.25081,-0.0493 0.25528,0 0.41427,0.1366 0.21049,0.17915 0.21049,0.47026 v 1.02784 q 0.14332,0 0.21274,0.0649 0.0694,0.0649 0.0694,0.16571 0,0.10077 -0.0694,0.16571 -0.0694,0.0627 -0.23513,0.0627 h -0.43667 v -1.44883 q 0,-0.10525 -0.0381,-0.14556 -0.0381,-0.0403 -0.11645,-0.0403 -0.0761,0 -0.14107,0.0403 -0.0829,0.056 -0.20154,0.21049 v 0.92484 q 0.14331,0 0.21273,0.0649 0.0694,0.0649 0.0694,0.16571 0,0.10077 -0.0694,0.16571 -0.0694,0.0627 -0.23512,0.0627 h -0.43667 v -1.44883 q 0,-0.10301 -0.0403,-0.14332 -0.0381,-0.0426 -0.11644,-0.0426 -0.0806,0 -0.15899,0.0515 -0.0784,0.0493 -0.1881,0.19929 v 0.92484 q 0.14331,0 0.21273,0.0649 0.0717,0.0649 0.0717,0.16571 0,0.10077 -0.0717,0.16571 -0.0694,0.0627 -0.23513,0.0627 h -0.41427 q -0.16571,0 -0.23513,-0.0627 -0.0717,-0.0649 -0.0717,-0.16795 0,-0.10077 0.0694,-0.16347 0.0694,-0.0649 0.21497,-0.0649 v -1.11518 q -0.14556,0 -0.21497,-0.0649 -0.0694,-0.0649 -0.0694,-0.1657 0,-0.10077 0.0717,-0.16347 0.0694,-0.0649 0.23513,-0.0649 z"
-       id="path50209"
-       style="font-weight:bold;font-size:4.5861px;line-height:1.1;font-family:'Courier New';-inkscape-font-specification:'Courier New Bold';fill:#ececec;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.984314"
-       inkscape:export-filename="C:\Users\annar\code\myApps\phaser\ASCII_Platformer\assets\header.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <path
-       d="m 282.62689,334.21887 h -1.88326 q 0.0717,0.17914 0.25304,0.28887 0.18363,0.10973 0.49489,0.10973 0.25528,0 0.67851,-0.10973 0.17467,-0.0448 0.24185,-0.0448 0.0918,0 0.15451,0.0649 0.0627,0.0649 0.0627,0.16347 0,0.0896 -0.0672,0.15228 -0.0896,0.0829 -0.43666,0.15899 -0.3471,0.0739 -0.66732,0.0739 -0.55087,0 -0.88228,-0.31126 -0.32918,-0.31126 -0.32918,-0.76584 0,-0.48369 0.35605,-0.786 0.35829,-0.30455 0.82406,-0.30455 0.27992,0 0.5128,0.0985 0.23513,0.0985 0.34933,0.21274 0.16123,0.16571 0.26648,0.40979 0.0717,0.17019 0.0717,0.39412 z m -0.50832,-0.45906 q -0.10525,-0.19706 -0.27544,-0.29335 -0.17018,-0.0985 -0.40531,-0.0985 -0.23289,0 -0.40308,0.0985 -0.17018,0.0963 -0.27767,0.29335 z"
-       id="path50211"
-       style="font-weight:bold;font-size:4.5861px;line-height:1.1;font-family:'Courier New';-inkscape-font-specification:'Courier New Bold';fill:#ececec;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.984314"
-       inkscape:export-filename="C:\Users\annar\code\myApps\phaser\ASCII_Platformer\assets\header.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <path
-       d="m 286.8659,333.42839 v 0.92036 q 0,0.14779 0.0605,0.19482 0.0941,0.0739 0.33589,0.0739 0.35158,0 0.6494,-0.15004 0.11421,-0.0582 0.17915,-0.0582 0.0896,0 0.15451,0.0672 0.0672,0.0672 0.0672,0.16347 0,0.0896 -0.0717,0.15451 -0.10972,0.10525 -0.43442,0.19482 -0.32246,0.0873 -0.54416,0.0873 -0.4277,0 -0.64268,-0.18362 -0.21273,-0.18586 -0.21273,-0.45458 v -1.00993 h -0.16571 q -0.16571,0 -0.23737,-0.0627 -0.0694,-0.0649 -0.0694,-0.16794 0,-0.10077 0.0694,-0.16347 0.0717,-0.0649 0.23737,-0.0649 h 0.16571 v -0.41428 q 0,-0.1657 0.0627,-0.23512 0.0649,-0.0717 0.16795,-0.0717 0.10077,0 0.16347,0.0717 0.0649,0.0694 0.0649,0.23512 v 0.41428 h 0.84869 q 0.16571,0 0.23513,0.0649 0.0717,0.0627 0.0717,0.1657 0,0.10077 -0.0717,0.16571 -0.0694,0.0627 -0.23513,0.0627 z"
-       id="path50213"
-       style="font-weight:bold;font-size:4.5861px;line-height:1.1;font-family:'Courier New';-inkscape-font-specification:'Courier New Bold';fill:#ececec;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.984314"
-       inkscape:export-filename="C:\Users\annar\code\myApps\phaser\ASCII_Platformer\assets\header.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <path
-       d="m 290.92352,334.02405 q 0,0.26424 -0.1478,0.5128 -0.14555,0.24632 -0.43666,0.39412 -0.28887,0.14555 -0.60461,0.14555 -0.31351,0 -0.60014,-0.14331 -0.28663,-0.14556 -0.43666,-0.39412 -0.15004,-0.24856 -0.15004,-0.51952 0,-0.27543 0.15228,-0.53967 0.15227,-0.26648 0.43666,-0.41875 0.28663,-0.15228 0.5979,-0.15228 0.3135,0 0.60237,0.15676 0.29111,0.15451 0.4389,0.41875 0.1478,0.262 0.1478,0.53967 z m -0.45906,0.002 q 0,-0.22169 -0.15899,-0.40756 -0.21721,-0.2508 -0.57102,-0.2508 -0.31127,0 -0.51952,0.1993 -0.20826,0.1993 -0.20826,0.4613 0,0.21497 0.2105,0.40307 0.21049,0.18587 0.51728,0.18587 0.30902,0 0.51952,-0.18587 0.21049,-0.1881 0.21049,-0.40531 z"
-       id="path50215"
-       style="font-weight:bold;font-size:4.5861px;line-height:1.1;font-family:'Courier New';-inkscape-font-specification:'Courier New Bold';fill:#ececec;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.984314"
-       inkscape:export-filename="C:\Users\annar\code\myApps\phaser\ASCII_Platformer\assets\header.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
     <path
        d="m 222.1992,341.42451 h -2.52146 q -0.16571,0 -0.23513,-0.0627 -0.0717,-0.0627 -0.0717,-0.16571 0,-0.10301 0.0717,-0.16795 0.0694,-0.0627 0.23513,-0.0627 h 2.52146 q 0.16347,0 0.23289,0.0627 0.0717,0.0649 0.0717,0.16795 0,0.10077 -0.0694,0.16347 -0.0694,0.0649 -0.23513,0.0649 z"
        id="path50217"
@@ -1352,5 +1293,39 @@
        inkscape:export-filename="C:\Users\annar\code\myApps\phaser\ASCII_Platformer\assets\header.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:4.5861px;line-height:1.1;font-family:'Courier New';-inkscape-font-specification:'Courier New Bold';fill:#ececec;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.984314"
+       x="223.17262"
+       y="375.45367"
+       id="text5196"
+       inkscape:export-filename="C:\Users\annar\code\myApps\phaser\ASCII_Platformer\assets\title.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         sodipodi:role="line"
+         id="tspan5194"
+         style="stroke-width:0.1"
+         x="223.17262"
+         y="375.45367"> ____  __ __  ____    _   ___   _   _</tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.1"
+         x="223.17262"
+         y="380.49838"
+         id="tspan5198">|_  _| \ V / |_  _|  / | |   | | | | \</tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.1"
+         x="223.17262"
+         y="385.54309"
+         id="tspan5200">  ||    \ /    ||   / .| | D | | | |. \</tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.1"
+         x="223.17262"
+         y="390.5878"
+         id="tspan5202">  ||    / \    ||  / /|| |  &lt;  | | ||\ \</tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.1"
+         x="223.17262"
+         y="395.63251"
+         id="tspan5204">  ||   /_^_\   || / / || ||\_\ |_| || \_\</tspan></text>
   </g>
 </svg>

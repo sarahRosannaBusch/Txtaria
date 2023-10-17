@@ -3,12 +3,14 @@ class LVL_0 extends Phaser.Scene {
         super({key:"LVL_0"});
         this.score = 0;
         this.level = 0;
+        this.helpShowing = false;
+        this.soundOn = false;
         this.gameOver = false;
     }
 
     preload() {
         this.load.image('scroll', 'assets/scroll.png');
-        this.load.image('header', 'assets/header.png');
+        this.load.image('title', 'assets/title.png');
         this.load.image('ground', 'assets/ground.png');
         this.load.image('platform0', 'assets/platform0.png');
         this.load.image('platform1', 'assets/platform1.png');
@@ -31,12 +33,29 @@ class LVL_0 extends Phaser.Scene {
         this.createPlatforms();
         this.createPlayer();
         this.createMobs();
+        this.createStars();
                     
-        this.physics.add.collider(this.player, this.platforms);    
+        this.physics.add.collider(this.player, this.platforms);  
+        
+        this.input.keyboard.on('keydown-ESC', () => {
+            this.showHelp(!this.helpShowing);
+        });
     }
     
-    update () {    
-        this.movePlayer();
+    update () {   
+        if (this.gameOver) {
+            const button = this.add.text(470, 384, 'retry', {
+                color:'white', fontSize:'xx-large', fixedWidth: 100, fixedHeight: 35
+            }).setInteractive();
+            button.on('pointerup', function () {
+                //this.scene.start("LVL_1");
+                this.scene.restart();
+                this.gameOver = false;
+            }, this);
+            return;
+        } else {
+            this.movePlayer();
+        } 
     }
 
     createUI() {        
@@ -45,16 +64,78 @@ class LVL_0 extends Phaser.Scene {
         this.wasd = this.input.keyboard.addKeys('W,S,A,D');
         this.input.addPointer(1); //for multi-touch
 
-        this.scoreText = this.add.text(16, 16, 'score: $0', { fontSize: '32px', fill: '#FFF' });
+        this.scoreText = this.add.text(16, 16, 'score: $0', { fontSize: '24px', fill: '#FFF' });
+        this.levelText = this.add.text(430, 24, 'level: 0 / 12', { fontSize: '24px', fill: '#FFF' });
         
-        const button = this.add.text(1024 - 16, 16, '[+]', { fontSize: '32px', fill: '#FFF' }).setOrigin(1, 0).setInteractive();
-        button.on('pointerup', function () {
-            if (this.scale.isFullscreen) {
-                this.scale.stopFullscreen();
-            } else {
-                this.scale.startFullscreen();
-            }
+        //help button
+        this.helpBtn = this.add.text(1024 - 80, 16, '[?]', { fontSize: '24px', fill: '#FFF' }).setOrigin(1, 0).setInteractive();
+        this.helpBtn.on('pointerup', function () {            
+            this.showHelp(!this.helpShowing);
         }, this);
+
+        //fullscreen button
+        this.fsBtn = this.add.text(1024 - 16, 16, '[+]', { fontSize: '24px', fill: '#FFF' }).setOrigin(1, 0).setInteractive();
+        this.fsBtn.on('pointerup', function () {
+            this.toggleFullscreen();
+        }, this);
+    }
+
+    toggleFullscreen() {
+        if (this.scale.isFullscreen) {
+            this.scale.stopFullscreen();
+            this.fsBtn.setText("[+]");
+        } else {
+            this.scale.startFullscreen();
+            this.fsBtn.setText("[-]");
+        }
+    }
+
+    toggleSound() {
+        this.soundOn = !this.soundOn;
+    }
+
+    showHelp(show) {     
+        if(show) {   
+            this.helpBtn.setText("[X]");
+            this.helpScroll = this.tutorial.create(512, 350, 'scroll');
+            let fs = this.scale.isFullscreen ? 'X' : ' ';
+            this.helpText = this.add.text(200, 180, `
+KEYBOARD CONTROLS:
+w,a,s,d or arrow keys
+
+TWO-FINGER TOUCH:
+1. hold left/right side of screen to move
+2. tap anywhere to jump
+3. swipe down to stomp
+
+OPTIONS:
+            `, { fontSize: '24px', fill: '#FFF' });
+
+            this.optFS = this.add.text(200, 415, `[${fs}] fullscreen`,
+                { fontSize: '24px', fill: '#FFF' }).setInteractive();
+            this.optFS.on('pointerup', function () {
+                this.toggleFullscreen();
+                fs = this.scale.isFullscreen ? ' ' : 'X';
+                this.optFS.setText(`[${fs}] fullscreen`);
+            }, this);
+
+            let s = this.soundOn ? 'X' : ' ';
+            this.optSound = this.add.text(200, 435, `[${s}] sound`,
+                { fontSize: '24px', fill: '#FFF' }).setInteractive();
+            this.optSound.on('pointerup', function () {
+                this.toggleSound();
+                s = this.soundOn ? 'X' : ' ';
+                this.optSound.setText(`[${s}] sound`);
+            }, this);
+        } else {
+            this.helpBtn.setText("[?]");
+            this.helpScroll.destroy();
+            this.helpText.destroy();
+            this.optFS.destroy();
+            this.optSound.destroy();
+        }
+        
+        this.helpShowing = !this.helpShowing;
     }
 
     createPlatforms() {        
@@ -65,41 +146,23 @@ class LVL_0 extends Phaser.Scene {
         
                 this.tutorial = this.physics.add.staticGroup();
                 this.scroll = this.tutorial.create(512, 350, 'scroll');
-                let title = this.tutorial.create(512, 300, 'header');
-                let subtitle = this.add.text(430, 380, 'Where it rains money', {
-                    fontSize: '16px', fill: '#FFF'
+                this.headerTxt = this.add.text(450, 200, 'Welcome to', {
+                    fontSize: '24px', fill: '#FFF'
                 });
-
-                let button = this.add.text(470, 420, '[Play]', { 
-                    fontSize: '32px', fill: '#FFF' 
-                }).setInteractive();
-                
-                button.on('pointerup', () => {
-                    //this.scene.start("LVL_X");
-                    title.destroy();
-                    subtitle.destroy();
-                    button.destroy();
-
-                    this.text = this.add.text(200, 180, `
-KEYBOARD CONTROLS:
-w,a,s,d or arrow keys
-
-TWO-FINGER TOUCH:
-1. hold left/right side of screen to move
-2. tap anywhere to jump
-3. swipe down to stomp
-
-OPTIONS:
-[ ] fullscreen
-[X] sound
-                    `, { fontSize: '24px', fill: '#FFF' });
-                    
-                    this.createStars();
+                this.title = this.tutorial.create(512, 300, 'title');
+                this.subtitle = this.add.text(380, 370, 'Where it rains money', {
+                    fontSize: '24px', fill: '#FFF'
+                });
+                this.hint = this.add.text(290, 440, 'Hint: click the [?] to see controls and options', {
+                    fontSize: '16px', fill: '#FFF', fontStyle: 'italic'
                 });
             break;
             case 1:
                 this.scroll.destroy();
-                this.text.destroy();
+                this.headerTxt.destroy();
+                this.title.destroy();
+                this.subtitle.destroy();
+                this.hint.destroy();
                 this.platforms.create(420, 250, 'platform0').setOrigin(0, 0).refreshBody();
                 this.platforms.create(744, 370, 'platform1').setOrigin(0, 0).refreshBody();
                 this.platforms.create(5, 410, 'platform2').setOrigin(0, 0).refreshBody();
@@ -232,7 +295,8 @@ OPTIONS:
     
         if (!this.gameOver && this.stars.countActive(true) === 0)
         {
-            this.level++;
+            this.level++;            
+            this.levelText.setText(`level: ${this.level} / 12`);
             this.createPlatforms();
             //  A new batch of stars to collect
             this.stars.children.iterate(function (child) {
