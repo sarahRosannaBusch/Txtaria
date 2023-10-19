@@ -1,6 +1,9 @@
-class LVL_0 extends Phaser.Scene {
+class GAME extends Phaser.Scene {
     constructor() {
-        super({key:"LVL_0"});
+        super("GAME");
+    }
+
+    init() {
         this.score = 0;
         this.level = 0;
         this.helpShowing = false;
@@ -36,107 +39,30 @@ class LVL_0 extends Phaser.Scene {
         this.createStars();
                     
         this.physics.add.collider(this.player, this.platforms);  
-        
-        this.input.keyboard.on('keydown-ESC', () => {
-            this.showHelp(!this.helpShowing);
-        });
+        this.physics.add.collider(this.mobs, this.platforms);
+        this.physics.add.collider(this.stars, this.platforms);
+
+        this.physics.add.overlap(this.player, this.mobs, this.hitMob, null, this);
+        this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
     }
     
-    update () {   
-        if (this.gameOver) {
+    update () { 
+        if(this.gameOver) {
             const button = this.add.text(470, 384, 'retry', {
                 color:'white', fontSize:'xx-large', fixedWidth: 100, fixedHeight: 35
             }).setInteractive();
-            button.on('pointerup', function () {
-                //this.scene.start("LVL_1");
+            button.on('pointerup', () => {
                 this.scene.restart();
-                this.gameOver = false;
-            }, this);
+            });
             return;
         } else {
             this.movePlayer();
         } 
     }
 
-    createUI() {        
-        //  Input Events
-        this.cursors = this.input.keyboard.createCursorKeys();
-        this.wasd = this.input.keyboard.addKeys('W,S,A,D');
-        this.input.addPointer(1); //for multi-touch
-
-        this.scoreText = this.add.text(16, 16, 'score: $0', { fontSize: '24px', fill: '#FFF' });
-        this.levelText = this.add.text(430, 24, 'level: 0 / 12', { fontSize: '24px', fill: '#FFF' });
-        
-        //help button
-        this.helpBtn = this.add.text(1024 - 80, 16, '[?]', { fontSize: '24px', fill: '#FFF' }).setOrigin(1, 0).setInteractive();
-        this.helpBtn.on('pointerup', function () {            
-            this.showHelp(!this.helpShowing);
-        }, this);
-
-        //fullscreen button
-        this.fsBtn = this.add.text(1024 - 16, 16, '[+]', { fontSize: '24px', fill: '#FFF' }).setOrigin(1, 0).setInteractive();
-        this.fsBtn.on('pointerup', function () {
-            this.toggleFullscreen();
-        }, this);
-    }
-
-    toggleFullscreen() {
-        if (this.scale.isFullscreen) {
-            this.scale.stopFullscreen();
-            this.fsBtn.setText("[+]");
-        } else {
-            this.scale.startFullscreen();
-            this.fsBtn.setText("[-]");
-        }
-    }
-
-    toggleSound() {
-        this.soundOn = !this.soundOn;
-    }
-
-    showHelp(show) {     
-        if(show) {   
-            this.helpBtn.setText("[X]");
-            this.helpScroll = this.tutorial.create(512, 350, 'scroll');
-            let fs = this.scale.isFullscreen ? 'X' : ' ';
-            this.helpText = this.add.text(200, 180, `
-KEYBOARD CONTROLS:
-w,a,s,d or arrow keys
-
-TWO-FINGER TOUCH:
-1. hold left/right side of screen to move
-2. tap anywhere to jump
-3. swipe down to stomp
-
-OPTIONS:
-            `, { fontSize: '24px', fill: '#FFF' });
-
-            this.optFS = this.add.text(200, 415, `[${fs}] fullscreen`,
-                { fontSize: '24px', fill: '#FFF' }).setInteractive();
-            this.optFS.on('pointerup', function () {
-                this.toggleFullscreen();
-                fs = this.scale.isFullscreen ? ' ' : 'X';
-                this.optFS.setText(`[${fs}] fullscreen`);
-            }, this);
-
-            let s = this.soundOn ? 'X' : ' ';
-            this.optSound = this.add.text(200, 435, `[${s}] sound`,
-                { fontSize: '24px', fill: '#FFF' }).setInteractive();
-            this.optSound.on('pointerup', function () {
-                this.toggleSound();
-                s = this.soundOn ? 'X' : ' ';
-                this.optSound.setText(`[${s}] sound`);
-            }, this);
-        } else {
-            this.helpBtn.setText("[?]");
-            this.helpScroll.destroy();
-            this.helpText.destroy();
-            this.optFS.destroy();
-            this.optSound.destroy();
-        }
-        
-        this.helpShowing = !this.helpShowing;
-    }
+    ////////////////////////////////////////////////////////////////////
+    //                            Levels                              //
+    ////////////////////////////////////////////////////////////////////
 
     createPlatforms() {        
         switch(this.level) {
@@ -196,12 +122,9 @@ OPTIONS:
         }
     }
 
-    createMobs() {
-        this.mobs = this.physics.add.group();
-        this.physics.add.collider(this.mobs, this.platforms);
-        this.physics.add.collider(this.mobs, this.player);
-        this.physics.add.overlap(this.player, this.mobs, this.hitMob, null, this);
-    }
+    ////////////////////////////////////////////////////////////////////
+    //                            Player                              //
+    ////////////////////////////////////////////////////////////////////
 
     createPlayer() {                
         // The player and its settings
@@ -271,6 +194,10 @@ OPTIONS:
         }
     }
 
+    ////////////////////////////////////////////////////////////////////
+    //                             Coins                              //
+    ////////////////////////////////////////////////////////////////////
+
     createStars() {  
         this.stars = this.physics.add.group({
             key: 'star',
@@ -281,9 +208,6 @@ OPTIONS:
             //  Give each star a slightly different bounce
             child.setBounceY(Phaser.Math.FloatBetween(0.2, 0.4));
         });        
-
-        this.physics.add.collider(this.stars, this.platforms);
-        this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
     }
         
     collectStar (player, star) {
@@ -302,7 +226,19 @@ OPTIONS:
             this.stars.children.iterate(function (child) {
                 child.enableBody(true, child.x, 0, true, true);
             });
+
+            if(this.helpShowing) {
+                this.showHelp(false);
+            } 
         }
+    }
+
+    ////////////////////////////////////////////////////////////////////
+    //                         Mobile Objects                         //
+    ////////////////////////////////////////////////////////////////////
+    
+    createMobs() {
+        this.mobs = this.physics.add.group();
     }
     
     hitMob (player, mob) {
@@ -310,5 +246,95 @@ OPTIONS:
         player.setTint(0xff0000);
         player.anims.play('turn');
         this.gameOver = true;
+    }
+
+    ////////////////////////////////////////////////////////////////////
+    //                  User Interface and Controls                   //
+    ////////////////////////////////////////////////////////////////////
+    
+    createUI() {        
+        //  Input Events
+        this.cursors = this.input.keyboard.createCursorKeys();
+        this.wasd = this.input.keyboard.addKeys('W,S,A,D');
+        this.input.addPointer(1); //for multi-touch
+
+        this.scoreText = this.add.text(16, 16, 'score: $0', { fontSize: '24px', fill: '#FFF' });
+        this.levelText = this.add.text(430, 24, 'level: 0 / 12', { fontSize: '24px', fill: '#FFF' });
+        
+        //help button
+        this.helpBtn = this.add.text(1024 - 80, 16, '[?]', { fontSize: '24px', fill: '#FFF' }).setOrigin(1, 0).setInteractive();
+        this.helpBtn.on('pointerup', function () {            
+            this.showHelp(!this.helpShowing);
+        }, this);                
+        this.input.keyboard.on('keydown-ESC', () => {
+            this.showHelp(!this.helpShowing);
+        });
+
+        //fullscreen button
+        this.fsBtn = this.add.text(1024 - 16, 16, '[+]', { fontSize: '24px', fill: '#FFF' }).setOrigin(1, 0).setInteractive();
+        this.fsBtn.on('pointerup', function () {
+            this.toggleFullscreen();
+        }, this);
+    }
+
+    toggleFullscreen() {
+        if (this.scale.isFullscreen) {
+            this.scale.stopFullscreen();
+            this.fsBtn.setText("[+]");
+        } else {
+            this.scale.startFullscreen();
+            this.fsBtn.setText("[-]");
+        }
+    }
+
+    toggleSound() {
+        this.soundOn = !this.soundOn;
+        //todo
+    }
+
+    showHelp(show) {     
+        if(show) {   
+            this.physics.pause();
+            this.helpBtn.setText("[X]");
+            this.helpScroll = this.tutorial.create(512, 350, 'scroll');
+            let fs = this.scale.isFullscreen ? 'X' : ' ';
+            this.helpText = this.add.text(200, 180, `
+KEYBOARD CONTROLS:
+w,a,s,d or arrow keys
+
+TWO-FINGER TOUCH:
+1. hold left/right side of screen to move
+2. tap anywhere to jump
+3. swipe down to stomp
+
+OPTIONS:
+            `, { fontSize: '24px', fill: '#FFF' });
+
+            this.optFS = this.add.text(200, 415, `[${fs}] fullscreen`,
+                { fontSize: '24px', fill: '#FFF' }).setInteractive();
+            this.optFS.on('pointerup', () => {
+                this.toggleFullscreen();
+                fs = this.scale.isFullscreen ? ' ' : 'X';
+                this.optFS.setText(`[${fs}] fullscreen`);
+            });
+
+            let s = this.soundOn ? 'X' : ' ';
+            this.optSound = this.add.text(200, 435, `[${s}] sound`,
+                { fontSize: '24px', fill: '#FFF' }).setInteractive();
+            this.optSound.on('pointerup', () => {
+                this.toggleSound();
+                s = this.soundOn ? 'X' : ' ';
+                this.optSound.setText(`[${s}] sound`);
+            });
+        } else {
+            this.physics.resume();
+            this.helpBtn.setText("[?]");
+            this.helpScroll.destroy();
+            this.helpText.destroy();
+            this.optFS.destroy();
+            this.optSound.destroy();
+        }
+        
+        this.helpShowing = !this.helpShowing;
     }
 }
