@@ -8,6 +8,8 @@ class GAME extends Phaser.Scene {
         this.level = 0;
         this.helpShowing = false;
         this.soundOn = false;
+        this.tick = 0;
+        this.hintIdx = 0;
         this.gameOver = false;
     }
 
@@ -46,23 +48,36 @@ class GAME extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
     }
     
-    update () { 
+    update (time, delta) { 
         if(this.gameOver) {
-            const button = this.add.text(470, 384, 'retry', {
-                color:'white', fontSize:'xx-large', fixedWidth: 100, fixedHeight: 35
-            }).setInteractive();
-            button.on('pointerup', () => {
-                this.scene.restart();
-            });
-            return;
+            this.rollCredits();
         } else {
             this.movePlayer();
+            //after a delay, start pulse
+            if(!this.tick) {
+                this.tick = time;
+            } else if(time - this.tick > 5000) {
+                this.tick = time;
+                this.bounceStars();
+                if(this.level === 0) {
+                    this.changeHint();
+                }
+            }
         } 
     }
 
     ////////////////////////////////////////////////////////////////////
     //                            Levels                              //
     ////////////////////////////////////////////////////////////////////
+
+    changeHint() {
+        if(this.hintIdx < 2) {
+            this.hintIdx++;
+        } else {
+            this.hintIdx = 0;
+        }
+        this.hint.setText(this.hints[this.hintIdx]);
+    }
 
     createPlatforms() {        
         switch(this.level) {
@@ -75,11 +90,16 @@ class GAME extends Phaser.Scene {
                 this.headerTxt = this.add.text(450, 200, 'Welcome to', {
                     fontSize: '24px', fill: '#FFF'
                 });
-                this.title = this.tutorial.create(512, 300, 'title');
-                this.subtitle = this.add.text(380, 370, 'Where it rains money', {
+                this.title = this.tutorial.create(540, 280, 'title');
+                this.subtitle = this.add.text(380, 360, 'Where it rains money', {
                     fontSize: '24px', fill: '#FFF'
                 });
-                this.hint = this.add.text(290, 440, 'Hint: click the [?] to see controls and options', {
+                this.hints = [
+                    'Hint: click the [?] to see controls and options',
+                    'Hint: click the [+] or [-] to toggle fullscreen',
+                    'Hint: collect all the {$} to progress to next level'
+                ]
+                this.hint = this.add.text(290, 430, this.hints[0], {
                     fontSize: '16px', fill: '#FFF', fontStyle: 'italic'
                 });
             break;
@@ -202,11 +222,13 @@ class GAME extends Phaser.Scene {
         this.stars = this.physics.add.group({
             key: 'star',
             repeat: 11,
-            setXY: { x: 25, y: 0, stepX: 85 }
+            setXY: { x: 42, y: 0, stepX: 85 }
         });            
         this.stars.children.iterate(function (child) {
-            //  Give each star a slightly different bounce
+            child.setY(Phaser.Math.FloatBetween(0, -75));
+            child.setVelocityY(Phaser.Math.FloatBetween(0, 250));
             child.setBounceY(Phaser.Math.FloatBetween(0.2, 0.4));
+            //child.disableBody(true, true); //wait for trigger to rain stars
         });        
     }
         
@@ -224,13 +246,22 @@ class GAME extends Phaser.Scene {
             this.createPlatforms();
             //  A new batch of stars to collect
             this.stars.children.iterate(function (child) {
-                child.enableBody(true, child.x, 0, true, true);
+                child.enableBody(true, child.x, Phaser.Math.FloatBetween(0, -75), true, true);
+                child.setVelocityY(Phaser.Math.FloatBetween(0, 250));
             });
 
             if(this.helpShowing) {
                 this.showHelp(false);
             } 
         }
+    }
+
+    bounceStars() {
+        this.stars.children.iterate(function (child) {
+            if(child.body.touching.down) {
+                child.setVelocityY(Phaser.Math.FloatBetween(-25, -75));
+            }
+        });
     }
 
     ////////////////////////////////////////////////////////////////////
@@ -336,5 +367,15 @@ OPTIONS:
         }
         
         this.helpShowing = !this.helpShowing;
+    }
+
+    rollCredits() {            
+        this.tutorial.create(512, 350, 'scroll');    
+        const button = this.add.text(450, 320, '[retry]', {
+            color:'white', fontSize:'xx-large', 
+        }).setInteractive();
+        button.on('pointerup', () => {
+            this.scene.restart();
+        });
     }
 }
