@@ -1,6 +1,6 @@
-class GAME extends Phaser.Scene {
+class SCENE extends Phaser.Scene {
     constructor() {
-        super("GAME");
+        super("SCENE");
     }
 
     init() {
@@ -33,12 +33,13 @@ class GAME extends Phaser.Scene {
         //this.soundFX.play();
     }
 
-    create () {    
-        this.createUI();    
+    create () {       
         this.createPlatforms();
         this.createPlayer();
         this.createMobs();
         this.createStars();
+        this.addTweens();
+        this.createUI(); 
                     
         this.physics.add.collider(this.player, this.platforms);  
         this.physics.add.collider(this.mobs, this.platforms);
@@ -53,10 +54,7 @@ class GAME extends Phaser.Scene {
             this.rollCredits();
         } else {
             this.movePlayer();
-            //after a delay, start pulse
-            if(!this.tick) {
-                this.tick = time;
-            } else if(time - this.tick > 5000) {
+            if(time - this.tick > 5000) {
                 this.tick = time;
                 this.bounceStars();
                 if(this.level === 0) {
@@ -67,17 +65,21 @@ class GAME extends Phaser.Scene {
     }
 
     ////////////////////////////////////////////////////////////////////
-    //                            Levels                              //
+    //                            Tweens                              //
     ////////////////////////////////////////////////////////////////////
 
-    changeHint() {
-        if(this.hintIdx < 2) {
-            this.hintIdx++;
-        } else {
-            this.hintIdx = 0;
-        }
-        this.hint.setText(this.hints[this.hintIdx]);
+    addTweens() {
+        this.tweens.add({
+            targets: this.tutorial,
+            y: 350, 
+            ease: 'Power1',
+            duration: 2000
+        })
     }
+
+    ////////////////////////////////////////////////////////////////////
+    //                            Levels                              //
+    ////////////////////////////////////////////////////////////////////
 
     createPlatforms() {        
         switch(this.level) {
@@ -85,30 +87,27 @@ class GAME extends Phaser.Scene {
                 this.platforms = this.physics.add.staticGroup();
                 this.platforms.create(512, 748, 'ground');
         
-                this.tutorial = this.physics.add.staticGroup();
-                this.scroll = this.tutorial.create(512, 350, 'scroll');
-                this.headerTxt = this.add.text(450, 200, 'Welcome to', {
+                this.scroll = this.add.image(0, 0, 'scroll');
+                this.headerTxt = this.add.text(0, -150, 'Welcome to', {
                     fontSize: '24px', fill: '#FFF'
-                });
-                this.title = this.tutorial.create(540, 280, 'title');
-                this.subtitle = this.add.text(380, 360, 'Where it rains money', {
+                }).setOrigin(0.5);                
+                this.title = this.add.image(0, -75, 'title').setOrigin(0.5);
+                this.subtitle = this.add.text(0, 15, 'Where it rains money', {
                     fontSize: '24px', fill: '#FFF'
-                });
+                }).setOrigin(0.5);
                 this.hints = [
                     'Hint: click the [?] to see controls and options',
                     'Hint: click the [+] or [-] to toggle fullscreen',
                     'Hint: collect all the {$} to progress to next level'
                 ]
-                this.hint = this.add.text(290, 430, this.hints[0], {
-                    fontSize: '16px', fill: '#FFF', fontStyle: 'italic'
-                });
+                this.hint = this.add.text(0, 75, this.hints[0], {
+                    fontSize: '18px', fill: '#FFF', fontStyle: 'italic'
+                }).setOrigin(0.5);
+                this.tutorial = this.add.container(512, 0);
+                this.tutorial.add([this.scroll, this.headerTxt, this.title, this.subtitle, this.hint]);
             break;
             case 1:
-                this.scroll.destroy();
-                this.headerTxt.destroy();
-                this.title.destroy();
-                this.subtitle.destroy();
-                this.hint.destroy();
+                this.tutorial.destroy();
                 this.platforms.create(420, 250, 'platform0').setOrigin(0, 0).refreshBody();
                 this.platforms.create(744, 370, 'platform1').setOrigin(0, 0).refreshBody();
                 this.platforms.create(5, 410, 'platform2').setOrigin(0, 0).refreshBody();
@@ -148,7 +147,7 @@ class GAME extends Phaser.Scene {
 
     createPlayer() {                
         // The player and its settings
-        this.player = this.physics.add.sprite(350, 650, 'dude');
+        this.player = this.physics.add.sprite(375, 650, 'dude');
         this.player.setBounce(0.2);
         this.player.setCollideWorldBounds(true);
     
@@ -307,6 +306,15 @@ class GAME extends Phaser.Scene {
             this.toggleFullscreen();
         }, this);
     }
+    
+    changeHint() {
+        if(this.hintIdx < 2) {
+            this.hintIdx++;
+        } else {
+            this.hintIdx = 0;
+        }
+        this.hint.setText(this.hints[this.hintIdx]);
+    }
 
     toggleFullscreen() {
         if (this.scale.isFullscreen) {
@@ -370,7 +378,7 @@ OPTIONS:
     }
 
     rollCredits() {            
-        this.tutorial.create(512, 350, 'scroll');    
+        this.add.image(512, 350, 'scroll');    
         const button = this.add.text(450, 320, '[retry]', {
             color:'white', fontSize:'xx-large', 
         }).setInteractive();
