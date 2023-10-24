@@ -10,3 +10,6 @@ ASCII-art platformer as a study in Phaser.io
 - Fullscreen button: https://github.com/photonstorm/phaser3-examples/blob/master/public/src/scalemanager/full%20screen%20game.js
 - Retry button: https://newdocs.phaser.io/docs/3.60.0/Phaser.Scenes.ScenePlugin#restart
     and https://newdocs.phaser.io/docs/3.60.0/Phaser.GameObjects.Text
+- Containers: https://newdocs.phaser.io/docs/3.60.0/focus/Phaser.GameObjects.GameObjectFactory-container
+- Tweens: https://labs.phaser.io/edit.html?src=src/time\timeline\create%20timeline.js
+    and https://newdocs.phaser.io/docs/3.60.0/Phaser.Tweens.TweenManager#tweens

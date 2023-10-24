@@ -14,6 +14,12 @@ class SCENE extends Phaser.Scene {
     }
 
     preload() {
+        this.load.spritesheet('asciiRain', 'assets/asciiRain.png', { 
+            frameWidth: 10, frameHeight: 17
+        });   
+        this.load.spritesheet('rainStreak', 'assets/rainStreak.png', { 
+            frameWidth: 10, frameHeight: 2242
+        });      
         this.load.image('scroll', 'assets/scroll.png');
         this.load.image('title', 'assets/title.png');
         this.load.image('ground', 'assets/ground.png');
@@ -33,12 +39,13 @@ class SCENE extends Phaser.Scene {
         //this.soundFX.play();
     }
 
-    create () {       
-        this.createPlatforms();
-        this.createPlayer();
+    create () {  
+        this.createTutorial();     
         this.createMobs();
         this.createStars();
-        this.addTweens();
+        this.createRain();
+        this.createPlatforms();
+        this.createPlayer();
         this.createUI(); 
                     
         this.physics.add.collider(this.player, this.platforms);  
@@ -47,6 +54,8 @@ class SCENE extends Phaser.Scene {
 
         this.physics.add.overlap(this.player, this.mobs, this.hitMob, null, this);
         this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
+
+        this.playTween();
     }
     
     update (time, delta) { 
@@ -68,43 +77,97 @@ class SCENE extends Phaser.Scene {
     //                            Tweens                              //
     ////////////////////////////////////////////////////////////////////
 
-    addTweens() {
-        this.tweens.add({
-            targets: this.tutorial,
-            y: 350, 
-            ease: 'Power1',
-            duration: 2000
-        })
+    playTween() {
+        let params;
+        switch(this.level) {
+            case 0:
+                params = [
+                    {
+                        at: 0,
+                        run: () => {
+                            this.rainAscii();
+                        }
+                    }, {
+                        at: 1000,
+                        tween: {
+                            targets: this.tutorial,
+                            y: 0, 
+                            ease: 'Power0',
+                            duration: 2000
+                        }
+                    }, {
+                        at: 2000,
+                        run: () => {
+                            this.rainCoins();
+                        }
+                    }
+                ];
+            break;
+            default: break;
+        }
+        const timeline = this.add.timeline(params);
+        timeline.play();
+    }
+
+    createRain() {  
+        this.asciiRain = this.physics.add.group();    
+        for(let i = 0; i < 103; i++) {
+            let x = i * 10;
+            let drop = this.physics.add.sprite(x, 0, 'rainStreak');
+            drop.setDepth(50);  
+            drop.disableBody(true, true); 
+            this.asciiRain.add(drop);
+        }   
+    }
+
+    rainAscii() {       
+        this.asciiRain.children.iterate(function (child) {
+            child.enableBody(true, child.x, Phaser.Math.FloatBetween(-500, -1000), true, true);
+            child.setVelocityY(Phaser.Math.FloatBetween(-50, 300));    
+            child.setFrame(Phaser.Math.Between(0, 2));
+        });      
     }
 
     ////////////////////////////////////////////////////////////////////
     //                            Levels                              //
     ////////////////////////////////////////////////////////////////////
 
+    levelUp() {
+        this.level++;            
+        this.levelText.setText(`level: ${this.level} / 12`);
+        this.createPlatforms();
+        this.rainCoins();
+
+        if(this.helpShowing) {
+            this.showHelp(false);
+        } 
+    }
+
+    createTutorial() {        
+        let scroll = this.add.image(0, 350, 'scroll');
+        let headerTxt = this.add.text(0, 200, 'Welcome to', {
+            fontSize: '24px', fill: '#FFF'
+        }).setOrigin(0.5);                
+        let title = this.add.image(0, 275, 'title').setOrigin(0.5);
+        let subtitle = this.add.text(0, 365, 'Where ASCII rains', {
+            fontSize: '24px', fill: '#FFF'
+        }).setOrigin(0.5);
+        this.hints = [
+            'Hint: click the [?] to see controls and options',
+            'Hint: click the [+] or [-] to toggle fullscreen',
+            'Hint: collect all the {$} to progress to next level'
+        ]
+        this.hint = this.add.text(0, 430, this.hints[0], {
+            fontSize: '18px', fill: '#FFF', fontStyle: 'italic'
+        }).setOrigin(0.5);
+        this.tutorial = this.add.container(512, -450, [scroll, headerTxt, title, subtitle, this.hint]);
+    }
+
     createPlatforms() {        
         switch(this.level) {
             case 0:
                 this.platforms = this.physics.add.staticGroup();
-                this.platforms.create(512, 748, 'ground');
-        
-                this.scroll = this.add.image(0, 0, 'scroll');
-                this.headerTxt = this.add.text(0, -150, 'Welcome to', {
-                    fontSize: '24px', fill: '#FFF'
-                }).setOrigin(0.5);                
-                this.title = this.add.image(0, -75, 'title').setOrigin(0.5);
-                this.subtitle = this.add.text(0, 15, 'Where it rains money', {
-                    fontSize: '24px', fill: '#FFF'
-                }).setOrigin(0.5);
-                this.hints = [
-                    'Hint: click the [?] to see controls and options',
-                    'Hint: click the [+] or [-] to toggle fullscreen',
-                    'Hint: collect all the {$} to progress to next level'
-                ]
-                this.hint = this.add.text(0, 75, this.hints[0], {
-                    fontSize: '18px', fill: '#FFF', fontStyle: 'italic'
-                }).setOrigin(0.5);
-                this.tutorial = this.add.container(512, 0);
-                this.tutorial.add([this.scroll, this.headerTxt, this.title, this.subtitle, this.hint]);
+                this.ground = this.platforms.create(512, 748, 'ground').setDepth(75);
             break;
             case 1:
                 this.tutorial.destroy();
@@ -147,7 +210,7 @@ class SCENE extends Phaser.Scene {
 
     createPlayer() {                
         // The player and its settings
-        this.player = this.physics.add.sprite(375, 650, 'dude');
+        this.player = this.physics.add.sprite(375, 0, 'dude');
         this.player.setBounce(0.2);
         this.player.setCollideWorldBounds(true);
     
@@ -224,11 +287,17 @@ class SCENE extends Phaser.Scene {
             setXY: { x: 42, y: 0, stepX: 85 }
         });            
         this.stars.children.iterate(function (child) {
-            child.setY(Phaser.Math.FloatBetween(0, -75));
-            child.setVelocityY(Phaser.Math.FloatBetween(0, 250));
-            child.setBounceY(Phaser.Math.FloatBetween(0.2, 0.4));
-            //child.disableBody(true, true); //wait for trigger to rain stars
+            child.disableBody(true, true); //wait for trigger to rain stars
         });        
+    }
+
+    rainCoins() {
+        //  A new batch of stars to collect
+        this.stars.children.iterate(function (child) {
+            child.enableBody(true, child.x, Phaser.Math.FloatBetween(0, -75), true, true);
+            child.setBounceY(Phaser.Math.FloatBetween(0.2, 0.4));
+            child.setVelocityY(Phaser.Math.FloatBetween(0, 250));
+        });
     }
         
     collectStar (player, star) {
@@ -240,18 +309,7 @@ class SCENE extends Phaser.Scene {
     
         if (!this.gameOver && this.stars.countActive(true) === 0)
         {
-            this.level++;            
-            this.levelText.setText(`level: ${this.level} / 12`);
-            this.createPlatforms();
-            //  A new batch of stars to collect
-            this.stars.children.iterate(function (child) {
-                child.enableBody(true, child.x, Phaser.Math.FloatBetween(0, -75), true, true);
-                child.setVelocityY(Phaser.Math.FloatBetween(0, 250));
-            });
-
-            if(this.helpShowing) {
-                this.showHelp(false);
-            } 
+            this.levelUp();
         }
     }
 
@@ -282,17 +340,19 @@ class SCENE extends Phaser.Scene {
     //                  User Interface and Controls                   //
     ////////////////////////////////////////////////////////////////////
     
-    createUI() {        
+    createUI() {    
+        let fontStyle = { fontSize: '24px', fill: '#FFF', backgroundColor: config.backgroundColor };
+        
         //  Input Events
         this.cursors = this.input.keyboard.createCursorKeys();
         this.wasd = this.input.keyboard.addKeys('W,S,A,D');
         this.input.addPointer(1); //for multi-touch
 
-        this.scoreText = this.add.text(16, 16, 'score: $0', { fontSize: '24px', fill: '#FFF' });
-        this.levelText = this.add.text(430, 24, 'level: 0 / 12', { fontSize: '24px', fill: '#FFF' });
+        this.scoreText = this.add.text(16, 16, 'score: $0', fontStyle);
+        this.levelText = this.add.text(430, 24, 'level: 0 / 12', fontStyle);
         
         //help button
-        this.helpBtn = this.add.text(1024 - 80, 16, '[?]', { fontSize: '24px', fill: '#FFF' }).setOrigin(1, 0).setInteractive();
+        this.helpBtn = this.add.text(1024 - 80, 16, '[?]', fontStyle).setOrigin(1, 0).setInteractive();
         this.helpBtn.on('pointerup', function () {            
             this.showHelp(!this.helpShowing);
         }, this);                
@@ -301,10 +361,13 @@ class SCENE extends Phaser.Scene {
         });
 
         //fullscreen button
-        this.fsBtn = this.add.text(1024 - 16, 16, '[+]', { fontSize: '24px', fill: '#FFF' }).setOrigin(1, 0).setInteractive();
+        this.fsBtn = this.add.text(1024 - 16, 16, '[+]', fontStyle).setOrigin(1, 0).setInteractive();
         this.fsBtn.on('pointerup', function () {
             this.toggleFullscreen();
         }, this);
+
+        this.ui = this.add.container(0, 0, [this.scoreText, this.levelText, this.helpBtn, this.fsBtn]);
+        this.ui.setDepth(100);
     }
     
     changeHint() {
@@ -335,7 +398,7 @@ class SCENE extends Phaser.Scene {
         if(show) {   
             this.physics.pause();
             this.helpBtn.setText("[X]");
-            this.helpScroll = this.tutorial.create(512, 350, 'scroll');
+            this.helpScroll = this.add.image(512, 350, 'scroll');
             let fs = this.scale.isFullscreen ? 'X' : ' ';
             this.helpText = this.add.text(200, 180, `
 KEYBOARD CONTROLS:
