@@ -10,15 +10,14 @@ class SCENE extends Phaser.Scene {
         this.soundOn = false;
         this.tick = 0;
         this.hintIdx = 0;
+        this.tweening = true;
         this.gameOver = false;
+        this.touchY = 0;
     }
 
-    preload() {
+    preload() {  
         this.load.spritesheet('asciiRain', 'assets/asciiRain.png', { 
-            frameWidth: 10, frameHeight: 17
-        });   
-        this.load.spritesheet('rainStreak', 'assets/rainStreak.png', { 
-            frameWidth: 10, frameHeight: 2242
+            frameWidth: 10, frameHeight: 1059
         });      
         this.load.image('scroll', 'assets/scroll.png');
         this.load.image('title', 'assets/title.png');
@@ -62,12 +61,14 @@ class SCENE extends Phaser.Scene {
         if(this.gameOver) {
             this.rollCredits();
         } else {
-            this.movePlayer();
-            if(time - this.tick > 5000) {
-                this.tick = time;
-                this.bounceStars();
-                if(this.level === 0) {
-                    this.changeHint();
+            if(!this.tweening) {
+                this.movePlayer();
+                if(time - this.tick > 5000) {
+                    this.tick = time;
+                    this.bounceStars();
+                    if(this.level === 0) {
+                        this.changeHint();
+                    }
                 }
             }
         } 
@@ -78,32 +79,71 @@ class SCENE extends Phaser.Scene {
     ////////////////////////////////////////////////////////////////////
 
     playTween() {
-        let params;
-        switch(this.level) {
-            case 0:
-                params = [
-                    {
-                        at: 0,
-                        run: () => {
-                            this.rainAscii();
-                        }
-                    }, {
-                        at: 1000,
-                        tween: {
-                            targets: this.tutorial,
-                            y: 0, 
-                            ease: 'Power0',
-                            duration: 2000
-                        }
-                    }, {
-                        at: 2000,
-                        run: () => {
-                            this.rainCoins();
-                        }
+        let params = [{
+            at: 0,
+            run: () => {
+                this.tweening = true;
+            }
+        }, {
+            at: 3000,
+            run: () => {
+                this.tweening = false;
+            }
+        }];
+        if(this.level === 0) {
+            params.push({
+                    at: 0,
+                    run: () => {
+                        this.rainAscii();
                     }
-                ];
-            break;
-            default: break;
+                }, {
+                    at: 500,
+                    tween: {
+                        targets: this.tutorial,
+                        y: 0, 
+                        ease: 'Power0',
+                        duration: 2000
+                    }
+                }, {
+                    at: 1000,
+                    run: () => {
+                        this.rainCoins();
+                        this.player.setCollideWorldBounds(true);
+                    }
+                }
+            );
+        } else {
+            params.push({
+                    at: 0,
+                    run: () => {                        
+                        this.player.anims.play('dance');
+                    }
+                }, {
+                    at: 1000,
+                    tween: {
+                        targets: this.player,
+                        y: 275,
+                        ease: 'Power0',
+                        duration: 500
+                    },
+                    run: () => {
+                        this.rainAscii();
+                        this.player.anims.play('jump');
+                    }
+                }, {
+                    at: 1500,
+                    tween: {
+                        targets: this.player,
+                        x: 375,
+                        ease: 'Power0',
+                        duration: 500
+                    },
+                    run: () => {
+                        this.createPlatforms();
+                        this.rainCoins();
+                    }
+                }
+            );
         }
         const timeline = this.add.timeline(params);
         timeline.play();
@@ -113,7 +153,7 @@ class SCENE extends Phaser.Scene {
         this.asciiRain = this.physics.add.group();    
         for(let i = 0; i < 103; i++) {
             let x = i * 10;
-            let drop = this.physics.add.sprite(x, 0, 'rainStreak');
+            let drop = this.physics.add.sprite(x, 0, 'asciiRain');
             drop.setDepth(50);  
             drop.disableBody(true, true); 
             this.asciiRain.add(drop);
@@ -124,7 +164,7 @@ class SCENE extends Phaser.Scene {
         this.asciiRain.children.iterate(function (child) {
             child.enableBody(true, child.x, Phaser.Math.FloatBetween(-500, -1000), true, true);
             child.setVelocityY(Phaser.Math.FloatBetween(-50, 300));    
-            child.setFrame(Phaser.Math.Between(0, 2));
+            child.setFrame(Phaser.Math.Between(0, 4));
         });      
     }
 
@@ -135,8 +175,9 @@ class SCENE extends Phaser.Scene {
     levelUp() {
         this.level++;            
         this.levelText.setText(`level: ${this.level} / 12`);
-        this.createPlatforms();
-        this.rainCoins();
+        //this.createPlatforms();
+        //this.rainCoins();
+        this.playTween();
 
         if(this.helpShowing) {
             this.showHelp(false);
@@ -146,11 +187,11 @@ class SCENE extends Phaser.Scene {
     createTutorial() {        
         let scroll = this.add.image(0, 350, 'scroll');
         let headerTxt = this.add.text(0, 200, 'Welcome to', {
-            fontSize: '24px', fill: '#FFF'
+            fontSize: '24pt', fill: '#FFF'
         }).setOrigin(0.5);                
         let title = this.add.image(0, 275, 'title').setOrigin(0.5);
         let subtitle = this.add.text(0, 365, 'Where ASCII rains', {
-            fontSize: '24px', fill: '#FFF'
+            fontSize: '24pt', fill: '#FFF'
         }).setOrigin(0.5);
         this.hints = [
             'Hint: click the [?] to see controls and options',
@@ -158,9 +199,9 @@ class SCENE extends Phaser.Scene {
             'Hint: collect all the {$} to progress to next level'
         ]
         this.hint = this.add.text(0, 430, this.hints[0], {
-            fontSize: '18px', fill: '#FFF', fontStyle: 'italic'
+            fontSize: '18pt', fill: '#FFF', fontStyle: 'italic'
         }).setOrigin(0.5);
-        this.tutorial = this.add.container(512, -450, [scroll, headerTxt, title, subtitle, this.hint]);
+        this.tutorial = this.add.container(512, -700, [scroll, headerTxt, title, subtitle, this.hint]);
     }
 
     createPlatforms() {        
@@ -210,9 +251,9 @@ class SCENE extends Phaser.Scene {
 
     createPlayer() {                
         // The player and its settings
-        this.player = this.physics.add.sprite(375, 0, 'dude');
+        this.player = this.physics.add.sprite(375, -250, 'dude');
         this.player.setBounce(0.2);
-        this.player.setCollideWorldBounds(true);
+        //this.player.setCollideWorldBounds(true);
     
         //  Player animations, turning, walking left and walking right.
         this.anims.create({
@@ -234,6 +275,27 @@ class SCENE extends Phaser.Scene {
             frameRate: 8,
             repeat: -1
         });
+
+        this.anims.create({
+            key: 'dance',
+            frames: this.anims.generateFrameNumbers('dude', { start: 7, end: 8 }),
+            frameRate: 8,
+            repeat: -1
+        });        
+
+        this.anims.create({
+            key: 'jump',
+            frames: [ { key: 'dude', frame: 9 } ],
+            frameRate: 20,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'stomp',
+            frames: [ { key: 'dude', frame: 10 } ],
+            frameRate: 20,
+            repeat: -1
+        });
     }
 
     movePlayer() {
@@ -241,37 +303,67 @@ class SCENE extends Phaser.Scene {
         let jumpPointer = this.input.pointer2;
     
         let jump = jumpPointer.isDown ? true : false;
+        let stomp = false;
         let dir;
     
+        //touch controls
         if(dirPointer.isDown) {
             let x = dirPointer.position.x;
-            if(x > 400) {
-                dir = 'right';
-            } else {            
-                dir = 'left';
+            let y = dirPointer.position.y;
+            if(this.touchY === 0) {
+                this.touchY = y;
+            } else if(y > this.touchY) {                
+                stomp = true;
+                console.log('touchY: ' + this.touchY);
+            } else {
+                if(x > 400) {
+                    dir = 'right';
+                } else {            
+                    dir = 'left';
+                }
             }
-        } else {
+        } else {            
+            this.touchY = 0;
             dir = false;
             if(dirPointer.getDuration() > 0 && dirPointer.getDuration() < 150) {
                 //if dirPointer isn't down and screen is tapped, jump
                 jump = true;
             }
         }
+
+        //keyboard controls
+        if(this.cursors.left.isDown || this.wasd.A.isDown) {
+            dir = 'left';
+        } else if(this.cursors.right.isDown || this.wasd.D.isDown) {
+            dir = 'right';
+        }
+
+        if(this.cursors.up.isDown || this.wasd.W.isDown) {
+            jump = true;
+        } else if(this.cursors.down.isDown || this.wasd.S.isDown) {
+            stomp = true;
+        }
     
-        if (dir === 'left' || this.cursors.left.isDown || this.wasd.A.isDown) {
+        //play anims
+        if(dir === 'left') {
             this.player.setVelocityX(-260);
             this.player.anims.play('left', true);
-        }
-        else if (dir === 'right' || this.cursors.right.isDown || this.wasd.D.isDown) {
+        } else if(dir === 'right') {
             this.player.setVelocityX(260);
             this.player.anims.play('right', true);
-        }
-        else {
+        } else {
             this.player.setVelocityX(0);
-            this.player.anims.play('turn');
-        }
+            if(jump) {                
+                this.player.anims.play('jump');
+            } else if(stomp) {
+                this.player.anims.play('stomp');
+                this.player.setVelocityY(330);
+            } else {
+                this.player.anims.play('turn');
+            }
+        }        
     
-        if ((jump === true || this.cursors.up.isDown || this.wasd.W.isDown) && this.player.body.touching.down){
+        if (jump && this.player.body.touching.down){
             this.player.setVelocityY(-330);
         }
     }
@@ -341,15 +433,16 @@ class SCENE extends Phaser.Scene {
     ////////////////////////////////////////////////////////////////////
     
     createUI() {    
-        let fontStyle = { fontSize: '24px', fill: '#FFF', backgroundColor: config.backgroundColor };
+        let fontStyle = { fontSize: '24pt', fill: '#FFF', backgroundColor: config.backgroundColor };
         
         //  Input Events
         this.cursors = this.input.keyboard.createCursorKeys();
         this.wasd = this.input.keyboard.addKeys('W,S,A,D');
         this.input.addPointer(1); //for multi-touch
 
+        //UI
         this.scoreText = this.add.text(16, 16, 'score: $0', fontStyle);
-        this.levelText = this.add.text(430, 24, 'level: 0 / 12', fontStyle);
+        this.levelText = this.add.text(512, 32, 'level: 0 / 12', fontStyle).setOrigin(0.5);
         
         //help button
         this.helpBtn = this.add.text(1024 - 80, 16, '[?]', fontStyle).setOrigin(1, 0).setInteractive();
@@ -362,9 +455,9 @@ class SCENE extends Phaser.Scene {
 
         //fullscreen button
         this.fsBtn = this.add.text(1024 - 16, 16, '[+]', fontStyle).setOrigin(1, 0).setInteractive();
-        this.fsBtn.on('pointerup', function () {
+        this.fsBtn.on('pointerup', () => {
             this.toggleFullscreen();
-        }, this);
+        });
 
         this.ui = this.add.container(0, 0, [this.scoreText, this.levelText, this.helpBtn, this.fsBtn]);
         this.ui.setDepth(100);
