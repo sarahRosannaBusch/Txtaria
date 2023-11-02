@@ -175,8 +175,6 @@ class SCENE extends Phaser.Scene {
     levelUp() {
         this.level++;            
         this.levelText.setText(`level: ${this.level} / 12`);
-        //this.createPlatforms();
-        //this.rainCoins();
         this.playTween();
 
         if(this.helpShowing) {
@@ -194,15 +192,15 @@ class SCENE extends Phaser.Scene {
             fontSize: '24pt', fill: '#FFF'
         }).setOrigin(0.5);
         this.hints = [
-            'Hint: click the [?] to see controls and options',
-            'Hint: click the [+] or [-] to toggle fullscreen',
-            'Hint: collect all the {$} to progress to next level'
+            'Click the [?] to see controls and options',
+            'Click the [+] or [-] to toggle fullscreen',
+            'Collect all the {$} to progress to next level'
         ]
         this.hint = this.add.text(0, 430, this.hints[0], {
             fontSize: '18pt', fill: '#FFF', fontStyle: 'italic'
         }).setOrigin(0.5);
         this.tutorial = this.add.container(512, -700, [scroll, headerTxt, title, subtitle, this.hint]);
-    }
+            }
 
     createPlatforms() {        
         switch(this.level) {
@@ -212,10 +210,10 @@ class SCENE extends Phaser.Scene {
             break;
             case 1:
                 this.tutorial.destroy();
-                this.platforms.create(420, 250, 'platform0').setOrigin(0, 0).refreshBody();
-                this.platforms.create(744, 370, 'platform1').setOrigin(0, 0).refreshBody();
-                this.platforms.create(5, 410, 'platform2').setOrigin(0, 0).refreshBody();
-                this.platforms.create(460, 550, 'platform3').setOrigin(0, 0).refreshBody();
+                this.platforms.create(420, 300, 'platform0').setOrigin(0, 0).refreshBody();
+                this.platforms.create(744, 440, 'platform1').setOrigin(0, 0).refreshBody();
+                this.platforms.create(5, 460, 'platform2').setOrigin(0, 0).refreshBody();
+                this.platforms.create(460, 600, 'platform3').setOrigin(0, 0).refreshBody();
             break;
             case 2:                
                 var x = (this.player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
@@ -255,44 +253,58 @@ class SCENE extends Phaser.Scene {
         this.player.setBounce(0.2);
         //this.player.setCollideWorldBounds(true);
     
-        //  Player animations, turning, walking left and walking right.
+        //  Player animations, turning, walking left and walking right.    
+        this.anims.create({
+            key: 'turn',
+            frames: [ { key: 'dude', frame: 0 } ],
+            frameRate: 20
+        });
+
         this.anims.create({
             key: 'left',
-            frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 2 }),
+            frames: this.anims.generateFrameNumbers('dude', { start: 1, end: 3 }),
             frameRate: 8,
             repeat: -1
         });
     
         this.anims.create({
-            key: 'turn',
-            frames: [ { key: 'dude', frame: 3 } ],
-            frameRate: 20
-        });
-    
-        this.anims.create({
             key: 'right',
-            frames: this.anims.generateFrameNumbers('dude', { start: 4, end: 6 }),
+            frames: this.anims.generateFrameNumbers('dude', { start: 6, end: 8 }),
             frameRate: 8,
             repeat: -1
         });
 
         this.anims.create({
             key: 'dance',
-            frames: this.anims.generateFrameNumbers('dude', { start: 7, end: 8 }),
+            frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 12 }),
             frameRate: 8,
             repeat: -1
         });        
 
         this.anims.create({
             key: 'jump',
-            frames: [ { key: 'dude', frame: 9 } ],
+            frames: [ { key: 'dude', frame: 11 } ],
+            frameRate: 20,
+            repeat: -1
+        });      
+
+        this.anims.create({
+            key: 'jumpRight',
+            frames: [ { key: 'dude', frame: 5 } ],
+            frameRate: 20,
+            repeat: -1
+        });      
+
+        this.anims.create({
+            key: 'jumpLeft',
+            frames: [ { key: 'dude', frame: 4 } ],
             frameRate: 20,
             repeat: -1
         });
 
         this.anims.create({
             key: 'stomp',
-            frames: [ { key: 'dude', frame: 10 } ],
+            frames: [ { key: 'dude', frame: 12 } ],
             frameRate: 20,
             repeat: -1
         });
@@ -314,7 +326,7 @@ class SCENE extends Phaser.Scene {
                 this.touchY = y;
             } else if(y > this.touchY) {                
                 stomp = true;
-                console.log('touchY: ' + this.touchY);
+                //console.log('touchY: ' + this.touchY);
             } else {
                 if(x > 400) {
                     dir = 'right';
@@ -347,10 +359,18 @@ class SCENE extends Phaser.Scene {
         //play anims
         if(dir === 'left') {
             this.player.setVelocityX(-260);
-            this.player.anims.play('left', true);
+            if(jump) {
+                this.player.anims.play('jumpLeft', true);
+            } else {
+                this.player.anims.play('left', true);
+            }
         } else if(dir === 'right') {
             this.player.setVelocityX(260);
-            this.player.anims.play('right', true);
+            if(jump) {
+                this.player.anims.play('jumpRight', true);
+            } else {
+                this.player.anims.play('right', true);
+            }
         } else {
             this.player.setVelocityX(0);
             if(jump) {                
@@ -363,8 +383,8 @@ class SCENE extends Phaser.Scene {
             }
         }        
     
-        if (jump && this.player.body.touching.down){
-            this.player.setVelocityY(-330);
+        if(jump && this.player.body.touching.down){
+            this.player.setVelocityY(-400);
         }
     }
 
@@ -397,7 +417,7 @@ class SCENE extends Phaser.Scene {
     
         //  Add and update the score
         this.score += 10;
-        this.scoreText.setText('Score: $' + this.score);
+        this.scoreText.setText('score: $' + this.score);
     
         if (!this.gameOver && this.stars.countActive(true) === 0)
         {
