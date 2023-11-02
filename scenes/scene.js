@@ -38,7 +38,10 @@ class SCENE extends Phaser.Scene {
         //this.soundFX.play();
     }
 
-    create () {  
+    create () {          
+        this.base = this.physics.add.staticGroup();
+        this.platforms = this.physics.add.staticGroup();
+
         this.createTutorial();     
         this.createMobs();
         this.createStars();
@@ -47,8 +50,11 @@ class SCENE extends Phaser.Scene {
         this.createPlayer();
         this.createUI(); 
                     
+        this.physics.add.collider(this.player, this.base);  
         this.physics.add.collider(this.player, this.platforms);  
+        this.physics.add.collider(this.mobs, this.base); 
         this.physics.add.collider(this.mobs, this.platforms);
+        this.physics.add.collider(this.stars, this.base);
         this.physics.add.collider(this.stars, this.platforms);
 
         this.physics.add.overlap(this.player, this.mobs, this.hitMob, null, this);
@@ -97,7 +103,7 @@ class SCENE extends Phaser.Scene {
                         this.rainAscii();
                     }
                 }, {
-                    at: 500,
+                    at: 600,
                     tween: {
                         targets: this.tutorial,
                         y: 0, 
@@ -107,8 +113,12 @@ class SCENE extends Phaser.Scene {
                 }, {
                     at: 1000,
                     run: () => {
-                        this.rainCoins();
                         this.player.setCollideWorldBounds(true);
+                    }
+                }, {
+                    at: 1500,
+                    run: () => {
+                        this.rainCoins();
                     }
                 }
             );
@@ -119,28 +129,25 @@ class SCENE extends Phaser.Scene {
                         this.player.anims.play('dance');
                     }
                 }, {
-                    at: 1000,
-                    tween: {
-                        targets: this.player,
-                        y: 275,
-                        ease: 'Power0',
-                        duration: 500
-                    },
+                    at: 250,
                     run: () => {
                         this.rainAscii();
-                        this.player.anims.play('jump');
                     }
                 }, {
-                    at: 1500,
+                    at: 2000,
+                    run: () => {
+                        this.createPlatforms();
+                    }
+                }, {
+                    at: 2500,
+                    run: () => {
+                        this.rainCoins();
+                    },
                     tween: {
                         targets: this.player,
                         x: 375,
                         ease: 'Power0',
-                        duration: 500
-                    },
-                    run: () => {
-                        this.createPlatforms();
-                        this.rainCoins();
+                        duration: 1000
                     }
                 }
             );
@@ -162,7 +169,7 @@ class SCENE extends Phaser.Scene {
 
     rainAscii() {       
         this.asciiRain.children.iterate(function (child) {
-            child.enableBody(true, child.x, Phaser.Math.FloatBetween(-500, -1000), true, true);
+            child.enableBody(true, child.x, Phaser.Math.FloatBetween(-500, -750), true, true);
             child.setVelocityY(Phaser.Math.FloatBetween(-50, 300));    
             child.setFrame(Phaser.Math.Between(0, 4));
         });      
@@ -200,13 +207,12 @@ class SCENE extends Phaser.Scene {
             fontSize: '18pt', fill: '#FFF', fontStyle: 'italic'
         }).setOrigin(0.5);
         this.tutorial = this.add.container(512, -700, [scroll, headerTxt, title, subtitle, this.hint]);
-            }
+    }
 
     createPlatforms() {        
         switch(this.level) {
             case 0:
-                this.platforms = this.physics.add.staticGroup();
-                this.ground = this.platforms.create(512, 748, 'ground').setDepth(75);
+                this.ground = this.base.create(512, 748, 'ground').setDepth(75);
             break;
             case 1:
                 this.tutorial.destroy();
@@ -215,17 +221,12 @@ class SCENE extends Phaser.Scene {
                 this.platforms.create(5, 460, 'platform2').setOrigin(0, 0).refreshBody();
                 this.platforms.create(460, 600, 'platform3').setOrigin(0, 0).refreshBody();
             break;
-            case 2:                
-                var x = (this.player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
-                var mob = this.mobs.create(x, 16, 'mob0');
-                mob.setBounce(0.2);
-                mob.setCollideWorldBounds(true);
-                mob.setVelocity(Phaser.Math.Between(-200, 200), 20);
-                mob.allowGravity = true;
+            case 2: 
+                this.platforms.clear(true, true);
             break;
             case 3:
                 var x = (this.player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
-                var mob = this.mobs.create(x, 16, 'mob1');
+                var mob = this.mobs.create(x, 16, 'mob0');
                 mob.setBounce(0.2);
                 mob.setCollideWorldBounds(true);
                 mob.setVelocity(Phaser.Math.Between(-200, 200), 20);
