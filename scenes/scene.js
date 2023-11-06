@@ -1,4 +1,4 @@
-class SCENE extends Phaser.Scene {
+export default class SCENE extends Phaser.Scene {
     constructor() {
         super("SCENE");
     }
@@ -454,7 +454,7 @@ class SCENE extends Phaser.Scene {
     ////////////////////////////////////////////////////////////////////
     
     createUI() {    
-        let fontStyle = { fontSize: '24pt', fill: '#FFF', backgroundColor: config.backgroundColor };
+        let fontStyle = { fontSize: '24pt', fill: '#FFF', backgroundColor: this.game.config.backgroundColor.rgba };
         
         //  Input Events
         this.cursors = this.input.keyboard.createCursorKeys();

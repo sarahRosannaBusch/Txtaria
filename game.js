@@ -1,3 +1,5 @@
+import SCENE from "./scenes/scene.js";
+
 const config = {
     parent: "game",
     type: Phaser.AUTO,
@@ -18,4 +20,4 @@ const config = {
     scene: [ SCENE ]
 };
 
-const GAME = new Phaser.Game(config);
+const game = new Phaser.Game(config);
