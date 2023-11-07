@@ -1,6 +1,7 @@
 import PLAYER from "./player.js";
 import COINS from "./coins.js";
 import ASCIIRAIN from "./asciiRain.js";
+import MOBS from "./mobs.js";
 
 export default class SCENE extends Phaser.Scene {
     constructor() {
@@ -42,23 +43,25 @@ export default class SCENE extends Phaser.Scene {
         //this.soundFX.play();
     }
 
-    create () {          
+    create () {       
+        let world = this.physics.world;
+        
         this.base = this.physics.add.staticGroup();
         this.base.create(512, 748, 'ground').setDepth(75);
 
         this.platforms = this.physics.add.staticGroup();
     
-        this.createMobs();
         this.createLevel();
         this.createUI(); 
 
         this.player = new PLAYER(this, 375, -250, 'dude', 0);
-        this.coins = new COINS(this.physics.world, this, {
+        this.coins = new COINS(world, this, {
             key: 'coin',
             repeat: 11,
             setXY: { x: 42, y: 0, stepX: 85 }
         });
-        this.asciiRain = new ASCIIRAIN(this.physics.world, this, {});
+        this.asciiRain = new ASCIIRAIN(world, this, {});
+        this.mobs = new MOBS(world, this, {});
                     
         this.physics.add.collider(this.player, this.base);  
         this.physics.add.collider(this.player, this.platforms);  
@@ -200,13 +203,14 @@ export default class SCENE extends Phaser.Scene {
         this.tutorial = this.add.container(512, -700, [scroll, headerTxt, title, subtitle, this.hint]);
     }
 
-    createLevel() {        
+    createLevel() {    
         switch(this.level) {
             case 0:
                 this.createTutorial(); 
             break;
             case 1:
                 this.tutorial.destroy();
+                this.mobs.spawn(512, 16, 'bomb');
                 this.platforms.create(420, 300, 'platform0').setOrigin(0, 0).refreshBody();
                 this.platforms.create(744, 440, 'platform1').setOrigin(0, 0).refreshBody();
                 this.platforms.create(5, 460, 'platform2').setOrigin(0, 0).refreshBody();
@@ -214,22 +218,11 @@ export default class SCENE extends Phaser.Scene {
             break;
             case 2: 
                 this.platforms.clear(true, true);
+                this.mobs.clear(true, true);    
+                this.mobs.spawn(512, 16, 'mob0');
             break;
-            case 3:
-                var x = (this.player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
-                var mob = this.mobs.create(x, 16, 'mob0');
-                mob.setBounce(0.2);
-                mob.setCollideWorldBounds(true);
-                mob.setVelocity(Phaser.Math.Between(-200, 200), 20);
-                mob.allowGravity = false;
-            break;
-            case 4:
-                var x = (this.player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
-                var bomb = this.mobs.create(x, 16, 'bomb');
-                bomb.setBounce(1);
-                bomb.setCollideWorldBounds(true);
-                bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
-                bomb.allowGravity = false;
+            case 3:                
+                this.mobs.spawn(512, 16, 'mob1');
             break;
             default: break;
         }
@@ -308,10 +301,6 @@ export default class SCENE extends Phaser.Scene {
     ////////////////////////////////////////////////////////////////////
     //                         Mobile Objects                         //
     ////////////////////////////////////////////////////////////////////
-    
-    createMobs() {
-        this.mobs = this.physics.add.group();
-    }
     
     hitMob (player, mob) {
         this.physics.pause();
