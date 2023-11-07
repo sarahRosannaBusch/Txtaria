@@ -1,4 +1,5 @@
 import PLAYER from "./player.js";
+import COINS from "./coins.js";
 
 export default class SCENE extends Phaser.Scene {
     constructor() {
@@ -28,7 +29,7 @@ export default class SCENE extends Phaser.Scene {
         this.load.image('platform1', 'assets/platform1.png');
         this.load.image('platform2', 'assets/platform2.png');
         this.load.image('platform3', 'assets/platform3.png');
-        this.load.image('star', 'assets/star.png');
+        this.load.image('coin', 'assets/coin.png');
         this.load.image('healthPot', 'assets/healthPot.png');
         this.load.image('mob0', 'assets/mob0.png');    
         this.load.image('mob1', 'assets/mob1.png');
@@ -42,26 +43,31 @@ export default class SCENE extends Phaser.Scene {
 
     create () {          
         this.base = this.physics.add.staticGroup();
-        this.platforms = this.physics.add.staticGroup();
+        this.base.create(512, 748, 'ground').setDepth(75);
 
-        this.createTutorial();     
+        this.platforms = this.physics.add.staticGroup();
+    
         this.createMobs();
-        this.createStars();
         this.createRain();
-        this.createPlatforms();
+        this.createLevel();
         this.createUI(); 
 
         this.player = new PLAYER(this, 375, -250, 'dude', 0);
+        this.coins = new COINS(this.physics.world, this, {
+            key: 'coin',
+            repeat: 11,
+            setXY: { x: 42, y: 0, stepX: 85 }
+        });
                     
         this.physics.add.collider(this.player, this.base);  
         this.physics.add.collider(this.player, this.platforms);  
         this.physics.add.collider(this.mobs, this.base); 
         this.physics.add.collider(this.mobs, this.platforms);
-        this.physics.add.collider(this.stars, this.base);
-        this.physics.add.collider(this.stars, this.platforms);
+        this.physics.add.collider(this.coins, this.base);
+        this.physics.add.collider(this.coins, this.platforms);
 
         this.physics.add.overlap(this.player, this.mobs, this.hitMob, null, this);
-        this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
+        this.physics.add.overlap(this.player, this.coins, this.collectCoin, null, this);
 
         this.playTween();
     }
@@ -74,7 +80,7 @@ export default class SCENE extends Phaser.Scene {
                 this.movePlayer();
                 if(time - this.tick > 5000) {
                     this.tick = time;
-                    this.bounceStars();
+                    this.coins.bounce();
                     if(this.level === 0) {
                         this.changeHint();
                     }
@@ -121,7 +127,7 @@ export default class SCENE extends Phaser.Scene {
                 }, {
                     at: 1500,
                     run: () => {
-                        this.rainCoins();
+                        this.coins.rain();
                     }
                 }
             );
@@ -139,12 +145,12 @@ export default class SCENE extends Phaser.Scene {
                 }, {
                     at: 2000,
                     run: () => {
-                        this.createPlatforms();
+                        this.createLevel();
                     }
                 }, {
                     at: 2500,
                     run: () => {
-                        this.rainCoins();
+                        this.coins.rain();
                     },
                     tween: {
                         targets: this.player,
@@ -212,10 +218,10 @@ export default class SCENE extends Phaser.Scene {
         this.tutorial = this.add.container(512, -700, [scroll, headerTxt, title, subtitle, this.hint]);
     }
 
-    createPlatforms() {        
+    createLevel() {        
         switch(this.level) {
             case 0:
-                this.ground = this.base.create(512, 748, 'ground').setDepth(75);
+                this.createTutorial(); 
             break;
             case 1:
                 this.tutorial.destroy();
@@ -304,46 +310,17 @@ export default class SCENE extends Phaser.Scene {
     ////////////////////////////////////////////////////////////////////
     //                             Coins                              //
     ////////////////////////////////////////////////////////////////////
-
-    createStars() {  
-        this.stars = this.physics.add.group({
-            key: 'star',
-            repeat: 11,
-            setXY: { x: 42, y: 0, stepX: 85 }
-        });            
-        this.stars.children.iterate(function (child) {
-            child.disableBody(true, true); //wait for trigger to rain stars
-        });        
-    }
-
-    rainCoins() {
-        //  A new batch of stars to collect
-        this.stars.children.iterate(function (child) {
-            child.enableBody(true, child.x, Phaser.Math.FloatBetween(0, -75), true, true);
-            child.setBounceY(Phaser.Math.FloatBetween(0.2, 0.4));
-            child.setVelocityY(Phaser.Math.FloatBetween(0, 250));
-        });
-    }
         
-    collectStar (player, star) {
-        star.disableBody(true, true);
+    collectCoin (player, coin) {
+        coin.disableBody(true, true);
     
         //  Add and update the score
         this.score += 10;
         this.scoreText.setText('score: $' + this.score);
     
-        if (!this.gameOver && this.stars.countActive(true) === 0)
-        {
+        if (!this.gameOver && this.coins.countActive(true) === 0) {
             this.levelUp();
         }
-    }
-
-    bounceStars() {
-        this.stars.children.iterate(function (child) {
-            if(child.body.touching.down) {
-                child.setVelocityY(Phaser.Math.FloatBetween(-25, -75));
-            }
-        });
     }
 
     ////////////////////////////////////////////////////////////////////
