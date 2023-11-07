@@ -1,3 +1,5 @@
+import PLAYER from "./player.js";
+
 export default class SCENE extends Phaser.Scene {
     constructor() {
         super("SCENE");
@@ -47,8 +49,9 @@ export default class SCENE extends Phaser.Scene {
         this.createStars();
         this.createRain();
         this.createPlatforms();
-        this.createPlayer();
         this.createUI(); 
+
+        this.player = new PLAYER(this, 375, -250, 'dude', 0);
                     
         this.physics.add.collider(this.player, this.base);  
         this.physics.add.collider(this.player, this.platforms);  
@@ -248,69 +251,7 @@ export default class SCENE extends Phaser.Scene {
     //                            Player                              //
     ////////////////////////////////////////////////////////////////////
 
-    createPlayer() {                
-        // The player and its settings
-        this.player = this.physics.add.sprite(375, -250, 'dude');
-        this.player.setBounce(0.2);
-        //this.player.setCollideWorldBounds(true);
-    
-        //  Player animations, turning, walking left and walking right.    
-        this.anims.create({
-            key: 'turn',
-            frames: [ { key: 'dude', frame: 0 } ],
-            frameRate: 20
-        });
-
-        this.anims.create({
-            key: 'left',
-            frames: this.anims.generateFrameNumbers('dude', { start: 1, end: 3 }),
-            frameRate: 8,
-            repeat: -1
-        });
-    
-        this.anims.create({
-            key: 'right',
-            frames: this.anims.generateFrameNumbers('dude', { start: 6, end: 8 }),
-            frameRate: 8,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: 'dance',
-            frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 12 }),
-            frameRate: 8,
-            repeat: -1
-        });        
-
-        this.anims.create({
-            key: 'jump',
-            frames: [ { key: 'dude', frame: 11 } ],
-            frameRate: 20,
-            repeat: -1
-        });      
-
-        this.anims.create({
-            key: 'jumpRight',
-            frames: [ { key: 'dude', frame: 5 } ],
-            frameRate: 20,
-            repeat: -1
-        });      
-
-        this.anims.create({
-            key: 'jumpLeft',
-            frames: [ { key: 'dude', frame: 4 } ],
-            frameRate: 20,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: 'stomp',
-            frames: [ { key: 'dude', frame: 12 } ],
-            frameRate: 20,
-            repeat: -1
-        });
-    }
-
+    //based on user input
     movePlayer() {
         let dirPointer = this.input.pointer1;
         let jumpPointer = this.input.pointer2;
@@ -357,36 +298,7 @@ export default class SCENE extends Phaser.Scene {
             stomp = true;
         }
     
-        //play anims
-        if(dir === 'left') {
-            this.player.setVelocityX(-260);
-            if(jump) {
-                this.player.anims.play('jumpLeft', true);
-            } else {
-                this.player.anims.play('left', true);
-            }
-        } else if(dir === 'right') {
-            this.player.setVelocityX(260);
-            if(jump) {
-                this.player.anims.play('jumpRight', true);
-            } else {
-                this.player.anims.play('right', true);
-            }
-        } else {
-            this.player.setVelocityX(0);
-            if(jump) {                
-                this.player.anims.play('jump');
-            } else if(stomp) {
-                this.player.anims.play('stomp');
-                this.player.setVelocityY(330);
-            } else {
-                this.player.anims.play('turn');
-            }
-        }        
-    
-        if(jump && this.player.body.touching.down){
-            this.player.setVelocityY(-400);
-        }
+        this.player.playAnims(dir, jump, stomp);
     }
 
     ////////////////////////////////////////////////////////////////////
