@@ -1,5 +1,6 @@
 import PLAYER from "./player.js";
 import COINS from "./coins.js";
+import ASCIIRAIN from "./asciiRain.js";
 
 export default class SCENE extends Phaser.Scene {
     constructor() {
@@ -48,7 +49,6 @@ export default class SCENE extends Phaser.Scene {
         this.platforms = this.physics.add.staticGroup();
     
         this.createMobs();
-        this.createRain();
         this.createLevel();
         this.createUI(); 
 
@@ -58,6 +58,7 @@ export default class SCENE extends Phaser.Scene {
             repeat: 11,
             setXY: { x: 42, y: 0, stepX: 85 }
         });
+        this.asciiRain = new ASCIIRAIN(this.physics.world, this, {});
                     
         this.physics.add.collider(this.player, this.base);  
         this.physics.add.collider(this.player, this.platforms);  
@@ -109,7 +110,7 @@ export default class SCENE extends Phaser.Scene {
             params.push({
                     at: 0,
                     run: () => {
-                        this.rainAscii();
+                        this.asciiRain.rain();
                     }
                 }, {
                     at: 600,
@@ -140,7 +141,7 @@ export default class SCENE extends Phaser.Scene {
                 }, {
                     at: 250,
                     run: () => {
-                        this.rainAscii();
+                        this.asciiRain.rain();
                     }
                 }, {
                     at: 2000,
@@ -163,25 +164,6 @@ export default class SCENE extends Phaser.Scene {
         }
         const timeline = this.add.timeline(params);
         timeline.play();
-    }
-
-    createRain() {  
-        this.asciiRain = this.physics.add.group();    
-        for(let i = 0; i < 103; i++) {
-            let x = i * 10;
-            let drop = this.physics.add.sprite(x, 0, 'asciiRain');
-            drop.setDepth(50);  
-            drop.disableBody(true, true); 
-            this.asciiRain.add(drop);
-        }   
-    }
-
-    rainAscii() {       
-        this.asciiRain.children.iterate(function (child) {
-            child.enableBody(true, child.x, Phaser.Math.FloatBetween(-500, -750), true, true);
-            child.setVelocityY(Phaser.Math.FloatBetween(-50, 300));    
-            child.setFrame(Phaser.Math.Between(0, 4));
-        });      
     }
 
     ////////////////////////////////////////////////////////////////////

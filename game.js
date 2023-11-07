@@ -1,4 +1,4 @@
-import SCENE from "./scenes/scene.js";
+import SCENE from "./classes/scene.js";
 
 const config = {
     parent: "game",
