@@ -3,6 +3,7 @@ import COINS from "./coins.js";
 import ASCIIRAIN from "./asciiRain.js";
 import MOBS from "./mobs.js";
 import UI from "./ui.js";
+import PLATFORMS from "./platforms.js";
 
 export default class SCENE extends Phaser.Scene {
     constructor() {
@@ -49,14 +50,15 @@ export default class SCENE extends Phaser.Scene {
         this.cursors = this.input.keyboard.createCursorKeys();
         this.wasd = this.input.keyboard.addKeys('W,S,A,D');
         this.input.addPointer(1); //for multi-touch
+
+        this.ui = new UI(this);
         
         this.base = this.physics.add.staticGroup();
         this.base.create(512, 748, 'ground').setDepth(75);
 
-        this.platforms = this.physics.add.staticGroup();    
+        this.platforms = new PLATFORMS(world, this, {}); 
         this.createLevel();
 
-        this.ui = new UI(this);
         this.player = new PLAYER(this, 375, -250, 'dude', 0);
         this.coins = new COINS(world, this, {
             key: 'coin',
@@ -95,10 +97,6 @@ export default class SCENE extends Phaser.Scene {
             }
         } 
     }
-
-    ////////////////////////////////////////////////////////////////////
-    //                            Tweens                              //
-    ////////////////////////////////////////////////////////////////////
 
     playTween() {
         let params = [{
@@ -172,10 +170,6 @@ export default class SCENE extends Phaser.Scene {
         timeline.play();
     }
 
-    ////////////////////////////////////////////////////////////////////
-    //                            Levels                              //
-    ////////////////////////////////////////////////////////////////////
-
     levelUp() {
         this.level++;            
         this.ui.updateLevel(this.level);
@@ -223,10 +217,12 @@ export default class SCENE extends Phaser.Scene {
             case 1:
                 this.tutorial.destroy();
                 this.mobs.spawn(512, 16, 'bomb');
-                this.platforms.create(420, 300, 'platform0').setOrigin(0, 0).refreshBody();
-                this.platforms.create(744, 440, 'platform1').setOrigin(0, 0).refreshBody();
-                this.platforms.create(5, 460, 'platform2').setOrigin(0, 0).refreshBody();
-                this.platforms.create(460, 600, 'platform3').setOrigin(0, 0).refreshBody();
+                this.platforms.build([
+                    {x: 420, y: 300, key: 'platform0'},
+                    {x: 744, y: 440, key: 'platform1'},
+                    {x: 5, y: 460, key: 'platform2'},
+                    {x: 460, y: 600, key: 'platform3'},
+                ]);
             break;
             case 2: 
                 this.platforms.clear(true, true);
@@ -239,10 +235,6 @@ export default class SCENE extends Phaser.Scene {
             default: break;
         }
     }
-
-    ////////////////////////////////////////////////////////////////////
-    //                            Player                              //
-    ////////////////////////////////////////////////////////////////////
 
     //based on user input
     movePlayer() {
@@ -293,11 +285,7 @@ export default class SCENE extends Phaser.Scene {
     
         this.player.playAnims(dir, jump, stomp);
     }
-
-    ////////////////////////////////////////////////////////////////////
-    //                             Coins                              //
-    ////////////////////////////////////////////////////////////////////
-        
+  
     collectCoin (player, coin) {
         coin.disableBody(true, true);
     
@@ -309,22 +297,12 @@ export default class SCENE extends Phaser.Scene {
         }
     }
 
-    ////////////////////////////////////////////////////////////////////
-    //                         Mobile Objects                         //
-    ////////////////////////////////////////////////////////////////////
-    
     hitMob (player, mob) {
         this.physics.pause();
         player.setTint(0xff0000);
         player.anims.play('turn');
         this.gameOver = true;
     }
-
-    ////////////////////////////////////////////////////////////////////
-    //                  User Interface and Controls                   //
-    ////////////////////////////////////////////////////////////////////
-    
-
 
     rollCredits() {            
         this.add.image(512, 350, 'scroll');    
