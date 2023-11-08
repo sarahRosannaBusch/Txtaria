@@ -6,11 +6,6 @@ export default class UI {
 
         let fontStyle = { fontSize: '24pt', fill: '#FFF', backgroundColor: this.scene.game.config.backgroundColor.rgba };
         
-        //  Input Events
-        this.scene.cursors = this.scene.input.keyboard.createCursorKeys();
-        this.scene.wasd = this.scene.input.keyboard.addKeys('W,S,A,D');
-        this.scene.input.addPointer(1); //for multi-touch
-
         //UI
         this.scoreText = this.scene.add.text(16, 16, 'score: $0', fontStyle);
         this.levelText = this.scene.add.text(512, 32, 'level: 0 / 12', fontStyle).setOrigin(0.5);
@@ -30,8 +25,8 @@ export default class UI {
             this.toggleFullscreen();
         });
 
-        this.scene.ui = this.scene.add.container(0, 0, [this.scoreText, this.levelText, this.helpBtn, this.fsBtn]);
-        this.scene.ui.setDepth(100);
+        let container = this.scene.add.container(0, 0, [this.scoreText, this.levelText, this.helpBtn, this.fsBtn]);
+        container.setDepth(100);
     }
     
     updateScore(score) {        
@@ -96,13 +91,13 @@ OPTIONS:
                 s = this.soundOn ? 'X' : ' ';
                 this.optSound.setText(`[${s}] sound`);
             });
+            
+            this.help = this.scene.add.container(0, 0, [this.helpScroll, this.helpText, this.optFS, this.optSound]);
+            this.help.setDepth(100);
         } else {
             this.scene.physics.resume();
             this.helpBtn.setText("[?]");
-            this.helpScroll.destroy();
-            this.helpText.destroy();
-            this.optFS.destroy();
-            this.optSound.destroy();
+            this.help.destroy();
         }
         
         this.helpShowing = !this.helpShowing;

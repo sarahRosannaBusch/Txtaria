@@ -45,6 +45,11 @@ export default class SCENE extends Phaser.Scene {
     create () {       
         let world = this.physics.world;
         
+        //  Input Events
+        this.cursors = this.input.keyboard.createCursorKeys();
+        this.wasd = this.input.keyboard.addKeys('W,S,A,D');
+        this.input.addPointer(1); //for multi-touch
+        
         this.base = this.physics.add.staticGroup();
         this.base.create(512, 748, 'ground').setDepth(75);
 
