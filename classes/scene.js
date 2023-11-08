@@ -4,6 +4,7 @@ import ASCIIRAIN from "./asciiRain.js";
 import MOBS from "./mobs.js";
 import UI from "./ui.js";
 import PLATFORMS from "./platforms.js";
+import TUTORIAL from "./tutorial.js";
 
 export default class SCENE extends Phaser.Scene {
     constructor() {
@@ -14,7 +15,6 @@ export default class SCENE extends Phaser.Scene {
         this.score = 0;
         this.level = 0;
         this.tick = 0;
-        this.hintIdx = 0;
         this.tweening = true;
         this.gameOver = false;
         this.touchY = 0;
@@ -91,7 +91,7 @@ export default class SCENE extends Phaser.Scene {
                     this.tick = time;
                     this.coins.bounce();
                     if(this.level === 0) {
-                        this.changeHint();
+                        this.tutorial.changeHint();
                     }
                 }
             }
@@ -179,40 +179,11 @@ export default class SCENE extends Phaser.Scene {
             this.ui.showHelp(false);
         } 
     }
-
-    createTutorial() {        
-        let scroll = this.add.image(0, 350, 'scroll');
-        let headerTxt = this.add.text(0, 200, 'Welcome to', {
-            fontSize: '24pt', fill: '#FFF'
-        }).setOrigin(0.5);                
-        let title = this.add.image(0, 275, 'title').setOrigin(0.5);
-        let subtitle = this.add.text(0, 365, 'Where ASCII rains', {
-            fontSize: '24pt', fill: '#FFF'
-        }).setOrigin(0.5);
-        this.hints = [
-            'Click the [?] to see controls and options',
-            'Click the [+] or [-] to toggle fullscreen',
-            'Collect all the {$} to progress to next level'
-        ]
-        this.hint = this.add.text(0, 430, this.hints[0], {
-            fontSize: '18pt', fill: '#FFF', fontStyle: 'italic'
-        }).setOrigin(0.5);
-        this.tutorial = this.add.container(512, -700, [scroll, headerTxt, title, subtitle, this.hint]);
-    }
     
-    changeHint() {
-        if(this.hintIdx < 2) {
-            this.hintIdx++;
-        } else {
-            this.hintIdx = 0;
-        }
-        this.hint.setText(this.hints[this.hintIdx]);
-    }
-
     createLevel() {    
         switch(this.level) {
             case 0:
-                this.createTutorial(); 
+                this.tutorial = new TUTORIAL(this, 512, -700); 
             break;
             case 1:
                 this.tutorial.destroy();
