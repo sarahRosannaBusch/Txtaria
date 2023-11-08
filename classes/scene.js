@@ -86,7 +86,7 @@ export default class SCENE extends Phaser.Scene {
             this.rollCredits();
         } else {
             if(!this.tweening) {
-                this.movePlayer();
+                this.player.move();
                 if(time - this.tick > 5000) {
                     this.tick = time;
                     this.coins.bounce();
@@ -234,56 +234,6 @@ export default class SCENE extends Phaser.Scene {
             break;
             default: break;
         }
-    }
-
-    //based on user input
-    movePlayer() {
-        let dirPointer = this.input.pointer1;
-        let jumpPointer = this.input.pointer2;
-    
-        let jump = jumpPointer.isDown ? true : false;
-        let stomp = false;
-        let dir;
-    
-        //touch controls
-        if(dirPointer.isDown) {
-            let x = dirPointer.position.x;
-            let y = dirPointer.position.y;
-            if(this.touchY === 0) {
-                this.touchY = y;
-            } else if(y > this.touchY) {                
-                stomp = true;
-                //console.log('touchY: ' + this.touchY);
-            } else {
-                if(x > 400) {
-                    dir = 'right';
-                } else {            
-                    dir = 'left';
-                }
-            }
-        } else {            
-            this.touchY = 0;
-            dir = false;
-            if(dirPointer.getDuration() > 0 && dirPointer.getDuration() < 150) {
-                //if dirPointer isn't down and screen is tapped, jump
-                jump = true;
-            }
-        }
-
-        //keyboard controls
-        if(this.cursors.left.isDown || this.wasd.A.isDown) {
-            dir = 'left';
-        } else if(this.cursors.right.isDown || this.wasd.D.isDown) {
-            dir = 'right';
-        }
-
-        if(this.cursors.up.isDown || this.wasd.W.isDown) {
-            jump = true;
-        } else if(this.cursors.down.isDown || this.wasd.S.isDown) {
-            stomp = true;
-        }
-    
-        this.player.playAnims(dir, jump, stomp);
     }
   
     collectCoin (player, coin) {
