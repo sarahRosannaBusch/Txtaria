@@ -21,7 +21,7 @@ export default class SCENE extends Phaser.Scene {
 
     preload() {  
         this.load.spritesheet('asciiRain', 'assets/asciiRain.png', { 
-            frameWidth: 10, frameHeight: 1059
+            frameWidth: 10, frameHeight: 1554
         });      
         this.load.image('scroll', 'assets/scroll.png');
         this.load.image('title', 'assets/title.png');
@@ -151,6 +151,12 @@ export default class SCENE extends Phaser.Scene {
                     {x: 460, y: 600, key: 'platform3'},
                 ]);              
             break;
+            default: break;
+        }
+    }
+
+    addMobs() {
+        switch(this.level) {
             case 2:    
                 this.mobs.spawn(512, 16, 'mob0');
             break;
@@ -219,6 +225,11 @@ export default class SCENE extends Phaser.Scene {
                     x: 375,
                     ease: 'Power0',
                     duration: 1000
+                }
+            }, {
+                at: 2500,
+                run: () => {
+                    this.addMobs();
                 }
             });
         }

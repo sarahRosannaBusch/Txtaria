@@ -23,6 +23,7 @@ export default class TUTORIAL extends Phaser.GameObjects.Container {
         }).setOrigin(0.5);
         
         this.add([scroll, headerTxt, title, subtitle, this.hint]);
+        this.setDepth(0);
     }
 
     changeHint() {
