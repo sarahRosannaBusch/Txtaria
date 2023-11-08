@@ -2,6 +2,7 @@ import PLAYER from "./player.js";
 import COINS from "./coins.js";
 import ASCIIRAIN from "./asciiRain.js";
 import MOBS from "./mobs.js";
+import UI from "./ui.js";
 
 export default class SCENE extends Phaser.Scene {
     constructor() {
@@ -11,8 +12,6 @@ export default class SCENE extends Phaser.Scene {
     init() {
         this.score = 0;
         this.level = 0;
-        this.helpShowing = false;
-        this.soundOn = false;
         this.tick = 0;
         this.hintIdx = 0;
         this.tweening = true;
@@ -49,11 +48,10 @@ export default class SCENE extends Phaser.Scene {
         this.base = this.physics.add.staticGroup();
         this.base.create(512, 748, 'ground').setDepth(75);
 
-        this.platforms = this.physics.add.staticGroup();
-    
+        this.platforms = this.physics.add.staticGroup();    
         this.createLevel();
-        this.createUI(); 
 
+        this.ui = new UI(this);
         this.player = new PLAYER(this, 375, -250, 'dude', 0);
         this.coins = new COINS(world, this, {
             key: 'coin',
@@ -175,11 +173,11 @@ export default class SCENE extends Phaser.Scene {
 
     levelUp() {
         this.level++;            
-        this.levelText.setText(`level: ${this.level} / 12`);
+        this.ui.updateLevel(this.level);
         this.playTween();
 
-        if(this.helpShowing) {
-            this.showHelp(false);
+        if(this.ui.helpShowing) {
+            this.ui.showHelp(false);
         } 
     }
 
@@ -201,6 +199,15 @@ export default class SCENE extends Phaser.Scene {
             fontSize: '18pt', fill: '#FFF', fontStyle: 'italic'
         }).setOrigin(0.5);
         this.tutorial = this.add.container(512, -700, [scroll, headerTxt, title, subtitle, this.hint]);
+    }
+    
+    changeHint() {
+        if(this.hintIdx < 2) {
+            this.hintIdx++;
+        } else {
+            this.hintIdx = 0;
+        }
+        this.hint.setText(this.hints[this.hintIdx]);
     }
 
     createLevel() {    
@@ -291,8 +298,7 @@ export default class SCENE extends Phaser.Scene {
     
         //  Add and update the score
         this.score += 10;
-        this.scoreText.setText('score: $' + this.score);
-    
+        this.ui.updateScore(this.score);
         if (!this.gameOver && this.coins.countActive(true) === 0) {
             this.levelUp();
         }
@@ -313,106 +319,7 @@ export default class SCENE extends Phaser.Scene {
     //                  User Interface and Controls                   //
     ////////////////////////////////////////////////////////////////////
     
-    createUI() {    
-        let fontStyle = { fontSize: '24pt', fill: '#FFF', backgroundColor: this.game.config.backgroundColor.rgba };
-        
-        //  Input Events
-        this.cursors = this.input.keyboard.createCursorKeys();
-        this.wasd = this.input.keyboard.addKeys('W,S,A,D');
-        this.input.addPointer(1); //for multi-touch
 
-        //UI
-        this.scoreText = this.add.text(16, 16, 'score: $0', fontStyle);
-        this.levelText = this.add.text(512, 32, 'level: 0 / 12', fontStyle).setOrigin(0.5);
-        
-        //help button
-        this.helpBtn = this.add.text(1024 - 80, 16, '[?]', fontStyle).setOrigin(1, 0).setInteractive();
-        this.helpBtn.on('pointerup', function () {            
-            this.showHelp(!this.helpShowing);
-        }, this);                
-        this.input.keyboard.on('keydown-ESC', () => {
-            this.showHelp(!this.helpShowing);
-        });
-
-        //fullscreen button
-        this.fsBtn = this.add.text(1024 - 16, 16, '[+]', fontStyle).setOrigin(1, 0).setInteractive();
-        this.fsBtn.on('pointerup', () => {
-            this.toggleFullscreen();
-        });
-
-        this.ui = this.add.container(0, 0, [this.scoreText, this.levelText, this.helpBtn, this.fsBtn]);
-        this.ui.setDepth(100);
-    }
-    
-    changeHint() {
-        if(this.hintIdx < 2) {
-            this.hintIdx++;
-        } else {
-            this.hintIdx = 0;
-        }
-        this.hint.setText(this.hints[this.hintIdx]);
-    }
-
-    toggleFullscreen() {
-        if (this.scale.isFullscreen) {
-            this.scale.stopFullscreen();
-            this.fsBtn.setText("[+]");
-        } else {
-            this.scale.startFullscreen();
-            this.fsBtn.setText("[-]");
-        }
-    }
-
-    toggleSound() {
-        this.soundOn = !this.soundOn;
-        //todo
-    }
-
-    showHelp(show) {     
-        if(show) {   
-            this.physics.pause();
-            this.helpBtn.setText("[X]");
-            this.helpScroll = this.add.image(512, 350, 'scroll');
-            let fs = this.scale.isFullscreen ? 'X' : ' ';
-            this.helpText = this.add.text(200, 180, `
-KEYBOARD CONTROLS:
-w,a,s,d or arrow keys
-
-TWO-FINGER TOUCH:
-1. hold left/right side of screen to move
-2. tap anywhere to jump
-3. swipe down to stomp
-
-OPTIONS:
-            `, { fontSize: '24px', fill: '#FFF' });
-
-            this.optFS = this.add.text(200, 415, `[${fs}] fullscreen`,
-                { fontSize: '24px', fill: '#FFF' }).setInteractive();
-            this.optFS.on('pointerup', () => {
-                this.toggleFullscreen();
-                fs = this.scale.isFullscreen ? ' ' : 'X';
-                this.optFS.setText(`[${fs}] fullscreen`);
-            });
-
-            let s = this.soundOn ? 'X' : ' ';
-            this.optSound = this.add.text(200, 435, `[${s}] sound`,
-                { fontSize: '24px', fill: '#FFF' }).setInteractive();
-            this.optSound.on('pointerup', () => {
-                this.toggleSound();
-                s = this.soundOn ? 'X' : ' ';
-                this.optSound.setText(`[${s}] sound`);
-            });
-        } else {
-            this.physics.resume();
-            this.helpBtn.setText("[?]");
-            this.helpScroll.destroy();
-            this.helpText.destroy();
-            this.optFS.destroy();
-            this.optSound.destroy();
-        }
-        
-        this.helpShowing = !this.helpShowing;
-    }
 
     rollCredits() {            
         this.add.image(512, 350, 'scroll');    
