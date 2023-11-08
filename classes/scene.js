@@ -17,7 +17,6 @@ export default class SCENE extends Phaser.Scene {
         this.tick = 0;
         this.tweening = true;
         this.gameOver = false;
-        this.touchY = 0;
     }
 
     preload() {  
@@ -45,11 +44,6 @@ export default class SCENE extends Phaser.Scene {
 
     create () {       
         let world = this.physics.world;
-        
-        //  Input Events
-        this.cursors = this.input.keyboard.createCursorKeys();
-        this.wasd = this.input.keyboard.addKeys('W,S,A,D');
-        this.input.addPointer(1); //for multi-touch
 
         this.ui = new UI(this);
         
@@ -179,7 +173,7 @@ export default class SCENE extends Phaser.Scene {
             this.ui.showHelp(false);
         } 
     }
-    
+
     createLevel() {    
         switch(this.level) {
             case 0:

@@ -11,7 +11,7 @@ export default class UI {
         this.levelText = this.scene.add.text(512, 32, 'level: 0 / 12', fontStyle).setOrigin(0.5);
         
         //help button
-        this.helpBtn = this.scene.add.text(1024 - 80, 16, '[?]', fontStyle).setOrigin(1, 0).setInteractive();
+        this.helpBtn = this.scene.add.text(1024 - 120, 16, '[?]', fontStyle).setOrigin(1, 0).setInteractive();
         this.helpBtn.on('pointerup', () => {            
             this.showHelp(!this.helpShowing);
         });                

@@ -6,6 +6,13 @@ export default class PLAYER extends Phaser.Physics.Arcade.Sprite {
         this.setInteractive();
         this.setBounce(0.2);
         this.createAnims();
+        
+        //  Input Events
+        this.cursors = scene.input.keyboard.createCursorKeys();
+        this.wasd = scene.input.keyboard.addKeys('W,S,A,D');
+        scene.input.addPointer(1); //for multi-touch
+        this.touchY = 0;
+        this.click = 0; //duration of last click
     }
 
     createAnims() {
@@ -126,22 +133,24 @@ export default class PLAYER extends Phaser.Physics.Arcade.Sprite {
         } else {            
             this.scene.touchY = 0;
             dir = false;
-            if(dirPointer.getDuration() > 0 && dirPointer.getDuration() < 150) {
+            let dur = dirPointer.getDuration();
+            if((this.click !== dur) && (dur > 0) && (dur < 150)) {
                 //if dirPointer isn't down and screen is tapped, jump
                 jump = true;
+                this.click = dur; //to disable autojumping
             }
         }
 
         //keyboard controls
-        if(this.scene.cursors.left.isDown || this.scene.wasd.A.isDown) {
+        if(this.cursors.left.isDown || this.wasd.A.isDown) {
             dir = 'left';
-        } else if(this.scene.cursors.right.isDown || this.scene.wasd.D.isDown) {
+        } else if(this.cursors.right.isDown || this.wasd.D.isDown) {
             dir = 'right';
         }
 
-        if(this.scene.cursors.up.isDown || this.scene.wasd.W.isDown) {
+        if(this.cursors.up.isDown || this.wasd.W.isDown) {
             jump = true;
-        } else if(this.scene.cursors.down.isDown || this.scene.wasd.S.isDown) {
+        } else if(this.cursors.down.isDown || this.wasd.S.isDown) {
             stomp = true;
         }
     
