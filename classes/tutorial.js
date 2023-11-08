@@ -2,7 +2,7 @@ export default class TUTORIAL extends Phaser.GameObjects.Container {
     constructor(scene, x, y) {  
         super(scene, x, y);
         scene.add.existing(this);
-        this.hintIdx = 0;
+        
         let scroll = scene.add.image(0, 350, 'scroll');
         let headerTxt = scene.add.text(0, 200, 'Welcome to', {
             fontSize: '24pt', fill: '#FFF'
@@ -11,6 +11,8 @@ export default class TUTORIAL extends Phaser.GameObjects.Container {
         let subtitle = scene.add.text(0, 365, 'Where ASCII rains', {
             fontSize: '24pt', fill: '#FFF'
         }).setOrigin(0.5);
+
+        this.hintIdx = 0;
         this.hints = [
             'Click the [?] to see controls and options',
             'Click the [+] or [-] to toggle fullscreen',
@@ -19,6 +21,7 @@ export default class TUTORIAL extends Phaser.GameObjects.Container {
         this.hint = scene.add.text(0, 430, this.hints[0], {
             fontSize: '18pt', fill: '#FFF', fontStyle: 'italic'
         }).setOrigin(0.5);
+        
         this.add([scroll, headerTxt, title, subtitle, this.hint]);
     }
 

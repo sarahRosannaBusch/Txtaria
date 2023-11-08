@@ -45,13 +45,11 @@ export default class SCENE extends Phaser.Scene {
     create () {       
         let world = this.physics.world;
 
-        this.ui = new UI(this);
+        this.ui = new UI(this, this.level);
         
         this.base = this.physics.add.staticGroup();
         this.base.create(512, 748, 'ground').setDepth(75);
-
         this.platforms = new PLATFORMS(world, this, {}); 
-        this.createLevel();
 
         this.player = new PLAYER(this, 375, -250, 'dude', 0);
         this.coins = new COINS(world, this, {
@@ -72,6 +70,9 @@ export default class SCENE extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.mobs, this.hitMob, null, this);
         this.physics.add.overlap(this.player, this.coins, this.collectCoin, null, this);
 
+        this.player.setCollideWorldBounds(true);
+
+        this.buildLevel();
         this.playTween();
     }
     
@@ -92,115 +93,10 @@ export default class SCENE extends Phaser.Scene {
         } 
     }
 
-    playTween() {
-        let params = [{
-            at: 0,
-            run: () => {
-                this.tweening = true;
-            }
-        }, {
-            at: 3000,
-            run: () => {
-                this.tweening = false;
-            }
-        }];
-        if(this.level === 0) {
-            params.push({
-                    at: 0,
-                    run: () => {
-                        this.asciiRain.rain();
-                    }
-                }, {
-                    at: 600,
-                    tween: {
-                        targets: this.tutorial,
-                        y: 0, 
-                        ease: 'Power0',
-                        duration: 2000
-                    }
-                }, {
-                    at: 1000,
-                    run: () => {
-                        this.player.setCollideWorldBounds(true);
-                    }
-                }, {
-                    at: 1500,
-                    run: () => {
-                        this.coins.rain();
-                    }
-                }
-            );
-        } else {
-            params.push({
-                    at: 0,
-                    run: () => {                        
-                        this.player.anims.play('dance');
-                    }
-                }, {
-                    at: 250,
-                    run: () => {
-                        this.asciiRain.rain();
-                    }
-                }, {
-                    at: 2000,
-                    run: () => {
-                        this.createLevel();
-                    }
-                }, {
-                    at: 2500,
-                    run: () => {
-                        this.coins.rain();
-                    },
-                    tween: {
-                        targets: this.player,
-                        x: 375,
-                        ease: 'Power0',
-                        duration: 1000
-                    }
-                }
-            );
-        }
-        const timeline = this.add.timeline(params);
-        timeline.play();
-    }
+    /////////////////////////////////////////////////////////////////////////////
+    //                               Game events                               //
+    /////////////////////////////////////////////////////////////////////////////
 
-    levelUp() {
-        this.level++;            
-        this.ui.updateLevel(this.level);
-        this.playTween();
-
-        if(this.ui.helpShowing) {
-            this.ui.showHelp(false);
-        } 
-    }
-
-    createLevel() {    
-        switch(this.level) {
-            case 0:
-                this.tutorial = new TUTORIAL(this, 512, -700); 
-            break;
-            case 1:
-                this.tutorial.destroy();
-                this.mobs.spawn(512, 16, 'bomb');
-                this.platforms.build([
-                    {x: 420, y: 300, key: 'platform0'},
-                    {x: 744, y: 440, key: 'platform1'},
-                    {x: 5, y: 460, key: 'platform2'},
-                    {x: 460, y: 600, key: 'platform3'},
-                ]);
-            break;
-            case 2: 
-                this.platforms.clear(true, true);
-                this.mobs.clear(true, true);    
-                this.mobs.spawn(512, 16, 'mob0');
-            break;
-            case 3:                
-                this.mobs.spawn(512, 16, 'mob1');
-            break;
-            default: break;
-        }
-    }
-  
     collectCoin (player, coin) {
         coin.disableBody(true, true);
     
@@ -219,6 +115,15 @@ export default class SCENE extends Phaser.Scene {
         this.gameOver = true;
     }
 
+    levelUp() {
+        this.level++;            
+        this.ui.updateLevel(this.level);
+        if(this.ui.helpShowing) {
+            this.ui.showHelp(false);
+        } 
+        this.playTween();
+    }
+    
     rollCredits() {            
         this.add.image(512, 350, 'scroll');    
         const button = this.add.text(450, 320, '[retry]', {
@@ -227,5 +132,98 @@ export default class SCENE extends Phaser.Scene {
         button.on('pointerup', () => {
             this.scene.restart();
         });
+    }
+
+    /////////////////////////////////////////////////////////////////////////////
+    //                                 Levels                                  //
+    /////////////////////////////////////////////////////////////////////////////
+    
+    buildLevel() {    
+        switch(this.level) {
+            case 0:
+                this.tutorial = new TUTORIAL(this, 512, -700); 
+            break;
+            case 1:              
+                this.platforms.build([
+                    {x: 420, y: 300, key: 'platform0'},
+                    {x: 744, y: 440, key: 'platform1'},
+                    {x: 5, y: 460, key: 'platform2'},
+                    {x: 460, y: 600, key: 'platform3'},
+                ]);              
+            break;
+            case 2:    
+                this.mobs.spawn(512, 16, 'mob0');
+            break;
+            case 3:                
+                this.mobs.spawn(512, 16, 'mob1');
+            break;
+            case 4:
+                this.mobs.spawn(512, 16, 'bomb');
+                break;
+            default: break;
+        }
+    }
+
+    demoLevel() {
+        if(this.tutorial) this.tutorial.destroy();
+        if(this.platforms) this.platforms.clear(true, true);
+        if(this.mobs) this.mobs.clear(true, true);
+    }
+
+    /////////////////////////////////////////////////////////////////////////////
+    //                            Tween Timeline                               //
+    /////////////////////////////////////////////////////////////////////////////
+
+    playTween() {
+        let params = [{
+            at: 0,
+            run: () => {
+                this.tweening = true;
+                this.asciiRain.rain();
+            }
+        }, {
+            at: 1500,
+            run: () => {
+                this.coins.rain();
+            }
+        }, {
+            at: 3000,
+            run: () => {
+                this.tweening = false;
+            }
+        }];
+
+        if(this.level === 0) {
+            params.push({
+                at: 500,
+                tween: {
+                    targets: this.tutorial,
+                    y: 0, 
+                    ease: 'Power0',
+                    duration: 2000
+                }
+            });
+        } else {
+            params.push({
+                at: 0,
+                run: () => {                        
+                    this.demoLevel();
+                }
+            }, {
+                at: 1500,
+                run: () => {
+                    this.buildLevel();
+                },
+                tween: {
+                    targets: this.player,
+                    x: 375,
+                    ease: 'Power0',
+                    duration: 1000
+                }
+            });
+        }
+
+        const timeline = this.add.timeline(params);
+        timeline.play();
     }
 }

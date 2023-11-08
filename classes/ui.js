@@ -1,5 +1,5 @@
 export default class UI {
-    constructor(scene) {  
+    constructor(scene, level) {  
         this.scene = scene;
         this.helpShowing = false;
         this.soundOn = false;
@@ -8,7 +8,7 @@ export default class UI {
         
         //UI
         this.scoreText = this.scene.add.text(16, 16, 'score: $0', fontStyle);
-        this.levelText = this.scene.add.text(512, 32, 'level: 0 / 12', fontStyle).setOrigin(0.5);
+        this.levelText = this.scene.add.text(512, 32, `level: ${level} / 12`, fontStyle).setOrigin(0.5);
         
         //help button
         this.helpBtn = this.scene.add.text(1024 - 120, 16, '[?]', fontStyle).setOrigin(1, 0).setInteractive();

@@ -14,7 +14,7 @@ export default class ASCIIRAIN extends Phaser.Physics.Arcade.Group {
 
     rain() {
         this.children.iterate(function (child) {
-            child.enableBody(true, child.x, Phaser.Math.FloatBetween(-500, -750), true, true);
+            child.enableBody(true, child.x, Phaser.Math.Between(-500, -750), true, true);
             child.setVelocityY(Phaser.Math.FloatBetween(-50, 300));    
             child.setFrame(Phaser.Math.Between(0, 4));
         }); 
