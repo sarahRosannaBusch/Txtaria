@@ -1,13 +1,14 @@
 export default class PLAYER extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, texture, frame) {
         super(scene, x, y, texture, frame); //calls constructor of the class being extended
-        scene.add.existing(this); //so this will show up in the scene
-        scene.physics.add.existing(this);
-        this.setInteractive();
-        this.setBounce(0.2);
-        this.setDepth(75);
-        this.createAnims();
         
+        this.scene.add.existing(this); //so this will show up in the scene
+        this.scene.physics.add.existing(this);
+        this.setInteractive();
+        this.setBounce(0.25);
+        this.setDepth(25);
+        this.createAnims();
+
         //  Input Events
         this.cursors = scene.input.keyboard.createCursorKeys();
         this.wasd = scene.input.keyboard.addKeys('W,S,A,D');

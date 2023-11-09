@@ -21,7 +21,7 @@ export default class SCENE extends Phaser.Scene {
 
     preload() {  
         this.load.spritesheet('asciiRain', 'assets/asciiRain.png', { 
-            frameWidth: 10, frameHeight: 1554
+            frameWidth: 16.2, frameHeight: 1685
         });      
         this.load.image('scroll', 'assets/scroll.png');
         this.load.image('title', 'assets/title.png');
@@ -45,13 +45,13 @@ export default class SCENE extends Phaser.Scene {
     create () {       
         let world = this.physics.world;
 
-        this.ui = new UI(this, this.level);
+        this.ui = new UI(this, this.level, this.score);
         
         this.base = this.physics.add.staticGroup();
         this.base.create(512, 748, 'ground').setDepth(75);
         this.platforms = new PLATFORMS(world, this, {}); 
 
-        this.player = new PLAYER(this, 375, -250, 'dude', 0);
+        this.player = new PLAYER(this, 375, -500, 'dude', 0);
         this.coins = new COINS(world, this, {
             key: 'coin',
             repeat: 11,
@@ -69,8 +69,6 @@ export default class SCENE extends Phaser.Scene {
 
         this.physics.add.overlap(this.player, this.mobs, this.hitMob, null, this);
         this.physics.add.overlap(this.player, this.coins, this.collectCoin, null, this);
-
-        this.player.setCollideWorldBounds(true);
 
         this.buildLevel();
         this.playTween();
@@ -195,6 +193,7 @@ export default class SCENE extends Phaser.Scene {
         }, {
             at: 3000,
             run: () => {
+                this.player.setCollideWorldBounds(true);
                 this.tweening = false;
             }
         }];
@@ -214,17 +213,20 @@ export default class SCENE extends Phaser.Scene {
                 at: 0,
                 run: () => {                        
                     this.demoLevel();
+                    this.player.setDepth(75);
                 }
             }, {
-                at: 1500,
-                run: () => {
-                    this.buildLevel();
-                },
+                at: 500,
                 tween: {
                     targets: this.player,
-                    x: 375,
+                    x: 300,
                     ease: 'Power0',
-                    duration: 1000
+                    duration: 1500
+                }
+            }, {
+                at: 2000,
+                run: () => {
+                    this.buildLevel();
                 }
             }, {
                 at: 2500,

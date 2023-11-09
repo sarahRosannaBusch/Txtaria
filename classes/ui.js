@@ -1,5 +1,5 @@
 export default class UI {
-    constructor(scene, level) {  
+    constructor(scene, level, score) {  
         this.scene = scene;
         this.helpShowing = false;
         this.soundOn = false;
@@ -7,7 +7,7 @@ export default class UI {
         let fontStyle = { fontSize: '24pt', fill: '#FFF', backgroundColor: this.scene.game.config.backgroundColor.rgba };
         
         //UI
-        this.scoreText = this.scene.add.text(16, 16, 'score: $0', fontStyle);
+        this.scoreText = this.scene.add.text(16, 16, `score: $${score}`, fontStyle);
         this.levelText = this.scene.add.text(512, 32, `level: ${level} / 12`, fontStyle).setOrigin(0.5);
         
         //help button
