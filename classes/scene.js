@@ -5,6 +5,7 @@ import MOBS from "./mobs.js";
 import UI from "./ui.js";
 import PLATFORMS from "./platforms.js";
 import TUTORIAL from "./tutorial.js";
+import { themes } from "../themes.js";
 
 export default class SCENE extends Phaser.Scene {
     constructor() {
@@ -17,11 +18,13 @@ export default class SCENE extends Phaser.Scene {
         this.tick = 0;
         this.tweening = true;
         this.gameOver = false;
+
+        this.theme = themes.default;
     }
 
     preload() {  
         this.load.spritesheet('asciiRain', 'assets/asciiRain.png', { 
-            frameWidth: 16.2, frameHeight: 1685
+            frameWidth: 16.6, frameHeight: 2074
         });      
         this.load.image('scroll', 'assets/scroll.png');
         this.load.image('title', 'assets/title.png');
@@ -71,6 +74,7 @@ export default class SCENE extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.coins, this.collectCoin, null, this);
 
         this.buildLevel();
+        this.changeTheme('codingVibes');
         this.playTween();
     }
     
@@ -107,8 +111,8 @@ export default class SCENE extends Phaser.Scene {
     }
 
     hitMob (player, mob) {
-        this.physics.pause();
-        player.setTint(0xff0000);
+        //this.physics.pause(); //todo: this makes whole browser hang...
+        player.setTint(this.theme.kill);
         player.anims.play('turn');
         this.gameOver = true;
     }
@@ -123,10 +127,10 @@ export default class SCENE extends Phaser.Scene {
     }
     
     rollCredits() {            
-        this.add.image(512, 350, 'scroll');    
+        this.add.image(512, 350, 'scroll').setDepth(98).setTint(this.theme.ui);   
         const button = this.add.text(450, 320, '[retry]', {
             color:'white', fontSize:'xx-large', 
-        }).setInteractive();
+        }).setInteractive().setDepth(99).setTint(this.theme.ui);
         button.on('pointerup', () => {
             this.scene.restart();
         });
@@ -141,15 +145,15 @@ export default class SCENE extends Phaser.Scene {
             case 0:
                 this.tutorial = new TUTORIAL(this, 512, -700); 
             break;
-            case 1:              
+            default:              
                 this.platforms.build([
-                    {x: 420, y: 300, key: 'platform0'},
+                    {x: 435, y: 330, key: 'platform0'},
                     {x: 744, y: 440, key: 'platform1'},
                     {x: 5, y: 460, key: 'platform2'},
-                    {x: 460, y: 600, key: 'platform3'},
-                ]);              
+                    {x: 460, y: 580, key: 'platform3'},
+                ]);  
+                this.platforms.setTint(this.theme.platforms);
             break;
-            default: break;
         }
     }
 
@@ -200,7 +204,7 @@ export default class SCENE extends Phaser.Scene {
 
         if(this.level === 0) {
             params.push({
-                at: 500,
+                at: 1000,
                 tween: {
                     targets: this.tutorial,
                     y: 0, 
@@ -219,7 +223,7 @@ export default class SCENE extends Phaser.Scene {
                 at: 500,
                 tween: {
                     targets: this.player,
-                    x: 300,
+                    x: 350,
                     ease: 'Power0',
                     duration: 1500
                 }
@@ -238,5 +242,24 @@ export default class SCENE extends Phaser.Scene {
 
         const timeline = this.add.timeline(params);
         timeline.play();
+    }
+
+    /////////////////////////////////////////////////////////////////////////////
+    //                                Options                                  //
+    /////////////////////////////////////////////////////////////////////////////
+
+    changeTheme(theme) {
+        this.theme = themes[theme];
+
+        this.cameras.main.setBackgroundColor(this.theme.bg);
+        this.player.setTint(this.theme.player);
+        this.base.setTint(this.theme.base);
+        this.coins.setTint(this.theme.coins);
+        if(this.tutorial) this.tutorial.changeTint(this.theme.ui);
+        this.platforms.setTint(this.theme.platforms);
+        this.mobs.setTint(this.theme.mobs);
+        //this.pots.setTint(this.theme.pots);
+        this.ui.changeTint();
+        this.asciiRain.setTint(this.theme.rain);
     }
 }

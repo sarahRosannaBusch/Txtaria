@@ -3,12 +3,12 @@ export default class TUTORIAL extends Phaser.GameObjects.Container {
         super(scene, x, y);
         scene.add.existing(this);
         
-        let scroll = scene.add.image(0, 350, 'scroll');
-        let headerTxt = scene.add.text(0, 200, 'Welcome to', {
+        this.scroll = scene.add.image(0, 350, 'scroll');
+        this.headerTxt = scene.add.text(0, 200, 'Welcome to', {
             fontSize: '24pt', fill: '#FFF'
         }).setOrigin(0.5);                
-        let title = scene.add.image(0, 275, 'title').setOrigin(0.5);
-        let subtitle = scene.add.text(0, 365, 'Where ASCII rains', {
+        this.title = scene.add.image(0, 275, 'title').setOrigin(0.5);
+        this.subtitle = scene.add.text(0, 365, 'Where ASCII rains', {
             fontSize: '24pt', fill: '#FFF'
         }).setOrigin(0.5);
 
@@ -22,7 +22,7 @@ export default class TUTORIAL extends Phaser.GameObjects.Container {
             fontSize: '18pt', fill: '#FFF', fontStyle: 'italic'
         }).setOrigin(0.5);
         
-        this.add([scroll, headerTxt, title, subtitle, this.hint]);
+        this.add([this.scroll, this.headerTxt, this.title, this.subtitle, this.hint]);
         this.setDepth(0);
     }
 
@@ -33,5 +33,13 @@ export default class TUTORIAL extends Phaser.GameObjects.Container {
             this.hintIdx = 0;
         }
         this.hint.setText(this.hints[this.hintIdx]);
+    }
+
+    changeTint(colour) {
+        this.scroll.setTint(colour);
+        this.headerTxt.setTint(colour);
+        this.title.setTint(colour);
+        this.subtitle.setTint(colour);
+        this.hint.setTint(colour);
     }
 }

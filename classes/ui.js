@@ -4,7 +4,10 @@ export default class UI {
         this.helpShowing = false;
         this.soundOn = false;
 
-        let fontStyle = { fontSize: '24pt', fill: '#FFF', backgroundColor: this.scene.game.config.backgroundColor.rgba };
+        let fontStyle = { 
+            fontSize: '24pt', 
+            fill: '#FFF'
+        };
         
         //UI
         this.scoreText = this.scene.add.text(16, 16, `score: $${score}`, fontStyle);
@@ -62,8 +65,8 @@ export default class UI {
     showHelp(show) {     
         if(show) {   
             this.scene.physics.pause();
-            this.helpBtn.setText("[X]");
-            this.helpScroll = this.scene.add.image(512, 350, 'scroll');
+            this.helpBtn.setText("[X]").setTint(this.scene.theme.ui);
+            this.helpScroll = this.scene.add.image(512, 350, 'scroll').setTint(this.scene.theme.ui);
             let fs = this.scene.scale.isFullscreen ? 'X' : ' ';
             this.helpText = this.scene.add.text(200, 180, `
 KEYBOARD CONTROLS:
@@ -75,17 +78,17 @@ TWO-FINGER TOUCH:
 3. swipe down to stomp
 
 OPTIONS:
-            `, { fontSize: '24px', fill: '#FFF' });
+            `, { fontSize: '24px', fill: '#FFF' }).setTint(this.scene.theme.ui);
 
             this.optFS = this.scene.add.text(200, 415, `[${fs}] fullscreen`,
-                { fontSize: '24px', fill: '#FFF' }).setInteractive();
+                { fontSize: '24px', fill: '#FFF' }).setInteractive().setTint(this.scene.theme.ui);
             this.optFS.on('pointerup', () => {
                 this.toggleFullscreen();
             });
 
             let s = this.soundOn ? 'X' : ' ';
             this.optSound = this.scene.add.text(200, 435, `[${s}] sound`,
-                { fontSize: '24px', fill: '#FFF' }).setInteractive();
+                { fontSize: '24px', fill: '#FFF' }).setInteractive().setTint(this.scene.theme.ui);
             this.optSound.on('pointerup', () => {
                 this.toggleSound();
                 s = this.soundOn ? 'X' : ' ';
@@ -101,5 +104,19 @@ OPTIONS:
         }
         
         this.helpShowing = !this.helpShowing;
+    }
+
+    changeTint() {
+        let colours = this.scene.theme;
+        this.scoreText.setTint(colours.ui);
+        this.levelText.setTint(colours.ui);
+        this.helpBtn.setTint(colours.ui);
+        this.fsBtn.setTint(colours.ui);
+        if(this.helpShowing) {
+            this.helpScroll.setTint(colours.ui);
+            this.helpText.setTint(colours.ui);
+            this.optFS.setTint(colours.ui);
+            this.optSound.setTint(colours.ui);
+        }
     }
 }
