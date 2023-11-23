@@ -7,6 +7,7 @@ export default class PLAYER extends Phaser.Physics.Arcade.Sprite {
         this.setInteractive();
         this.setBounce(0.25);
         this.setDepth(25);
+        this.setTint(scene.theme.player);
         this.createAnims();
 
         //  Input Events

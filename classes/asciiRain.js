@@ -9,6 +9,7 @@ export default class ASCIIRAIN extends Phaser.Physics.Arcade.Group {
             let x = i * dropWidth;
             let drop = scene.physics.add.sprite(x, 0, 'asciiRain');
             drop.setDepth(50);  
+            drop.setTint(scene.theme.rain)
             drop.disableBody(true, true); 
             this.add(drop);
         } 

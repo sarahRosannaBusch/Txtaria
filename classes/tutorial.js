@@ -3,14 +3,14 @@ export default class TUTORIAL extends Phaser.GameObjects.Container {
         super(scene, x, y);
         scene.add.existing(this);
         
-        this.scroll = scene.add.image(0, 350, 'scroll');
+        this.scroll = scene.add.image(0, 350, 'scroll').setTint(this.scene.theme.ui);
         this.headerTxt = scene.add.text(0, 200, 'Welcome to', {
             fontSize: '24pt', fill: '#FFF'
-        }).setOrigin(0.5);                
-        this.title = scene.add.image(0, 275, 'title').setOrigin(0.5);
+        }).setOrigin(0.5).setTint(this.scene.theme.ui);                
+        this.title = scene.add.image(0, 275, 'title').setOrigin(0.5).setTint(this.scene.theme.ui);
         this.subtitle = scene.add.text(0, 365, 'Where ASCII rains', {
             fontSize: '24pt', fill: '#FFF'
-        }).setOrigin(0.5);
+        }).setOrigin(0.5).setTint(this.scene.theme.ui);
 
         this.hintIdx = 0;
         this.hints = [
@@ -20,7 +20,7 @@ export default class TUTORIAL extends Phaser.GameObjects.Container {
         ]
         this.hint = scene.add.text(0, 430, this.hints[0], {
             fontSize: '18pt', fill: '#FFF', fontStyle: 'italic'
-        }).setOrigin(0.5);
+        }).setOrigin(0.5).setTint(this.scene.theme.ui);
         
         this.add([this.scroll, this.headerTxt, this.title, this.subtitle, this.hint]);
         this.setDepth(0);

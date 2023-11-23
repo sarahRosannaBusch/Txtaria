@@ -18,8 +18,9 @@ export default class SCENE extends Phaser.Scene {
         this.tick = 0;
         this.tweening = true;
         this.gameOver = false;
-
-        this.theme = themes.default;
+        this.themeName = localStorage.getItem("theme");
+        if(!this.themeName) this.themeName = "Textarea";
+        this.theme = themes[this.themeName];
     }
 
     preload() {  
@@ -48,10 +49,11 @@ export default class SCENE extends Phaser.Scene {
     create () {       
         let world = this.physics.world;
 
+        this.cameras.main.setBackgroundColor(this.theme.bg);
         this.ui = new UI(this, this.level, this.score);
         
         this.base = this.physics.add.staticGroup();
-        this.base.create(512, 748, 'ground').setDepth(75);
+        this.base.create(512, 748, 'ground').setDepth(75).setTint(this.theme.base);
         this.platforms = new PLATFORMS(world, this, {}); 
 
         this.player = new PLAYER(this, 375, -500, 'dude', 0);
@@ -74,7 +76,6 @@ export default class SCENE extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.coins, this.collectCoin, null, this);
 
         this.buildLevel();
-        this.changeTheme('codingVibes');
         this.playTween();
     }
     
@@ -242,24 +243,5 @@ export default class SCENE extends Phaser.Scene {
 
         const timeline = this.add.timeline(params);
         timeline.play();
-    }
-
-    /////////////////////////////////////////////////////////////////////////////
-    //                                Options                                  //
-    /////////////////////////////////////////////////////////////////////////////
-
-    changeTheme(theme) {
-        this.theme = themes[theme];
-
-        this.cameras.main.setBackgroundColor(this.theme.bg);
-        this.player.setTint(this.theme.player);
-        this.base.setTint(this.theme.base);
-        this.coins.setTint(this.theme.coins);
-        if(this.tutorial) this.tutorial.changeTint(this.theme.ui);
-        this.platforms.setTint(this.theme.platforms);
-        this.mobs.setTint(this.theme.mobs);
-        //this.pots.setTint(this.theme.pots);
-        this.ui.changeTint();
-        this.asciiRain.setTint(this.theme.rain);
     }
 }

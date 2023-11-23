@@ -1,5 +1,7 @@
+import { themes } from "../../themes.js";
+
 export default class UI {
-    constructor(scene, level, score) {  
+    constructor(scene) {  
         this.scene = scene;
         this.helpShowing = false;
         this.soundOn = false;
@@ -10,25 +12,25 @@ export default class UI {
         };
         
         //UI
-        this.scoreText = this.scene.add.text(16, 16, `score: $${score}`, fontStyle);
-        this.levelText = this.scene.add.text(512, 32, `level: ${level} / 12`, fontStyle).setOrigin(0.5);
+        this.scoreText = scene.add.text(16, 16, `score: $${scene.score}`, fontStyle).setTint(scene.theme.ui);
+        this.levelText = scene.add.text(512, 32, `level: ${scene.level} / 12`, fontStyle).setOrigin(0.5).setTint(scene.theme.ui);
         
         //help button
-        this.helpBtn = this.scene.add.text(1024 - 120, 16, '[?]', fontStyle).setOrigin(1, 0).setInteractive();
+        this.helpBtn = scene.add.text(1024 - 120, 16, '[?]', fontStyle).setOrigin(1, 0).setInteractive().setTint(scene.theme.ui);
         this.helpBtn.on('pointerup', () => {            
             this.showHelp(!this.helpShowing);
         });                
-        this.scene.input.keyboard.on('keydown-ESC', () => {
+        scene.input.keyboard.on('keydown-ESC', () => {
             this.showHelp(!this.helpShowing);
         });
 
         //fullscreen button
-        this.fsBtn = this.scene.add.text(1024 - 16, 16, '[+]', fontStyle).setOrigin(1, 0).setInteractive();
+        this.fsBtn = scene.add.text(1024 - 16, 16, '[+]', fontStyle).setOrigin(1, 0).setInteractive().setTint(scene.theme.ui);
         this.fsBtn.on('pointerup', () => {
             this.toggleFullscreen();
         });
 
-        let container = this.scene.add.container(0, 0, [this.scoreText, this.levelText, this.helpBtn, this.fsBtn]);
+        let container = scene.add.container(0, 0, [this.scoreText, this.levelText, this.helpBtn, this.fsBtn]);
         container.setDepth(100);
     }
     
@@ -64,38 +66,77 @@ export default class UI {
 
     showHelp(show) {     
         if(show) {   
-            this.scene.physics.pause();
-            this.helpBtn.setText("[X]").setTint(this.scene.theme.ui);
-            this.helpScroll = this.scene.add.image(512, 350, 'scroll').setTint(this.scene.theme.ui);
+            let fontStyle = { fontSize: '24px', fill: '#FFF' };
+            let tint = this.scene.theme.ui;
             let fs = this.scene.scale.isFullscreen ? 'X' : ' ';
-            this.helpText = this.scene.add.text(200, 180, `
-KEYBOARD CONTROLS:
+            let s = this.soundOn ? 'X' : ' ';
+            //this.scene.physics.pause(); //todo: just pause the mobs instead
+
+            this.helpBtn.setText("[X]").setTint(tint);
+            this.helpScroll = this.scene.add.image(512, 350, 'scroll').setTint(tint);
+
+            //left side
+            this.controlsText = this.scene.add.text(200, 180, `
+CONTROLS:
+
+KEYBOARD
 w,a,s,d or arrow keys
 
-TWO-FINGER TOUCH:
-1. hold left/right side of screen to move
-2. tap anywhere to jump
-3. swipe down to stomp
+TWO-FINGER TOUCH
+move: hold left/right 
+      side of screen
+jump: tap anywhere
+stomp: swipe down
+            `, fontStyle).setTint(tint);
 
-OPTIONS:
-            `, { fontSize: '24px', fill: '#FFF' }).setTint(this.scene.theme.ui);
+            //right side
+            let x = 550;
+            this.optsText = this.scene.add.text(x, 180, `
+OPTIONS:`, fontStyle).setTint(tint);
 
-            this.optFS = this.scene.add.text(200, 415, `[${fs}] fullscreen`,
-                { fontSize: '24px', fill: '#FFF' }).setInteractive().setTint(this.scene.theme.ui);
+            this.optFS = this.scene.add.text(x, 230, `[${fs}] fullscreen`,
+                fontStyle).setInteractive().setTint(tint);
             this.optFS.on('pointerup', () => {
                 this.toggleFullscreen();
             });
 
-            let s = this.soundOn ? 'X' : ' ';
-            this.optSound = this.scene.add.text(200, 435, `[${s}] sound`,
-                { fontSize: '24px', fill: '#FFF' }).setInteractive().setTint(this.scene.theme.ui);
+            this.optSound = this.scene.add.text(x, 260, `[${s}] sound`,
+                fontStyle).setInteractive().setTint(tint);
             this.optSound.on('pointerup', () => {
                 this.toggleSound();
                 s = this.soundOn ? 'X' : ' ';
                 this.optSound.setText(`[${s}] sound`);
             });
+
+            this.themesText = this.scene.add.text(x, 300, `
+THEMES:`, fontStyle).setTint(tint);
+            this.themeOpts = {};
+            let themeNames = Object.keys(themes);
+            themeNames.forEach((name, i) => {
+                let height = 350 + (i * 30);
+                let sel = (name === this.scene.themeName) ? 'X' : ' ';
+                this.themeOpts[name] = this.scene.add.text(x, height, `[${sel}] ${name}`,
+                    fontStyle).setInteractive().setTint(tint);                
+                this.themeOpts[name].on('pointerup', () => {
+                    let cur = this.scene.themeName;
+                    this.themeOpts[cur].setText(`[ ] ${cur}`);
+                    this.themeOpts[name].setText(`[X] ${name}`);
+                    this.changeTheme(name);
+                });
+            });
             
-            this.help = this.scene.add.container(0, 0, [this.helpScroll, this.helpText, this.optFS, this.optSound]);
+            this.help = this.scene.add.container(0, 0, [
+                this.helpScroll, 
+                this.controlsText, 
+                this.optsText, 
+                this.optFS, 
+                this.optSound,
+                this.themesText,
+                this.themeOpts.Textarea, //todo: iterate these instead
+                this.themeOpts.Coding_Vibes,
+                this.themeOpts.Light_Bright,
+                this.themeOpts.Matrix_Mode
+            ]);
             this.help.setDepth(100);
         } else {
             this.scene.physics.resume();
@@ -106,6 +147,7 @@ OPTIONS:
         this.helpShowing = !this.helpShowing;
     }
 
+    //change tint of ui
     changeTint() {
         let colours = this.scene.theme;
         this.scoreText.setTint(colours.ui);
@@ -114,9 +156,32 @@ OPTIONS:
         this.fsBtn.setTint(colours.ui);
         if(this.helpShowing) {
             this.helpScroll.setTint(colours.ui);
-            this.helpText.setTint(colours.ui);
+            this.controlsText.setTint(colours.ui);
+            this.optsText.setTint(colours.ui);
             this.optFS.setTint(colours.ui);
             this.optSound.setTint(colours.ui);
+            this.themesText.setTint(colours.ui);
+            for(let key in this.themeOpts) {
+                this.themeOpts[key].setTint(colours.ui);
+            };
         }
+    }
+
+    //modifies scene
+    changeTheme(themeName) {
+        let theme = this.scene.theme = themes[themeName];
+        this.scene.themeName = themeName;
+        localStorage.setItem("theme", themeName);
+
+        this.scene.cameras.main.setBackgroundColor(theme.bg);
+        if(this.scene.player) this.scene.player.setTint(theme.player);
+        if(this.scene.base) this.scene.base.setTint(theme.base);
+        if(this.scene.coins) this.scene.coins.setTint(theme.coins);
+        if(this.scene.tutorial) this.scene.tutorial.changeTint(theme.ui);
+        if(this.scene.platforms) this.scene.platforms.setTint(theme.platforms);
+        if(this.scene.mobs) this.scene.mobs.setTint(theme.mobs);
+        if(this.scene.pots) this.scene.pots.setTint(theme.pots);
+        if(this.scene.ui) this.scene.ui.changeTint();
+        if(this.scene.asciiRain) this.scene.asciiRain.setTint(theme.rain);
     }
 }

@@ -1,5 +1,5 @@
 export const themes = {
-    default: {
+    Textarea: {
         kill: 0xFF0000,
         player: 0xECECEC, 
         base: 0xECECEC,
@@ -11,7 +11,7 @@ export const themes = {
         ui: 0xECECEC,
         rain: 0xECECEC
     },
-    codingVibes: {
+    Coding_Vibes: {
         kill: 0xc8250e, //red
         player: 0xb684ed, //purple
         base: 0x5fa638, //green
@@ -23,7 +23,7 @@ export const themes = {
         ui: 0x7cc9ff, 
         rain: 0xECECEC
     },
-    rainbowBright: {
+    Light_Bright: {
         kill: 0xFF0000,
         player: 0x00FF00,
         base: 0x1E90FF,
@@ -35,7 +35,7 @@ export const themes = {
         ui: 0x00FFFF,
         rain: 0x9400D3
     },
-    matrixMode: {
+    Matrix_Mode: {
         kill: 0xFF0000,
         player: 0x00FF00,
         base: 0x00FF00,

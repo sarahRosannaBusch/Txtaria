@@ -5,6 +5,7 @@ export default class COINS extends Phaser.Physics.Arcade.Group {
         scene.physics.add.existing(this);
         this.children.iterate(function (child) {
             child.setDepth(20);
+            child.setTint(scene.theme.coins);
             child.disableBody(true, true); //wait for trigger to rain coins
         }); 
     }
