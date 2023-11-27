@@ -27,7 +27,9 @@ export default class SCENE extends Phaser.Scene {
         this.load.spritesheet('asciiRain', 'assets/asciiRain.png', { 
             frameWidth: 16.6, frameHeight: 2074
         });      
+        this.load.image('rainBG', 'assets/rainBG.png');
         this.load.image('scroll', 'assets/scroll.png');
+        this.load.image('scrollBG', 'assets/scrollBG.png');
         this.load.image('title', 'assets/title.png');
         this.load.image('ground', 'assets/ground.png');
         this.load.image('platform0', 'assets/platform0.png');
@@ -128,6 +130,7 @@ export default class SCENE extends Phaser.Scene {
     }
     
     rollCredits() {            
+        this.add.image(512, 350, 'scrollBG').setDepth(97).setTint(this.theme.bg); 
         this.add.image(512, 350, 'scroll').setDepth(98).setTint(this.theme.ui);   
         const button = this.add.text(450, 320, '[retry]', {
             color:'white', fontSize:'xx-large', 
@@ -216,8 +219,7 @@ export default class SCENE extends Phaser.Scene {
         } else {
             params.push({
                 at: 0,
-                run: () => {                        
-                    this.demoLevel();
+                run: () => {           
                     this.player.setDepth(75);
                 }
             }, {
@@ -230,7 +232,8 @@ export default class SCENE extends Phaser.Scene {
                 }
             }, {
                 at: 2000,
-                run: () => {
+                run: () => {             
+                    this.demoLevel();
                     this.buildLevel();
                 }
             }, {

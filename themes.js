@@ -7,7 +7,7 @@ export const themes = {
         platforms: 0xECECEC,
         mobs: 0xECECEC,
         pots: 0xECECEC,
-        bg: "#121212", //todo: why doesn't 0x121212 work?
+        bg: 0x121212, 
         ui: 0xECECEC,
         rain: 0xECECEC
     },

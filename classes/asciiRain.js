@@ -3,6 +3,8 @@ export default class ASCIIRAIN extends Phaser.Physics.Arcade.Group {
         super(world, scene, config);
         scene.add.existing(this);
         scene.physics.add.existing(this); 
+        this.bg = scene.physics.add.image(0, 0, 'rainBG').setOrigin(0, 1);
+        this.bg.setTint(scene.theme.bg).setDepth(1);
         let dropWidth = 16.2;   
         let numDrops = 1024 / dropWidth;
         for(let i = 0; i < numDrops; i++) {
@@ -16,6 +18,7 @@ export default class ASCIIRAIN extends Phaser.Physics.Arcade.Group {
     }
 
     rain() {
+        this.bg.enableBody(true, 0, 0, true, true);
         this.children.iterate(function (child) {
             child.enableBody(true, child.x, Phaser.Math.Between(-750, -1000), true, true);
             child.setVelocityY(Phaser.Math.FloatBetween(-150, 300));    

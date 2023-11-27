@@ -73,6 +73,7 @@ export default class UI {
             //this.scene.physics.pause(); //todo: just pause the mobs instead
 
             this.helpBtn.setText("[X]").setTint(tint);
+            this.helpScrollBG = this.scene.add.image(512, 350, 'scrollBG').setTint(this.scene.theme.bg);
             this.helpScroll = this.scene.add.image(512, 350, 'scroll').setTint(tint);
 
             //left side
@@ -126,6 +127,7 @@ THEMES:`, fontStyle).setTint(tint);
             });
             
             this.help = this.scene.add.container(0, 0, [
+                this.helpScrollBG, 
                 this.helpScroll, 
                 this.controlsText, 
                 this.optsText, 
@@ -155,6 +157,7 @@ THEMES:`, fontStyle).setTint(tint);
         this.helpBtn.setTint(colours.ui);
         this.fsBtn.setTint(colours.ui);
         if(this.helpShowing) {
+            this.helpScrollBG.setTint(colours.bg);
             this.helpScroll.setTint(colours.ui);
             this.controlsText.setTint(colours.ui);
             this.optsText.setTint(colours.ui);
