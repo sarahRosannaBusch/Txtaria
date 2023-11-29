@@ -114,7 +114,7 @@ export default class SCENE extends Phaser.Scene {
     }
 
     hitMob (player, mob) {
-        //this.physics.pause(); //todo: this makes whole browser hang...
+        this.physics.pause(); //todo: this makes whole browser hang...
         player.setTint(this.theme.kill);
         player.anims.play('turn');
         this.gameOver = true;
@@ -131,10 +131,10 @@ export default class SCENE extends Phaser.Scene {
     
     rollCredits() {            
         this.add.image(512, 350, 'scrollBG').setDepth(97).setTint(this.theme.bg); 
-        this.add.image(512, 350, 'scroll').setDepth(98).setTint(this.theme.ui);   
+        this.add.image(512, 350, 'scroll').setDepth(98).setTint(this.theme.scroll);   
         const button = this.add.text(450, 320, '[retry]', {
             color:'white', fontSize:'xx-large', 
-        }).setInteractive().setDepth(99).setTint(this.theme.ui);
+        }).setInteractive().setDepth(99).setTint(this.theme.scroll);
         button.on('pointerup', () => {
             this.scene.restart();
         });

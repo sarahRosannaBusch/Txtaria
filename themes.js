@@ -9,6 +9,7 @@ export const themes = {
         pots: 0xECECEC,
         bg: 0x121212, 
         ui: 0xECECEC,
+        scroll: 0xECECEC,
         rain: 0xECECEC
     },
     Coding_Vibes: {
@@ -20,7 +21,8 @@ export const themes = {
         mobs: 0xdf7233, //orange
         pots: 0xc8250e,
         bg: 0x0f0f0f, //grey
-        ui: 0x7cc9ff, 
+        ui: 0x2967c5, //darkblue
+        scroll: 0x7cc9ff,
         rain: 0xECECEC
     },
     Light_Bright: {
@@ -33,6 +35,7 @@ export const themes = {
         pots: 0xFF0000,
         bg: 0x000000,
         ui: 0x00FFFF,
+        scroll: 0xFF55FF,
         rain: 0x9400D3
     },
     Matrix_Mode: {
@@ -43,8 +46,22 @@ export const themes = {
         platforms: 0x00FF00,
         mobs: 0x00FF00,
         pots: 0x00FF00,
-        bg: 0x121212 & 0x00FF00, //tint multiplies original colour with new
+        bg: 0x121212 & 0x00FF00, 
         ui: 0x00FF00,
+        scroll: 0x00FF00,
         rain: 0x00FF00
+    },
+    Paper: {
+        kill: 0xFF0000,
+        player: 0x000000,
+        base: 0x000000,
+        coins: 0x000000,
+        platforms: 0x000000,
+        mobs: 0x000000,
+        pots: 0x000000,
+        bg: 0xFEFBEA, 
+        ui: 0x000000,
+        scroll: 0x000000,
+        rain: 0x000000
     }
 }

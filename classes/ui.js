@@ -12,11 +12,14 @@ export default class UI {
         };
         
         //UI
-        this.scoreText = scene.add.text(16, 16, `score: $${scene.score}`, fontStyle).setTint(scene.theme.ui);
-        this.levelText = scene.add.text(512, 32, `level: ${scene.level} / 12`, fontStyle).setOrigin(0.5).setTint(scene.theme.ui);
+        this.scoreText = scene.add.text(16, 16, `score: $${scene.score}`, fontStyle)
+            .setTint(scene.theme.ui);
+        this.levelText = scene.add.text(512, 32, `level: ${scene.level} / 12`, fontStyle)
+            .setOrigin(0.5).setTint(scene.theme.ui);
         
         //help button
-        this.helpBtn = scene.add.text(1024 - 120, 16, '[?]', fontStyle).setOrigin(1, 0).setInteractive().setTint(scene.theme.ui);
+        this.helpBtn = scene.add.text(1024 - 120, 16, '[?]', fontStyle).setOrigin(1, 0)
+            .setInteractive().setTint(scene.theme.ui);
         this.helpBtn.on('pointerup', () => {            
             this.showHelp(!this.helpShowing);
         });                
@@ -25,12 +28,15 @@ export default class UI {
         });
 
         //fullscreen button
-        this.fsBtn = scene.add.text(1024 - 16, 16, '[+]', fontStyle).setOrigin(1, 0).setInteractive().setTint(scene.theme.ui);
+        this.fsBtn = scene.add.text(1024 - 16, 16, '[+]', fontStyle).setOrigin(1, 0)
+            .setInteractive().setTint(scene.theme.ui);
         this.fsBtn.on('pointerup', () => {
             this.toggleFullscreen();
         });
 
-        let container = scene.add.container(0, 0, [this.scoreText, this.levelText, this.helpBtn, this.fsBtn]);
+        let container = scene.add.container(0, 0, [
+            this.scoreText, this.levelText, this.helpBtn, this.fsBtn
+        ]);
         container.setDepth(100);
     }
     
@@ -67,14 +73,16 @@ export default class UI {
     showHelp(show) {     
         if(show) {   
             let fontStyle = { fontSize: '24px', fill: '#FFF' };
-            let tint = this.scene.theme.ui;
+            let tint = this.scene.theme.scroll;
             let fs = this.scene.scale.isFullscreen ? 'X' : ' ';
             let s = this.soundOn ? 'X' : ' ';
             //this.scene.physics.pause(); //todo: just pause the mobs instead
 
-            this.helpBtn.setText("[X]").setTint(tint);
-            this.helpScrollBG = this.scene.add.image(512, 350, 'scrollBG').setTint(this.scene.theme.bg);
-            this.helpScroll = this.scene.add.image(512, 350, 'scroll').setTint(tint);
+            this.helpBtn.setText("[X]");
+            this.helpScrollBG = this.scene.add.image(512, 350, 'scrollBG')
+                .setTint(this.scene.theme.bg);
+            this.helpScroll = this.scene.add.image(512, 350, 'scroll')
+                .setTint(tint);
 
             //left side
             this.controlsText = this.scene.add.text(200, 180, `
@@ -137,7 +145,8 @@ THEMES:`, fontStyle).setTint(tint);
                 this.themeOpts.Textarea, //todo: iterate these instead
                 this.themeOpts.Coding_Vibes,
                 this.themeOpts.Light_Bright,
-                this.themeOpts.Matrix_Mode
+                this.themeOpts.Matrix_Mode,
+                this.themeOpts.Paper
             ]);
             this.help.setDepth(100);
         } else {
@@ -158,14 +167,14 @@ THEMES:`, fontStyle).setTint(tint);
         this.fsBtn.setTint(colours.ui);
         if(this.helpShowing) {
             this.helpScrollBG.setTint(colours.bg);
-            this.helpScroll.setTint(colours.ui);
-            this.controlsText.setTint(colours.ui);
-            this.optsText.setTint(colours.ui);
-            this.optFS.setTint(colours.ui);
-            this.optSound.setTint(colours.ui);
-            this.themesText.setTint(colours.ui);
+            this.helpScroll.setTint(colours.scroll);
+            this.controlsText.setTint(colours.scroll);
+            this.optsText.setTint(colours.scroll);
+            this.optFS.setTint(colours.scroll);
+            this.optSound.setTint(colours.scroll);
+            this.themesText.setTint(colours.scroll);
             for(let key in this.themeOpts) {
-                this.themeOpts[key].setTint(colours.ui);
+                this.themeOpts[key].setTint(colours.scroll);
             };
         }
     }
@@ -177,14 +186,16 @@ THEMES:`, fontStyle).setTint(tint);
         localStorage.setItem("theme", themeName);
 
         this.scene.cameras.main.setBackgroundColor(theme.bg);
+        this.changeTint();
+        
         if(this.scene.player) this.scene.player.setTint(theme.player);
         if(this.scene.base) this.scene.base.setTint(theme.base);
         if(this.scene.coins) this.scene.coins.setTint(theme.coins);
-        if(this.scene.tutorial) this.scene.tutorial.changeTint(theme.ui);
         if(this.scene.platforms) this.scene.platforms.setTint(theme.platforms);
         if(this.scene.mobs) this.scene.mobs.setTint(theme.mobs);
         if(this.scene.pots) this.scene.pots.setTint(theme.pots);
-        if(this.scene.ui) this.scene.ui.changeTint();
-        if(this.scene.asciiRain) this.scene.asciiRain.setTint(theme.rain);
+
+        if(this.scene.tutorial) this.scene.tutorial.changeTint();
+        if(this.scene.asciiRain) this.scene.asciiRain.changeTint();
     }
 }
