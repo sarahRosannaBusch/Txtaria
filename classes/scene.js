@@ -44,8 +44,8 @@ export default class SCENE extends Phaser.Scene {
         this.load.spritesheet('dude', 'assets/dude.png', { 
             frameWidth: 51.888, frameHeight: 98 
         });
-        //this.soundFX = this.load.audio('sound', ['assets/sound.mp3]);
-        //this.soundFX.play();
+
+        this.load.audio('rain', ['assets/asciiRain.mp3']);
     }
 
     create () {       
@@ -79,6 +79,9 @@ export default class SCENE extends Phaser.Scene {
 
         this.buildLevel();
         this.playTween();
+        
+        this.rainFX = this.sound.add('rain');
+        this.rainFX.play();
     }
     
     update (time, delta) { 

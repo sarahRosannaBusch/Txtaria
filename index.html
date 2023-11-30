@@ -22,12 +22,41 @@
             height: 100%; 
             width: 100vw; 
         }
+        #overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: black;
+        }
+        button {
+            padding: 1rem 2rem;
+            border-radius: 0.25rem;
+            box-shadow: 2px 2px 5px grey;
+            font-size: larger;
+            font-weight: bolder;
+            font-family: monospace;
+        }
     </style>
 </head>
 <body>
     <div id="game"></div>
+    <div id="overlay">
+        <button id="playBtn">PLAY</button>
+    </div>
 
     <script src="//cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.js"></script>
     <script type="module" src="game.js"></script>
+    <script>
+        let playBtn = document.getElementById("playBtn");
+        let overlay = document.getElementById("overlay");
+        playBtn.onclick = () => {
+            overlay.style.display = "none";
+        };
+    </script>
 </body>
 </html>
