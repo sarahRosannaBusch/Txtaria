@@ -23,7 +23,9 @@ export default class SCENE extends Phaser.Scene {
         this.theme = themes[this.themeName];
     }
 
-    preload() {  
+    preload() {          
+        this.showLoadingScreen();
+
         this.load.spritesheet('asciiRain', 'assets/asciiRain.png', { 
             frameWidth: 16.6, frameHeight: 2074
         });      
@@ -44,7 +46,6 @@ export default class SCENE extends Phaser.Scene {
         this.load.spritesheet('dude', 'assets/dude.png', { 
             frameWidth: 51.888, frameHeight: 98 
         });
-
         this.load.audio('rain', ['assets/asciiRain.mp3']);
     }
 
@@ -249,5 +250,60 @@ export default class SCENE extends Phaser.Scene {
 
         const timeline = this.add.timeline(params);
         timeline.play();
+    }
+
+    /////////////////////////////////////////////////////////////////////////////
+    //                            Loading Screen                               //
+    /////////////////////////////////////////////////////////////////////////////
+    
+    showLoadingScreen() {        
+        //src: https://gamedevacademy.org/creating-a-preloading-screen-in-phaser-3/ 
+        //I just modified this to center it properly, and
+        //didn't include the fileprogress part cuz the event wasn't triggering and game loads fast anyway
+
+        var width = this.cameras.main.width / 2;
+        var height = this.cameras.main.height / 2;
+
+        var progressBar = this.add.graphics();
+        var progressBox = this.add.graphics();
+        progressBox.fillStyle(0x222222, 0.8);
+        progressBox.fillRect(width - 160, height - 25, 320, 50); //x, y, w, h
+
+        var loadingText = this.make.text({
+            x: width,
+            y: height - 50,
+            text: 'Loading...',
+            style: {
+                font: '20px monospace',
+                fill: '#ffffff'
+            }
+        });
+        loadingText.setOrigin(0.5, 0.5);
+
+        var percentText = this.make.text({
+            x: width,
+            y: height,
+            text: '0%',
+            style: {
+                font: '18px monospace',
+                fill: '#ffffff'
+            }
+        });
+        percentText.setOrigin(0.5, 0.5);
+
+        this.load.on('progress', function (value) {
+            //console.log(value);
+            progressBar.clear();
+            progressBar.fillStyle(0xffffff, 1);
+            progressBar.fillRect(width - 150, height - 15, 300 * value, 30);
+            percentText.setText(parseInt(value * 100) + '%');
+        }); 
+
+        this.load.on('complete', function () {
+            progressBar.destroy();
+            progressBox.destroy();
+            loadingText.destroy();
+            percentText.destroy();
+        });
     }
 }

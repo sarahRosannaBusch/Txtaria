@@ -19,3 +19,4 @@ ASCII-art platformer as a study in Phaser.io
 - Tinting: https://newdocs.phaser.io/docs/3.55.2/Phaser.GameObjects.Components.Tint
 - Sound FX: https://newdocs.phaser.io/docs/3.55.2/Phaser.Sound.Events and
     https://newdocs.phaser.io/docs/3.54.0/focus/Phaser.Loader.LoaderPlugin-audio
+- Loading Screen: https://gamedevacademy.org/creating-a-preloading-screen-in-phaser-3/

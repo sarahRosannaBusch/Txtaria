@@ -20,4 +20,6 @@ const config = {
     scene: [ SCENE ]
 };
 
-const game = new Phaser.Game(config);
+export default function playGame() {
+    const game = new Phaser.Game(config);
+}

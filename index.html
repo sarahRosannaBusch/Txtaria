@@ -46,16 +46,20 @@
 <body>
     <div id="game"></div>
     <div id="overlay">
-        <button id="playBtn">PLAY</button>
+        <button id="playBtn" disabled>PLAY</button>
     </div>
 
     <script src="//cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.js"></script>
-    <script type="module" src="game.js"></script>
-    <script>
+    <script type="module">
+        import playGame from "./game.js";
         let playBtn = document.getElementById("playBtn");
         let overlay = document.getElementById("overlay");
+        window.onload = () => {
+            playBtn.disabled = false;
+        }
         playBtn.onclick = () => {
             overlay.style.display = "none";
+            playGame();
         };
     </script>
 </body>
