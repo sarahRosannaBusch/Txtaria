@@ -47,6 +47,8 @@ export default class SCENE extends Phaser.Scene {
             frameWidth: 51.888, frameHeight: 98 
         });
         this.load.audio('rain', ['assets/asciiRain.mp3']);
+        this.load.audio('coin', ['assets/collectCoin.mp3']);
+        this.load.audio('death', ['assets/death.mp3']);
     }
 
     create () {       
@@ -82,6 +84,8 @@ export default class SCENE extends Phaser.Scene {
         this.playTween();
         
         this.rainFX = this.sound.add('rain');
+        this.coinFX = this.sound.add('coin');
+        this.deathFX = this.sound.add('death');
         this.rainFX.play();
     }
     
@@ -107,6 +111,7 @@ export default class SCENE extends Phaser.Scene {
     /////////////////////////////////////////////////////////////////////////////
 
     collectCoin (player, coin) {
+        this.coinFX.play();
         coin.disableBody(true, true);
     
         //  Add and update the score
@@ -118,6 +123,7 @@ export default class SCENE extends Phaser.Scene {
     }
 
     hitMob (player, mob) {
+        this.deathFX.play();
         this.physics.pause(); //todo: this makes whole browser hang...
         player.setTint(this.theme.kill);
         player.anims.play('turn');
@@ -130,6 +136,7 @@ export default class SCENE extends Phaser.Scene {
         if(this.ui.helpShowing) {
             this.ui.showHelp(false);
         } 
+        this.rainFX.play();
         this.playTween();
     }
     
