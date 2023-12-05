@@ -23,7 +23,7 @@ export const themes = {
         bg: 0x0f0f0f, //grey
         ui: 0x2967c5, //darkblue
         scroll: 0x7cc9ff,
-        rain: 0xECECEC
+        rain: 0x8faf53 // lightgreen
     },
     Light_Bright: {
         kill: 0xFF0000,

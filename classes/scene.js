@@ -14,12 +14,18 @@ export default class SCENE extends Phaser.Scene {
 
     init() {
         this.score = 0;
-        this.level = 0;
+        this.level = 2;
         this.tick = 0;
         this.tweening = true;
         this.gameOver = false;
         this.themeName = localStorage.getItem("theme");
-        if(!this.themeName) this.themeName = "Textarea";
+        if(!this.themeName) this.themeName = "Textarea"; //default
+        let mute = localStorage.getItem("mute");
+        if(mute) {
+            this.soundOn = mute === "false" ? true : false; 
+        } else {
+            this.soundOn = true; //default
+        }
         this.theme = themes[this.themeName];
     }
 
@@ -61,7 +67,7 @@ export default class SCENE extends Phaser.Scene {
         this.base.create(512, 748, 'ground').setDepth(75).setTint(this.theme.base);
         this.platforms = new PLATFORMS(world, this, {}); 
 
-        this.player = new PLAYER(this, 375, -500, 'dude', 0);
+        this.player = new PLAYER(this, 375, -200, 'dude', 0);
         this.coins = new COINS(world, this, {
             key: 'coin',
             repeat: 11,
@@ -86,7 +92,11 @@ export default class SCENE extends Phaser.Scene {
         this.rainFX = this.sound.add('rain');
         this.coinFX = this.sound.add('coin');
         this.deathFX = this.sound.add('death');
-        this.rainFX.play();
+        if(this.soundOn) {
+            this.rainFX.play();
+        } else {
+            this.ui.toggleSound('true')
+        }
     }
     
     update (time, delta) { 
@@ -123,11 +133,15 @@ export default class SCENE extends Phaser.Scene {
     }
 
     hitMob (player, mob) {
-        this.deathFX.play();
-        this.physics.pause(); //todo: this makes whole browser hang...
-        player.setTint(this.theme.kill);
-        player.anims.play('turn');
-        this.gameOver = true;
+        if(mob.key === 'mob0') {
+
+        } else {
+            this.deathFX.play();
+            this.physics.pause(); //todo: this makes whole browser hang...
+            player.setTint(this.theme.kill);
+            player.anims.play('turn');
+            this.gameOver = true;
+        }
     }
 
     levelUp() {
@@ -160,28 +174,41 @@ export default class SCENE extends Phaser.Scene {
             case 0:
                 this.tutorial = new TUTORIAL(this, 512, -700); 
             break;
-            default:              
+            case 1:              
                 this.platforms.build([
                     {x: 435, y: 330, key: 'platform0'},
                     {x: 744, y: 440, key: 'platform1'},
-                    {x: 5, y: 460, key: 'platform2'},
+                    {x: -5, y: 460, key: 'platform2'},
                     {x: 460, y: 580, key: 'platform3'},
                 ]);  
                 this.platforms.setTint(this.theme.platforms);
             break;
+            case 2:
+                this.platforms.build([
+                    {x: 600, y: 580, key: 'platform0'}, //158px X 21px
+                    {x: 855, y: 430, key: 'platform0'},
+                    {x: 685, y: 270, key: 'platform0'},
+                    {x: 430, y: 350, key: 'platform0'},
+                    {x: 175, y: 200, key: 'platform0'},
+                    {x: -75, y: 325, key: 'platform0'},
+                    {x: 90, y: 500, key: 'platform0'}
+                ]);  
+                this.platforms.setTint(this.theme.platforms); 
+            default: break;
         }
     }
 
     addMobs() {
         switch(this.level) {
             case 2:    
-                this.mobs.spawn(512, 16, 'mob0');
+                this.mobs.spawn(720, 500, 'mob0');
+                this.mobs.spawn(210, 400, 'mob0');
             break;
             case 3:                
-                this.mobs.spawn(512, 16, 'mob1');
+                //this.mobs.spawn(512, 16, 'mob1');
             break;
             case 4:
-                this.mobs.spawn(512, 16, 'bomb');
+                //this.mobs.spawn(512, 16, 'bomb');
                 break;
             default: break;
         }

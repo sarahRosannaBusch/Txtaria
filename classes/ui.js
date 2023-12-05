@@ -4,7 +4,6 @@ export default class UI {
     constructor(scene) {  
         this.scene = scene;
         this.helpShowing = false;
-        this.soundOn = false;
 
         let fontStyle = { 
             fontSize: '24pt', 
@@ -65,17 +64,10 @@ export default class UI {
         }
     }
 
-    toggleSound() {
-        this.soundOn = !this.soundOn;
-        //todo
-    }
-
     showHelp(show) {     
         if(show) {   
             let fontStyle = { fontSize: '24px', fill: '#FFF' };
             let tint = this.scene.theme.scroll;
-            let fs = this.scene.scale.isFullscreen ? 'X' : ' ';
-            let s = this.soundOn ? 'X' : ' ';
             //this.scene.physics.pause(); //todo: just pause the mobs instead
 
             this.helpBtn.setText("[X]");
@@ -103,17 +95,22 @@ stomp: swipe down
             this.optsText = this.scene.add.text(x, 180, `
 OPTIONS:`, fontStyle).setTint(tint);
 
+            let fs = this.scene.scale.isFullscreen ? 'X' : ' ';
             this.optFS = this.scene.add.text(x, 230, `[${fs}] fullscreen`,
                 fontStyle).setInteractive().setTint(tint);
             this.optFS.on('pointerup', () => {
                 this.toggleFullscreen();
             });
 
+            let s = this.scene.soundOn ? 'X' : ' ';
             this.optSound = this.scene.add.text(x, 260, `[${s}] sound`,
                 fontStyle).setInteractive().setTint(tint);
-            this.optSound.on('pointerup', () => {
-                this.toggleSound();
-                s = this.soundOn ? 'X' : ' ';
+            this.optSound.on('pointerup', () => {                
+                this.scene.soundOn = !this.scene.soundOn;
+                s = this.scene.soundOn ? 'X' : ' ';
+                let mute = !this.scene.soundOn;
+                localStorage.setItem("mute", mute);
+                this.toggleSound(mute);
                 this.optSound.setText(`[${s}] sound`);
             });
 
@@ -156,6 +153,12 @@ THEMES:`, fontStyle).setTint(tint);
         }
         
         this.helpShowing = !this.helpShowing;
+    }
+
+    toggleSound(mute) {        
+        this.scene.rainFX.setMute(mute);
+        this.scene.coinFX.setMute(mute);
+        this.scene.deathFX.setMute(mute);
     }
 
     //change tint of ui

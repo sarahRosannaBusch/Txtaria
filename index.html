@@ -45,8 +45,6 @@
         }
         button {
             padding: 1rem 2rem;
-            border-radius: 0.25rem;
-            box-shadow: 2px 2px 5px grey;
             font-size: large;
             font-weight: bolder;
             font-family: monospace;
@@ -60,7 +58,7 @@
         <h2>Welcome to</h2>
         <h1><img src="./assets/title.png" alt="TXTARIA [alpha]" height="92px"></h1>
         <h2>Where ASCII <span id="rainTxt">reigns</span></h2>
-        <button id="playBtn" disabled>PLAY</button>
+        <button id="playBtn" >PLAY</button>
         <p>A platformer made with Phaser.io</p>
         <p>By Ar0se Games</p>
     </div>
@@ -81,13 +79,11 @@
                 rainTxt.innerText = r[frame];
                 frame++;
             } else {
+                playBtn.disabled = false;
                 clearInterval(timer);
             }
         }, 250);
 
-        window.onload = () => {
-            playBtn.disabled = false;
-        }
         playBtn.onclick = () => {
             clearInterval(timer);
             landingPage.style.display = "none";
