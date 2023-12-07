@@ -58,7 +58,7 @@
         <h2>Welcome to</h2>
         <h1><img src="./assets/title.png" alt="TXTARIA [alpha]" height="92px"></h1>
         <h2>Where ASCII <span id="rainTxt">reigns</span></h2>
-        <button id="playBtn" >PLAY</button>
+        <button id="playBtn" disabled>PLAY</button>
         <p>A platformer made with Phaser.io</p>
         <p>By Ar0se Games</p>
     </div>
@@ -79,10 +79,13 @@
                 rainTxt.innerText = r[frame];
                 frame++;
             } else {
-                playBtn.disabled = false;
                 clearInterval(timer);
             }
         }, 250);
+
+        window.onload = () => {
+            playBtn.disabled = false;
+        };
 
         playBtn.onclick = () => {
             clearInterval(timer);

@@ -14,7 +14,7 @@ export default class SCENE extends Phaser.Scene {
 
     init() {
         this.score = 0;
-        this.level = 2;
+        this.level = 0;
         this.tick = 0;
         this.tweening = true;
         this.gameOver = false;
@@ -78,6 +78,7 @@ export default class SCENE extends Phaser.Scene {
                     
         this.physics.add.collider(this.player, this.base);  
         this.physics.add.collider(this.player, this.platforms);  
+        this.physics.add.collider(this.player, this.mobs);  
         this.physics.add.collider(this.mobs, this.base); 
         this.physics.add.collider(this.mobs, this.platforms);
         this.physics.add.collider(this.coins, this.base);
@@ -134,14 +135,22 @@ export default class SCENE extends Phaser.Scene {
 
     hitMob (player, mob) {
         if(mob.key === 'mob0') {
-
+            //player can kick mob0 from the sides,
+            //but landing on it's pointy hat is bad news
+            if(player.y + 50 < mob.y) {
+                this.killPlayer(player);
+            }
         } else {
-            this.deathFX.play();
-            this.physics.pause(); //todo: this makes whole browser hang...
-            player.setTint(this.theme.kill);
-            player.anims.play('turn');
-            this.gameOver = true;
+            this.killPlayer(player);
         }
+    }
+
+    killPlayer(player) {
+        this.deathFX.play();
+        this.physics.pause(); //todo: this makes whole browser hang...
+        player.setTint(this.theme.kill);
+        player.anims.play('turn');
+        this.gameOver = true;
     }
 
     levelUp() {
@@ -200,6 +209,9 @@ export default class SCENE extends Phaser.Scene {
 
     addMobs() {
         switch(this.level) {
+            case 1:
+                this.mobs.spawn(950, 300, 'mob1');
+            break;
             case 2:    
                 this.mobs.spawn(720, 500, 'mob0');
                 this.mobs.spawn(210, 400, 'mob0');
@@ -214,10 +226,13 @@ export default class SCENE extends Phaser.Scene {
         }
     }
 
+    killMobs() {
+        if(this.mobs) this.mobs.clear(true, true);
+    }
+
     demoLevel() {
         if(this.tutorial) this.tutorial.destroy();
         if(this.platforms) this.platforms.clear(true, true);
-        if(this.mobs) this.mobs.clear(true, true);
     }
 
     /////////////////////////////////////////////////////////////////////////////
@@ -259,6 +274,7 @@ export default class SCENE extends Phaser.Scene {
                 at: 0,
                 run: () => {           
                     this.player.setDepth(75);
+                    this.killMobs();
                 }
             }, {
                 at: 500,

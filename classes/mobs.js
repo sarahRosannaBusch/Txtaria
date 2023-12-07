@@ -3,14 +3,11 @@ export default class MOBS extends Phaser.Physics.Arcade.Group {
         super(world, scene, config); //calls constructor of the class being extended
         scene.add.existing(this); //so this will show up in the scene
         scene.physics.add.existing(this); 
-        this.scene = scene;
     }
 
     spawn(x, y, key) {
-        this.key = key;
         let mob = this.create(x, y, key).setTint(this.scene.theme.mobs);
-        mob.setCollideWorldBounds(true);
-        mob.allowGravity = false;
+        mob.key = key;
         if(key === 'bomb') {
             mob.setBounce(1);
         } else {
@@ -18,8 +15,11 @@ export default class MOBS extends Phaser.Physics.Arcade.Group {
         }
         
         switch(key) {
+            case "mob0":
+                mob.setCollideWorldBounds(true);
+            break;
             case "mob1":
-                mob.setVelocity(Phaser.Math.Between(-200, 200), 20);
+                mob.setVelocity(-50, 0);
             break;
             default: break;
         }
