@@ -14,7 +14,9 @@ export default class SCENE extends Phaser.Scene {
 
     init() {
         this.score = 0;
-        this.level = 0;
+        this.level = localStorage.getItem("level");
+        if(!this.level) this.level = "0";
+        this.maxLevel = 3;
         this.tick = 0;
         this.tweening = true;
         this.gameOver = false;
@@ -40,10 +42,10 @@ export default class SCENE extends Phaser.Scene {
         this.load.image('scrollBG', 'assets/scrollBG.png');
         this.load.image('title', 'assets/title.png');
         this.load.image('ground', 'assets/ground.png');
-        this.load.image('platform0', 'assets/platform0.png');
-        this.load.image('platform1', 'assets/platform1.png');
-        this.load.image('platform2', 'assets/platform2.png');
-        this.load.image('platform3', 'assets/platform3.png');
+        this.load.image('platform0', 'assets/platform0.png'); // !!!!!
+        this.load.image('platform1', 'assets/platform1.png'); // &&&&&
+        this.load.image('platform2', 'assets/platform2.png'); // %%%%%
+        this.load.image('platform3', 'assets/platform3.png'); // #####
         this.load.image('coin', 'assets/coin.png');
         this.load.image('healthPot', 'assets/healthPot.png');
         this.load.image('mob0', 'assets/mob0.png');    
@@ -67,7 +69,7 @@ export default class SCENE extends Phaser.Scene {
         this.base.create(512, 748, 'ground').setDepth(75).setTint(this.theme.base);
         this.platforms = new PLATFORMS(world, this, {}); 
 
-        this.player = new PLAYER(this, 375, -200, 'dude', 0);
+        this.player = new PLAYER(this, 375, 300, 'dude', 0);
         this.coins = new COINS(world, this, {
             key: 'coin',
             repeat: 11,
@@ -78,13 +80,12 @@ export default class SCENE extends Phaser.Scene {
                     
         this.physics.add.collider(this.player, this.base);  
         this.physics.add.collider(this.player, this.platforms);  
-        this.physics.add.collider(this.player, this.mobs);  
         this.physics.add.collider(this.mobs, this.base); 
         this.physics.add.collider(this.mobs, this.platforms);
         this.physics.add.collider(this.coins, this.base);
         this.physics.add.collider(this.coins, this.platforms);
 
-        this.physics.add.overlap(this.player, this.mobs, this.hitMob, null, this);
+        this.physics.add.collider(this.player, this.mobs, this.hitMob, null, this);  
         this.physics.add.overlap(this.player, this.coins, this.collectCoin, null, this);
 
         this.buildLevel();
@@ -109,7 +110,7 @@ export default class SCENE extends Phaser.Scene {
                 if(time - this.tick > 5000) {
                     this.tick = time;
                     this.coins.bounce();
-                    if(this.level === 0) {
+                    if(this.level == 0) {
                         this.tutorial.changeHint();
                     }
                 }
@@ -138,38 +139,73 @@ export default class SCENE extends Phaser.Scene {
             //player can kick mob0 from the sides,
             //but landing on it's pointy hat is bad news
             if(player.y + 50 < mob.y) {
-                this.killPlayer(player);
+                this.killPlayer(player, mob);
             }
         } else {
-            this.killPlayer(player);
+            this.killPlayer(player, mob);
         }
     }
 
-    killPlayer(player) {
-        this.deathFX.play();
+    killPlayer(player, mob) {
         this.physics.pause(); //todo: this makes whole browser hang...
+        this.deathFX.play();
         player.setTint(this.theme.kill);
         player.anims.play('turn');
-        this.gameOver = true;
+
+        if(!this.gameOver) {
+            this.showTips(mob);
+        }
     }
 
-    levelUp() {
-        this.level++;            
-        this.ui.updateLevel(this.level);
+    showTips(mob) {          
+        this.add.image(512, 350, 'scrollBG').setDepth(97).setTint(this.theme.bg); 
+        this.add.image(512, 350, 'scroll').setDepth(98).setTint(this.theme.scroll);
+
+        this.add.text(350, 250, mob.tip, {
+            color:'white', fontSize:'xx-large',
+        }).setDepth(99).setTint(this.theme.scroll).setOrigin(0.5, 0.5); 
+
+        const button = this.add.text(450, 350, '[retry]', {
+            color:'white', fontSize:'xx-large', 
+        }).setInteractive().setDepth(99).setTint(this.theme.scroll);
+        button.on('pointerup', () => {
+            this.scene.restart();
+        });
+    }
+
+    levelUp() { 
         if(this.ui.helpShowing) {
             this.ui.showHelp(false);
+        }
+
+        let level = parseInt(this.level);
+        level++; 
+
+        if(level > this.maxLevel) {
+            this.gameOver = true;
+        } else { 
+            this.level = level;
+            localStorage.setItem("level", this.level);       
+            this.ui.updateLevel(this.level);
+            this.rainFX.play();
+            this.playTween();
         } 
-        this.rainFX.play();
-        this.playTween();
     }
     
     rollCredits() {            
         this.add.image(512, 350, 'scrollBG').setDepth(97).setTint(this.theme.bg); 
-        this.add.image(512, 350, 'scroll').setDepth(98).setTint(this.theme.scroll);   
-        const button = this.add.text(450, 320, '[retry]', {
+        this.add.image(512, 350, 'scroll').setDepth(98).setTint(this.theme.scroll); 
+
+        this.add.text(330, 280, 'Thanks for playing!', {
+            color:'white', fontSize:'xx-large', 
+        }).setDepth(99).setTint(this.theme.scroll);
+
+        const button = this.add.text(400, 350, '[play again]', {
             color:'white', fontSize:'xx-large', 
         }).setInteractive().setDepth(99).setTint(this.theme.scroll);
         button.on('pointerup', () => {
+            this.level = 0;
+            localStorage.setItem("level", this.level);
             this.scene.restart();
         });
     }
@@ -178,8 +214,9 @@ export default class SCENE extends Phaser.Scene {
     //                                 Levels                                  //
     /////////////////////////////////////////////////////////////////////////////
     
-    buildLevel() {    
-        switch(this.level) {
+    buildLevel() { 
+        let lvl = parseInt(this.level);   
+        switch(lvl) {
             case 0:
                 this.tutorial = new TUTORIAL(this, 512, -700); 
             break;
@@ -203,12 +240,23 @@ export default class SCENE extends Phaser.Scene {
                     {x: 90, y: 500, key: 'platform0'}
                 ]);  
                 this.platforms.setTint(this.theme.platforms); 
+            break;        
+            case 3:              
+                this.platforms.build([
+                    {x: 350, y: 290, key: 'platform1'},
+                    {x: -200, y: 440, key: 'platform3'},
+                    {x: 760, y: 440, key: 'platform3'},
+                    {x: 440, y: 580, key: 'platform0'},
+                ]);  
+                this.platforms.setTint(this.theme.platforms);
+            break;
             default: break;
         }
     }
 
     addMobs() {
-        switch(this.level) {
+        let lvl = parseInt(this.level);   
+        switch(lvl) {
             case 1:
                 this.mobs.spawn(950, 300, 'mob1');
             break;
@@ -217,7 +265,7 @@ export default class SCENE extends Phaser.Scene {
                 this.mobs.spawn(210, 400, 'mob0');
             break;
             case 3:                
-                //this.mobs.spawn(512, 16, 'mob1');
+                this.mobs.spawn(512, 16, 'bomb');
             break;
             case 4:
                 //this.mobs.spawn(512, 16, 'bomb');
@@ -259,7 +307,7 @@ export default class SCENE extends Phaser.Scene {
             }
         }];
 
-        if(this.level === 0) {
+        if(this.level == 0) {
             params.push({
                 at: 1000,
                 tween: {

@@ -13,7 +13,7 @@ export default class UI {
         //UI
         this.scoreText = scene.add.text(16, 16, `score: $${scene.score}`, fontStyle)
             .setTint(scene.theme.ui);
-        this.levelText = scene.add.text(512, 32, `level: ${scene.level} / 12`, fontStyle)
+        this.levelText = scene.add.text(512, 32, `level: ${scene.level} / ${this.scene.maxLevel}`, fontStyle)
             .setOrigin(0.5).setTint(scene.theme.ui);
         
         //help button
@@ -44,7 +44,7 @@ export default class UI {
     }
 
     updateLevel(level) {
-        this.levelText.setText(`level: ${level} / 12`);
+        this.levelText.setText(`level: ${level} / ${this.scene.maxLevel}`);
     }
 
     toggleFullscreen() {

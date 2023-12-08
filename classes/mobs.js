@@ -17,9 +17,22 @@ export default class MOBS extends Phaser.Physics.Arcade.Group {
         switch(key) {
             case "mob0":
                 mob.setCollideWorldBounds(true);
+                mob.tip = `
+                You can safely kick witchhazel,
+                but don't land on it's pointy hat!`;
             break;
             case "mob1":
                 mob.setVelocity(-50, 0);
+                mob.tip = `
+                Scuttlebots will run you down, 
+                so stay out of their way.`;
+            break;
+            case "bomb":
+                mob.setCollideWorldBounds(true);
+                mob.setVelocity(-100, 50);
+                mob.tip = `
+                Spiky bombs don't usually explode,
+                but getting hit by one still hurts.`;
             break;
             default: break;
         }
