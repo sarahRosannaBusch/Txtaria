@@ -12,23 +12,27 @@ export default class SCENE extends Phaser.Scene {
         super("SCENE");
     }
 
-    init() {
-        this.score = 0;
-        this.level = localStorage.getItem("level");
-        if(!this.level) this.level = "0";
-        this.maxLevel = 3;
+    init() {        
         this.tick = 0;
         this.tweening = true;
         this.gameOver = false;
+        this.maxLevel = 3;
+
+        this.level = localStorage.getItem("level");
+        if(!this.level) this.level = "0";
+        let lvl = parseInt(this.level);
+        this.score = lvl * 120; //12 stars per level    
+
         this.themeName = localStorage.getItem("theme");
         if(!this.themeName) this.themeName = "Textarea"; //default
+        this.theme = themes[this.themeName];
+
         let mute = localStorage.getItem("mute");
         if(mute) {
             this.soundOn = mute === "false" ? true : false; 
         } else {
             this.soundOn = true; //default
         }
-        this.theme = themes[this.themeName];
     }
 
     preload() {          
@@ -69,7 +73,9 @@ export default class SCENE extends Phaser.Scene {
         this.base.create(512, 748, 'ground').setDepth(75).setTint(this.theme.base);
         this.platforms = new PLATFORMS(world, this, {}); 
 
-        this.player = new PLAYER(this, 375, 300, 'dude', 0);
+        this.player = new PLAYER(this, 375, 300, 'dude', 0);        
+        this.player.setCollideWorldBounds(true);
+
         this.coins = new COINS(world, this, {
             key: 'coin',
             repeat: 11,
@@ -88,7 +94,9 @@ export default class SCENE extends Phaser.Scene {
         this.physics.add.collider(this.player, this.mobs, this.hitMob, null, this);  
         this.physics.add.overlap(this.player, this.coins, this.collectCoin, null, this);
 
-        this.buildLevel();
+        if(this.level == 0) {
+            this.buildLevel();
+        }
         this.playTween();
         
         this.rainFX = this.sound.add('rain');
@@ -267,9 +275,6 @@ export default class SCENE extends Phaser.Scene {
             case 3:                
                 this.mobs.spawn(512, 16, 'bomb');
             break;
-            case 4:
-                //this.mobs.spawn(512, 16, 'bomb');
-                break;
             default: break;
         }
     }
@@ -287,6 +292,7 @@ export default class SCENE extends Phaser.Scene {
     //                            Tween Timeline                               //
     /////////////////////////////////////////////////////////////////////////////
 
+    // tween scenes
     playTween() {
         let params = [{
             at: 0,
@@ -302,7 +308,6 @@ export default class SCENE extends Phaser.Scene {
         }, {
             at: 3000,
             run: () => {
-                this.player.setCollideWorldBounds(true);
                 this.tweening = false;
             }
         }];
