@@ -5,6 +5,7 @@ import MOBS from "./mobs.js";
 import UI from "./ui.js";
 import PLATFORMS from "./platforms.js";
 import TUTORIAL from "./tutorial.js";
+import { LEVELS } from "../levels.js";
 import { themes } from "../themes.js";
 
 export default class SCENE extends Phaser.Scene {
@@ -223,59 +224,23 @@ export default class SCENE extends Phaser.Scene {
     /////////////////////////////////////////////////////////////////////////////
     
     buildLevel() { 
-        let lvl = parseInt(this.level);   
-        switch(lvl) {
-            case 0:
-                this.tutorial = new TUTORIAL(this, 512, -700); 
-            break;
-            case 1:              
-                this.platforms.build([
-                    {x: 435, y: 330, key: 'platform0'},
-                    {x: 744, y: 440, key: 'platform1'},
-                    {x: -5, y: 460, key: 'platform2'},
-                    {x: 460, y: 580, key: 'platform3'},
-                ]);  
-                this.platforms.setTint(this.theme.platforms);
-            break;
-            case 2:
-                this.platforms.build([
-                    {x: 600, y: 580, key: 'platform0'}, //158px X 21px
-                    {x: 855, y: 430, key: 'platform0'},
-                    {x: 685, y: 270, key: 'platform0'},
-                    {x: 430, y: 350, key: 'platform0'},
-                    {x: 175, y: 200, key: 'platform0'},
-                    {x: -75, y: 325, key: 'platform0'},
-                    {x: 90, y: 500, key: 'platform0'}
-                ]);  
-                this.platforms.setTint(this.theme.platforms); 
-            break;        
-            case 3:              
-                this.platforms.build([
-                    {x: 350, y: 290, key: 'platform1'},
-                    {x: -200, y: 440, key: 'platform3'},
-                    {x: 760, y: 440, key: 'platform3'},
-                    {x: 440, y: 580, key: 'platform0'},
-                ]);  
-                this.platforms.setTint(this.theme.platforms);
-            break;
-            default: break;
+        let lvl = parseInt(this.level);  
+        if(lvl === 0) {
+            this.tutorial = new TUTORIAL(this, 512, -700); 
+        } else {
+            this.platforms.build(LEVELS['lvl' + lvl].plats);  
+            this.platforms.setTint(this.theme.platforms);
         }
     }
 
     addMobs() {
         let lvl = parseInt(this.level);   
-        switch(lvl) {
-            case 1:
-                this.mobs.spawn(950, 300, 'mob1');
-            break;
-            case 2:    
-                this.mobs.spawn(720, 500, 'mob0');
-                this.mobs.spawn(210, 400, 'mob0');
-            break;
-            case 3:                
-                this.mobs.spawn(512, 16, 'bomb');
-            break;
-            default: break;
+        let mobs = LEVELS['lvl' + lvl].mobs;
+        let n = mobs.length;
+        if(n) {
+            for(let i = 0; i < n; i++) {
+                this.mobs.spawn(...mobs[i]);
+            }
         }
     }
 
