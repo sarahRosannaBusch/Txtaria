@@ -170,11 +170,14 @@ export default class SCENE extends Phaser.Scene {
         this.add.image(512, 350, 'scrollBG').setDepth(97).setTint(this.theme.bg); 
         this.add.image(512, 350, 'scroll').setDepth(98).setTint(this.theme.scroll);
 
-        this.add.text(350, 250, mob.tip, {
+        this.add.image(500, 250, mob.key).setDepth(99).setTint(this.theme.scroll)
+            .setOrigin(0.5, 0.5); 
+
+        this.add.text(350, 325, mob.tip, {
             color:'white', fontSize:'xx-large',
         }).setDepth(99).setTint(this.theme.scroll).setOrigin(0.5, 0.5); 
 
-        const button = this.add.text(450, 350, '[retry]', {
+        const button = this.add.text(435, 400, '[retry]', {
             color:'white', fontSize:'xx-large', 
         }).setInteractive().setDepth(99).setTint(this.theme.scroll);
         button.on('pointerup', () => {

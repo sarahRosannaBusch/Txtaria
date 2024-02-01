@@ -2,7 +2,7 @@
 
 A single-pane ASCII-art platformer made with Phaser.io
 
-## Run locally
+## To Run locally
 - install node (if you don't have it)
 - run `node server` from project root
 - open http://localhost:9999/index.html
@@ -14,12 +14,15 @@ A single-pane ASCII-art platformer made with Phaser.io
 - accessible (both visual and auditory cues, big font, 5 colour themes)
 - toggle fullscreen and sound
 - simple keyboard and touch controls (left, right, jump, stomp)
-TODO: controller controls
+- TODO: controller controls
 
 ### Landing Page
 - Simple animated banner and play button.
-- Completely contained in index.html
-TODO: make animation cooler
+- Completely contained in index.html for now
+- TODO: make animation cooler
+
+### Data
+- stored in localStorage: level, theme, mute
 
 ### Game Area
 - 1024 x 768 px, scaled to fit
@@ -27,11 +30,10 @@ TODO: make animation cooler
 
 ### Scene
 - single scene object that has components swapped out from level to level
-- base and player always persist
-- game logic and event handling done in scene class, everything else should be modular components
+- game logic and event handling done in scene.js, everything else is modular components
+- base, player, and ui always persist
 
-### Data
-- data stored in localStorage: level, theme, mute
+
 
 ## Phaser References
 - tutorial: https://phaser.io/tutorials/making-your-first-phaser-3-game/part1

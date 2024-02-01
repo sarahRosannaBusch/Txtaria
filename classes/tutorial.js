@@ -7,14 +7,11 @@ export default class TUTORIAL extends Phaser.GameObjects.Container {
         
         this.scroll = scene.add.image(0, 350, 'scroll')
             .setTint(tint);
-        this.headerTxt = scene.add.text(0, 200, 'Welcome to', {
+        this.headerTxt = scene.add.text(0, 225, 'Welcome to', {
             fontSize: '24pt', fill: '#FFF'
         }).setOrigin(0.5).setTint(tint);                
-        this.title = scene.add.image(0, 275, 'title').setOrigin(0.5)
+        this.title = scene.add.image(0, 300, 'title').setOrigin(0.5)
             .setTint(tint);
-        this.subtitle = scene.add.text(0, 365, 'Where ASCII rains', {
-            fontSize: '24pt', fill: '#FFF'
-        }).setOrigin(0.5).setTint(tint);
 
         this.hintIdx = 0;
         this.hints = [
@@ -22,11 +19,11 @@ export default class TUTORIAL extends Phaser.GameObjects.Container {
             'Click the [+] or [-] to toggle fullscreen',
             'Collect all the {$} to progress to next level'
         ]
-        this.hint = scene.add.text(0, 430, this.hints[0], {
+        this.hint = scene.add.text(0, 420, this.hints[0], {
             fontSize: '18pt', fill: '#FFF', fontStyle: 'italic'
         }).setOrigin(0.5).setTint(tint);
         
-        this.add([this.scroll, this.headerTxt, this.title, this.subtitle, this.hint]);
+        this.add([this.scroll, this.headerTxt, this.title, this.hint]);
         this.setDepth(0);
     }
 
@@ -45,7 +42,6 @@ export default class TUTORIAL extends Phaser.GameObjects.Container {
         this.scroll.setTint(colour);
         this.headerTxt.setTint(colour);
         this.title.setTint(colour);
-        this.subtitle.setTint(colour);
         this.hint.setTint(colour);
     }
 }
