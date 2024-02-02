@@ -39,9 +39,15 @@ export default class SCENE extends Phaser.Scene {
     preload() {          
         this.showLoadingScreen();
 
+        //sprites
         this.load.spritesheet('asciiRain', 'assets/asciiRain.png', { 
             frameWidth: 16.6, frameHeight: 2074
-        });      
+        });     
+        this.load.spritesheet('dude', 'assets/dude.png', { 
+            frameWidth: 51.888, frameHeight: 98 
+        });
+        
+        //objects
         this.load.image('rainBG', 'assets/rainBG.png');
         this.load.image('scroll', 'assets/scroll.png');
         this.load.image('scrollBG', 'assets/scrollBG.png');
@@ -56,9 +62,20 @@ export default class SCENE extends Phaser.Scene {
         this.load.image('mob0', 'assets/mob0.png');    
         this.load.image('mob1', 'assets/mob1.png');
         this.load.image('bomb', 'assets/bomb.png');
-        this.load.spritesheet('dude', 'assets/dude.png', { 
-            frameWidth: 51.888, frameHeight: 98 
-        });
+
+        //art
+        this.load.image('tree0', 'assets/tree0.png');
+        this.load.image('tree1', 'assets/tree1.png');
+        this.load.image('tree2', 'assets/tree2.png');
+        this.load.image('tree3', 'assets/tree3.png');
+        this.load.image('shrub0', 'assets/shrub0.png');
+        this.load.image('flower0', 'assets/flower0.png');
+        this.load.image('flower1', 'assets/flower1.png');
+        this.load.image('flower2', 'assets/flower2.png');
+        this.load.image('flower3', 'assets/flower3.png');
+        this.load.image('tower0', 'assets/tower0.png');
+
+        //sounds
         this.load.audio('rain', ['assets/asciiRain.mp3']);
         this.load.audio('coin', ['assets/collectCoin.mp3']);
         this.load.audio('death', ['assets/death.mp3']);
@@ -84,6 +101,7 @@ export default class SCENE extends Phaser.Scene {
         });
         this.asciiRain = new ASCIIRAIN(world, this, {});
         this.mobs = new MOBS(world, this, {});
+        this.art = [];
                     
         this.physics.add.collider(this.player, this.base);  
         this.physics.add.collider(this.player, this.platforms);  
@@ -116,7 +134,7 @@ export default class SCENE extends Phaser.Scene {
         } else {
             if(!this.tweening) {
                 this.player.move();
-                if(time - this.tick > 5000) {
+                if(time - this.tick > 3000) {
                     this.tick = time;
                     this.coins.bounce();
                     if(this.level == 0) {
@@ -227,12 +245,23 @@ export default class SCENE extends Phaser.Scene {
     /////////////////////////////////////////////////////////////////////////////
     
     buildLevel() { 
-        let lvl = parseInt(this.level);  
+        let lvl = parseInt(this.level);
+        let LEVEL =  LEVELS['lvl' + lvl]; 
         if(lvl === 0) {
             this.tutorial = new TUTORIAL(this, 512, -700); 
         } else {
-            this.platforms.build(LEVELS['lvl' + lvl].plats);  
+            this.platforms.build(LEVEL.plats);  
             this.platforms.setTint(this.theme.platforms);
+        }
+
+        if(LEVEL && LEVEL.art) {
+            let n = LEVEL.art.length;
+            for(let i = 0; i < n; i++){
+                let art = LEVEL.art[i];
+                let img = this.add.image(art.x, art.y, art.key).setDepth(0).setOrigin(1, 1)
+                    .setTint(this.theme.art);
+                this.art.push(img);
+            }
         }
     }
 
@@ -254,6 +283,12 @@ export default class SCENE extends Phaser.Scene {
     demoLevel() {
         if(this.tutorial) this.tutorial.destroy();
         if(this.platforms) this.platforms.clear(true, true);
+        if(this.art) {
+            let n = this.art.length;
+            for(let i = 0; i < n; i++) {
+                this.art[i].destroy();
+            }
+        }
     }
 
     /////////////////////////////////////////////////////////////////////////////

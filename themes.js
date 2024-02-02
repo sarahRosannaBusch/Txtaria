@@ -10,7 +10,8 @@ export const themes = {
         bg: 0x121212, 
         ui: 0xECECEC,
         scroll: 0xECECEC,
-        rain: 0xECECEC
+        rain: 0xECECEC,
+        art: 0xECECEC
     },
     Coding_Vibes: {
         kill: 0xc8250e, //red
@@ -23,7 +24,8 @@ export const themes = {
         bg: 0x0f0f0f, //grey
         ui: 0x2967c5, //darkblue
         scroll: 0x7cc9ff,
-        rain: 0x8faf53 // lightgreen
+        rain: 0x8faf53, // lightgreen
+        art: 0xFF6FFF //pink
     },
     Light_Bright: {
         kill: 0xFF0000,
@@ -36,7 +38,8 @@ export const themes = {
         bg: 0x000000,
         ui: 0x00FFFF,
         scroll: 0xFF55FF,
-        rain: 0x9400D3
+        rain: 0x9400D3,
+        art: 0x00BFFF
     },
     Matrix_Mode: {
         kill: 0xFF0000,
@@ -49,7 +52,8 @@ export const themes = {
         bg: 0x121212 & 0x00FF00, 
         ui: 0x00FF00,
         scroll: 0x00FF00,
-        rain: 0x00FF00
+        rain: 0x00FF00,
+        art: 0x00FF00
     },
     Paper: {
         kill: 0xFF0000,
@@ -62,6 +66,7 @@ export const themes = {
         bg: 0xFEFBEA, 
         ui: 0x000000,
         scroll: 0x000000,
-        rain: 0x000000
+        rain: 0x000000,
+        art: 0x000000
     }
 }

@@ -7,7 +7,6 @@ A single-pane ASCII-art platformer made with Phaser.io
 - run `node server` from project root
 - open http://localhost:9999/index.html
 
-
 ## Design
 - fully responsive
 - consistent experience in all browsers

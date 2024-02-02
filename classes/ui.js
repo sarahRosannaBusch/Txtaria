@@ -200,5 +200,13 @@ THEMES:`, fontStyle).setTint(tint);
 
         if(this.scene.tutorial) this.scene.tutorial.changeTint();
         if(this.scene.asciiRain) this.scene.asciiRain.changeTint();
+
+        if(this.scene.art) {
+            let n = this.scene.art.length;
+            for(let i = 0; i < n; i++) {
+                let piece = this.scene.art[i];
+                piece.setTint(theme.art);
+            }
+        }
     }
 }

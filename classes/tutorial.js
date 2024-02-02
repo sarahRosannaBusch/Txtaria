@@ -15,11 +15,11 @@ export default class TUTORIAL extends Phaser.GameObjects.Container {
 
         this.hintIdx = 0;
         this.hints = [
-            'Click the [?] to see controls and options',
+            'Collect all the {$} to progress to next level',
             'Click the [+] or [-] to toggle fullscreen',
-            'Collect all the {$} to progress to next level'
+            'Click the [?] to see controls and options'
         ]
-        this.hint = scene.add.text(0, 420, this.hints[0], {
+        this.hint = scene.add.text(0, 400, this.hints[0], {
             fontSize: '18pt', fill: '#FFF', fontStyle: 'italic'
         }).setOrigin(0.5).setTint(tint);
         
