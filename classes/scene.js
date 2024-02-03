@@ -17,7 +17,7 @@ export default class SCENE extends Phaser.Scene {
         this.tick = 0;
         this.tweening = true;
         this.gameOver = false;
-        this.maxLevel = 3;
+        this.maxLevel = LEVELS.length - 1;
 
         this.level = localStorage.getItem("level");
         if(!this.level) this.level = "0";
@@ -57,6 +57,8 @@ export default class SCENE extends Phaser.Scene {
         this.load.image('platform1', 'assets/platform1.png'); // &&&&&
         this.load.image('platform2', 'assets/platform2.png'); // %%%%%
         this.load.image('platform3', 'assets/platform3.png'); // #####
+        this.load.image('platform4', 'assets/platform4.png'); // /////
+        this.load.image('platform5', 'assets/platform5.png'); // \\\\\
         this.load.image('coin', 'assets/coin.png');
         this.load.image('healthPot', 'assets/healthPot.png');
         this.load.image('mob0', 'assets/mob0.png');    
@@ -64,16 +66,23 @@ export default class SCENE extends Phaser.Scene {
         this.load.image('bomb', 'assets/bomb.png');
 
         //art
+        this.load.image('cloud0', 'assets/cloud0.png');
+        this.load.image('cloud1', 'assets/cloud1.png');
         this.load.image('tree0', 'assets/tree0.png');
         this.load.image('tree1', 'assets/tree1.png');
         this.load.image('tree2', 'assets/tree2.png');
         this.load.image('tree3', 'assets/tree3.png');
         this.load.image('shrub0', 'assets/shrub0.png');
+        this.load.image('mushroom0', 'assets/mushroom0.png');
+        this.load.image('mushroom1', 'assets/mushroom1.png');
         this.load.image('flower0', 'assets/flower0.png');
         this.load.image('flower1', 'assets/flower1.png');
         this.load.image('flower2', 'assets/flower2.png');
         this.load.image('flower3', 'assets/flower3.png');
+        this.load.image('flower4', 'assets/flower4.png');
         this.load.image('tower0', 'assets/tower0.png');
+        this.load.image('hut', 'assets/hut.png');
+        this.load.image('rat', 'assets/rat.png');
 
         //sounds
         this.load.audio('rain', ['assets/asciiRain.mp3']);
@@ -162,14 +171,24 @@ export default class SCENE extends Phaser.Scene {
     }
 
     hitMob (player, mob) {
-        if(mob.key === 'mob0') {
-            //player can kick mob0 from the sides,
-            //but landing on it's pointy hat is bad news
-            if(player.y + 50 < mob.y) {
+        switch(mob.key) {
+            case 'mob0': //witchhazel
+                //player can kick mob0 from the sides,
+                //but landing on it's pointy hat is bad news
+                if(player.y + 50 < mob.y) {
+                    this.killPlayer(player, mob);
+                }
+            break;
+            case 'mob1': //scuttlebot
+                //runs player down from the sides,
+                //but player can hop on it's head
+                if(player.y + 50 > mob.y) {
+                    this.killPlayer(player, mob);
+                }
+            break;
+            default:
                 this.killPlayer(player, mob);
-            }
-        } else {
-            this.killPlayer(player, mob);
+            break;
         }
     }
 
@@ -246,7 +265,7 @@ export default class SCENE extends Phaser.Scene {
     
     buildLevel() { 
         let lvl = parseInt(this.level);
-        let LEVEL =  LEVELS['lvl' + lvl]; 
+        let LEVEL =  LEVELS[lvl]; 
         if(lvl === 0) {
             this.tutorial = new TUTORIAL(this, 512, -700); 
         } else {
@@ -267,9 +286,9 @@ export default class SCENE extends Phaser.Scene {
 
     addMobs() {
         let lvl = parseInt(this.level);   
-        let mobs = LEVELS['lvl' + lvl].mobs;
-        let n = mobs.length;
-        if(n) {
+        let mobs = LEVELS[lvl].mobs;
+        if(mobs) {
+            let n = mobs.length;
             for(let i = 0; i < n; i++) {
                 this.mobs.spawn(...mobs[i]);
             }
