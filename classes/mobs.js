@@ -5,7 +5,7 @@ export default class MOBS extends Phaser.Physics.Arcade.Group {
         scene.physics.add.existing(this); 
     }
 
-    spawn(x, y, key) {
+    spawn(x, y, key, dir) {
         let mob = this.create(x, y, key).setTint(this.scene.theme.mobs);
         mob.key = key;
         if(key === 'bomb') {
@@ -15,14 +15,16 @@ export default class MOBS extends Phaser.Physics.Arcade.Group {
         }
         
         switch(key) {
-            case "mob0":
-                mob.setCollideWorldBounds(true);
+            case "mob0": //witchhazel
+                //mob.setCollideWorldBounds(true);
                 mob.tip = `
                 You can safely kick witchhazel,
                 but don't land on it's pointy hat!`;
             break;
-            case "mob1":
-                mob.setVelocity(-50, 0);
+            case "mob1": //scuttlebot
+                let x = (dir === 'right') ? 50 : -50;
+                mob.setVelocity(x, 0);
+                mob.setMass(20);
                 mob.tip = `
                 Scuttlebots will run you down, 
                 so stay out of their way.`;

@@ -9,13 +9,13 @@ export const LEVELS = [
             {x: 460, y: 580, key: 'platform1'}, // &&&
         ],
         art: [
-            {x: 150, y: 727, key: 'tree1'},
-            {x: 750, y: 727, key: 'shrub0'},
-            {x: 975, y: 727, key: 'tree0'},
-            {x: 580, y: 580, key: 'flower0'},
-            {x: 150, y: 180, key: 'cloud0'},
-            {x: 330, y: 230, key: 'cloud1'},
-            {x: 940, y: 200, key: 'cloud0'}
+            {x: 50, y: 727, key: 'tree1'},
+            {x: 650, y: 727, key: 'shrub0'},
+            {x: 875, y: 727, key: 'tree0'},
+            {x: 480, y: 580, key: 'flower0'},
+            {x: 50, y: 180, key: 'cloud0'},
+            {x: 230, y: 230, key: 'cloud1'},
+            {x: 840, y: 200, key: 'cloud0'}
         ]
     }, { 
         plats: [
@@ -28,11 +28,11 @@ export const LEVELS = [
             [950, 100, 'mob1']
         ],
         art: [
-            {x: 300, y: 727, key: 'tree2'},
-            {x: 900, y: 727, key: 'tree3'},
-            {x: 780, y: 580, key: 'mushroom0'},
-            {x: 980, y: 580, key: 'mushroom1'},
-            {x: 200, y: 250, key: 'cloud1'},
+            {x: 200, y: 727, key: 'tree2'},
+            {x: 800, y: 727, key: 'tree3'},
+            {x: 680, y: 580, key: 'mushroom0'},
+            {x: 880, y: 580, key: 'mushroom1'},
+            {x: 100, y: 250, key: 'cloud1'},
         ]
     }, {
         plats: [
@@ -50,10 +50,10 @@ export const LEVELS = [
             [510, 300, 'mob0']
         ],
         art: [
-            {x: 200, y: 727, key: 'flower3'},
-            {x: 925, y: 727, key: 'flower4'},
-            {x: 310, y: 200, key: 'flower1'},
-            {x: 780, y: 270, key: 'flower2'}
+            {x: 100, y: 727, key: 'flower3'},
+            {x: 825, y: 727, key: 'flower4'},
+            {x: 210, y: 200, key: 'flower1'},
+            {x: 680, y: 270, key: 'flower2'}
         ]
     }, {
         plats: [
@@ -67,10 +67,10 @@ export const LEVELS = [
             [912, 16, 'bomb']
         ],
         art: [
-            {x: 200, y: 727, key: 'tree0'},            
-            {x: 850, y: 727, key: 'tree2'},
-            {x: 975, y: 727, key: 'tree3'},
-            {x: 570, y: 580, key: 'tower0'}
+            {x: 100, y: 727, key: 'tree0'},            
+            {x: 750, y: 727, key: 'tree2'},
+            {x: 875, y: 727, key: 'tree3'},
+            {x: 470, y: 580, key: 'tower0'}
         ]
     }, { //lvl 5
         plats: [
@@ -87,10 +87,37 @@ export const LEVELS = [
             [900, 550, 'mob0']
         ],
         art: [
-            {x: 200, y: 727, key: 'tree0'},            
-            {x: 560, y: 727, key: 'hut'},
-            {x: 650, y: 727, key: 'shrub0'},
-            {x: 840, y: 580, key: 'rat'}
+            {x: 100, y: 727, key: 'tree0'},            
+            {x: 460, y: 727, key: 'hut'},
+            {x: 550, y: 727, key: 'shrub0'},
+            {x: 740, y: 580, key: 'rat'}
+        ]
+    }, { 
+        plats: [
+            {x: 345, y: 184, key: 'platform0'}, // !!!
+            {x: 685, y: 265, key: 'platform0'}, // !!!
+            {x: 800, y: 580, key: 'platform6'}, 
+            {x: 566, y: 496, key: 'platform6'}, 
+            {x: 275, y: 425, key: 'platform7'}, 
+            {x: 8, y: 335, key: 'platform7'}, 
+        ],
+        mobs: [
+            [65, 290, 'mob1', 'right'],
+            [485, 350, 'mob0'],
+            [145, 700, 'mob0'],
+            [711, 700, 'mob0'],
+            [900, 700, 'mob0']
+        ],
+        art: [
+            {x: 605, y: 496, key: 'flower0'},            
+            {x: 80, y: 727, key: 'flower1'},
+            {x: 715, y: 727, key: 'flower2'},
+            {x: 900, y: 727, key: 'mushroom1'},
+            {x: 100, y: 335, key: 'mushroom1'},
+            {x: 46, y: 335, key: 'mushroom0'},
+            {x: 450, y: 727, key: 'wagon'},
+            {x: 820, y: 581, key: 'hut'},
+            {x: 341, y: 425, key: 'tower0'}
         ]
     }
 ]

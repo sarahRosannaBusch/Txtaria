@@ -77,6 +77,8 @@
 
     <script src="//cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.js"></script>
     <script type="module">
+        const devMode = 1;
+        localStorage.setItem("devMode", devMode);
         import playGame from "./game.js";
         let playBtn = document.getElementById("playBtn");
         let landingPage = document.getElementById("landingPage");
@@ -96,14 +98,19 @@
 
         window.onload = () => {
             playBtn.disabled = false;
+            if(devMode) start();
         };
 
         playBtn.onclick = () => {
+            start();
+        };
+
+        function start() {
             clearInterval(timer);
             landingPage.style.display = "none";
             gameCanvas.style.display = "flex";
             playGame();
-        };
+        }
     </script>
 </body>
 </html>

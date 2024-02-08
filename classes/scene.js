@@ -13,7 +13,9 @@ export default class SCENE extends Phaser.Scene {
         super("SCENE");
     }
 
-    init() {        
+    init() {   
+        this.devMode = parseInt(localStorage.getItem("devMode"));
+        
         this.tick = 0;
         this.tweening = true;
         this.gameOver = false;
@@ -59,6 +61,8 @@ export default class SCENE extends Phaser.Scene {
         this.load.image('platform3', 'assets/platform3.png'); // #####
         this.load.image('platform4', 'assets/platform4.png'); // /////
         this.load.image('platform5', 'assets/platform5.png'); // \\\\\
+        this.load.image('platform6', 'assets/platform6.png'); // |_|_|_|
+        this.load.image('platform7', 'assets/platform7.png'); // |_|_|_|_|_|_|
         this.load.image('coin', 'assets/coin.png');
         this.load.image('healthPot', 'assets/healthPot.png');
         this.load.image('mob0', 'assets/mob0.png');    
@@ -83,6 +87,7 @@ export default class SCENE extends Phaser.Scene {
         this.load.image('tower0', 'assets/tower0.png');
         this.load.image('hut', 'assets/hut.png');
         this.load.image('rat', 'assets/rat.png');
+        this.load.image('wagon', 'assets/wagon.png');
 
         //sounds
         this.load.audio('rain', ['assets/asciiRain.mp3']);
@@ -119,6 +124,7 @@ export default class SCENE extends Phaser.Scene {
         this.physics.add.collider(this.coins, this.base);
         this.physics.add.collider(this.coins, this.platforms);
 
+        this.physics.add.collider(this.mobs, this.mobs, this.mobHit, null, this);
         this.physics.add.collider(this.player, this.mobs, this.hitMob, null, this);  
         this.physics.add.overlap(this.player, this.coins, this.collectCoin, null, this);
 
@@ -158,7 +164,7 @@ export default class SCENE extends Phaser.Scene {
     //                               Game events                               //
     /////////////////////////////////////////////////////////////////////////////
 
-    collectCoin (player, coin) {
+    collectCoin(player, coin) {
         this.coinFX.play();
         coin.disableBody(true, true);
     
@@ -170,7 +176,7 @@ export default class SCENE extends Phaser.Scene {
         }
     }
 
-    hitMob (player, mob) {
+    hitMob(player, mob) {
         switch(mob.key) {
             case 'mob0': //witchhazel
                 //player can kick mob0 from the sides,
@@ -190,6 +196,10 @@ export default class SCENE extends Phaser.Scene {
                 this.killPlayer(player, mob);
             break;
         }
+    }
+
+    mobHit(mob1, mob2) {
+        console.log(mob1.key + " hit " + mob2.key);
     }
 
     killPlayer(player, mob) {
@@ -277,7 +287,7 @@ export default class SCENE extends Phaser.Scene {
             let n = LEVEL.art.length;
             for(let i = 0; i < n; i++){
                 let art = LEVEL.art[i];
-                let img = this.add.image(art.x, art.y, art.key).setDepth(0).setOrigin(1, 1)
+                let img = this.add.image(art.x, art.y, art.key).setDepth(0).setOrigin(0, 1)
                     .setTint(this.theme.art);
                 this.art.push(img);
             }
@@ -320,7 +330,7 @@ export default class SCENE extends Phaser.Scene {
             at: 0,
             run: () => {
                 this.tweening = true;
-                this.asciiRain.rain();
+                if(!this.devMode) this.asciiRain.rain();
             }
         }, {
             at: 1500,
