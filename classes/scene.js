@@ -88,6 +88,8 @@ export default class SCENE extends Phaser.Scene {
         this.load.image('hut', 'assets/hut.png');
         this.load.image('rat', 'assets/rat.png');
         this.load.image('wagon', 'assets/wagon.png');
+        this.load.image('moon', 'assets/moon.png');
+        this.load.image('star', 'assets/star.png');
 
         //sounds
         this.load.audio('rain', ['assets/asciiRain.mp3']);
