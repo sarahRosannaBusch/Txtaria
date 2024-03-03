@@ -20,19 +20,6 @@
             overflow: hidden;
             background: #010101;
         }
-        #game {
-            margin: 0;
-            padding: 0;
-            height: 100%; 
-            width: 100vw; 
-            /* background-image: url("assets/background.png"); */
-            background-position: center;
-        }
-        #game * { /* shows the bg in fullscreen mode too this way */
-            /* background: #121212; */
-            /* background-image: url("assets/background.png"); */
-            background-position: center; 
-        }
         #landingPage {
             position: absolute;
             width: 100%;
@@ -48,10 +35,12 @@
         }
         #landingPage * {
             max-width: 90vw;
+            text-align: center;
         }
         h2 {
             margin: 0.5rem;
             font-size: 18pt;
+            height: 1.5rem;
         }
         button {
             padding: 1rem 2rem;
@@ -61,44 +50,75 @@
             margin: 2rem;
             margin-bottom: 2.5rem;
         }
+        .fadeIn {
+            transition: opacity 1s;
+            transition-timing-function: ease-out; 
+            opacity: 1 !important;
+        }
+        .delayed {
+            transition-delay: 500ms;
+        }
     </style>
 </head>
 <body>
     <div id="landingPage">
         <h2>Welcome to</h2>
-        <h1><img src="./assets/title.png" alt="TXTARIA [alpha]" height="92px"></h1>
-        <h2>Where ASCII <span id="rainTxt">reigns</span></h2>
-        <button id="playBtn" disabled>PLAY</button>
-        <p>A platformer made with Phaser.io</p>
-        <p>By Ar0se Games</p>
+        <h1><img src="./assets/title.svg" alt="TXTARIA [alpha]" height="92px"></h1>
+        <h2 id="subtitle"></h2>
+        <button id="playBtn" style="opacity: 0" disabled>PLAY</button>
+        <div id="fineprint" style="opacity: 0">
+            <p>A platformer made with Phaser.io</p>
+            <p>By Ar0se Games</p>
+        </div>
     </div>
     
     <div id="game" style="display:none"></div>
 
-    <script src="//cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.js"></script>
-    <script type="module">
-        const devMode = 0;
-        localStorage.setItem("devMode", devMode);
-        import playGame from "./game.js";
+    <script>  
+        let subtitle = document.getElementById("subtitle");
+        let h1 = document.getElementsByTagName('h1')[0];
         let playBtn = document.getElementById("playBtn");
-        let landingPage = document.getElementById("landingPage");
-        let gameCanvas = document.getElementById("game");
-        let rainTxt = document.getElementById("rainTxt");
-        let r = ['reigns', 'reign', 'reig', 'rei', 're',  'r', 'ra', 'rai', 'rain', 'rains'];
-        let frame = 0;
+        let fineprint = document.getElementById("fineprint");
 
-        let timer = setInterval(() => {
-            if(frame < r.length) {
-                rainTxt.innerText = r[frame];
-                frame++;
-            } else {
-                clearInterval(timer);
+        let txt = "Where ASCII reigns";
+        let rTxt = 'ains';
+        let timer, frame = 0, r = 0;
+
+        timer = setInterval(() => {
+            if(h1.offsetWidth) { //to ensure title loads first
+                let startFrame = 5;
+                let len0 = startFrame + txt.length;
+                let pause = len0 + 3;
+                let len1 = pause + 5;
+                let len2 = len1 + 4;
+                if(frame > startFrame && frame <= len0) {
+                    subtitle.innerText = txt.substring(0, frame - startFrame);                  
+                } else if(frame <= pause) {
+                    //thinking
+                } else if(frame <= len1) {
+                    let s = subtitle.innerText;
+                    let l = s.length - 1;
+                    subtitle.innerText = s.substring(0, l);
+                } else if(frame <= len2) {
+                    subtitle.innerText += rTxt[r];
+                    r++;
+                } else {
+                    clearInterval(timer);
+                    playBtn.classList.add("fadeIn");
+                    fineprint.className = "fadeIn delayed";
+                }
+                    frame++;
             }
-        }, 250);
+        }, 125);
+    </script>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+    <script type="module">        
+        import playGame from "./game.js";
+        let gameCanvas = document.getElementById("game");
+        let landingPage = document.getElementById("landingPage");     
 
-        window.onload = () => {
-            playBtn.disabled = false;
-            if(devMode) start();
+        window.onload = () => {    
+            playBtn.disabled = false;    
         };
 
         playBtn.onclick = () => {

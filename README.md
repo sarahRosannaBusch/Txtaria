@@ -17,11 +17,14 @@ A single-pane ASCII-art platformer made with Phaser.io
 
 ### Landing Page
 - Simple animated banner and play button.
-- Completely contained in index.html for now
-- TODO: make animation cooler
+- Completely contained in index.html
+- Loads nicely even over slow connections
 
 ### Data
 - stored in localStorage: level, theme, mute, devMode
+
+### Dev Mode
+- `localStorage.setItem("devMode", 1);` in browser console to skip asciiRain tween
 
 ### Game Area
 - 1024 x 768 px, scaled to fit
@@ -31,9 +34,6 @@ A single-pane ASCII-art platformer made with Phaser.io
 - single scene object that has components swapped out from level to level
 - game logic and event handling done in scene.js, everything else is modular components
 - base, player, and ui always persist
-
-### Dev Mode
-- set to 1 in index.html to skip homescreen and asciiRain tween
 
 ## Phaser References
 - tutorial: https://phaser.io/tutorials/making-your-first-phaser-3-game/part1
