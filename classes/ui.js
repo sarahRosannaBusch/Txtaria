@@ -102,16 +102,15 @@ OPTIONS:`, fontStyle).setTint(tint);
                 this.toggleFullscreen();
             });
 
-            let s = this.scene.soundOn ? 'X' : ' ';
-            this.optSound = this.scene.add.text(x, 260, `[${s}] sound`,
-                fontStyle).setInteractive().setTint(tint);
-            this.optSound.on('pointerup', () => {                
-                this.scene.soundOn = !this.scene.soundOn;
-                s = this.scene.soundOn ? 'X' : ' ';
-                let mute = !this.scene.soundOn;
-                localStorage.setItem("mute", mute);
-                this.toggleSound(mute);
+            let s = this.scene.soundOn === '1' ? 'X' : ' ';
+            this.optSound = this.scene.add.text(x, 260, `[${s}] sound`, fontStyle).setInteractive().setTint(tint);
+            this.optSound.on('pointerup', () => {       
+                let soundOn = parseInt(this.scene.soundOn);      
+                soundOn = 1 - soundOn;
+                s = soundOn ? 'X' : ' ';
                 this.optSound.setText(`[${s}] sound`);
+                this.scene.setUserData("soundOn", soundOn);
+                this.toggleSound();
             });
 
             this.themesText = this.scene.add.text(x, 300, `
@@ -155,7 +154,8 @@ THEMES:`, fontStyle).setTint(tint);
         this.helpShowing = !this.helpShowing;
     }
 
-    toggleSound(mute) {        
+    toggleSound() {  
+        let mute = 1 - parseInt(this.scene.soundOn);       
         this.scene.rainFX.setMute(mute);
         this.scene.coinFX.setMute(mute);
         this.scene.deathFX.setMute(mute);
@@ -186,7 +186,7 @@ THEMES:`, fontStyle).setTint(tint);
     changeTheme(themeName) {
         let theme = this.scene.theme = themes[themeName];
         this.scene.themeName = themeName;
-        localStorage.setItem("theme", themeName);
+        this.scene.setUserData("theme", themeName);
 
         this.scene.cameras.main.setBackgroundColor(theme.bg);
         this.changeTint();

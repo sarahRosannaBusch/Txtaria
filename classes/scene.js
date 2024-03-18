@@ -1,10 +1,10 @@
-import PLAYER from "./player.js";
-import COINS from "./coins.js";
-import ASCIIRAIN from "./asciiRain.js";
-import MOBS from "./mobs.js";
-import UI from "./ui.js";
-import PLATFORMS from "./platforms.js";
 import TUTORIAL from "./tutorial.js";
+import UI from "./ui.js";
+import PLAYER from "./player.js";
+import PLATFORMS from "./platforms.js";
+import COINS from "./coins.js";
+import MOBS from "./mobs.js";
+import ASCIIRAIN from "./asciiRain.js";
 import { LEVELS } from "../levels.js";
 import { themes } from "../themes.js";
 
@@ -13,47 +13,50 @@ export default class SCENE extends Phaser.Scene {
         super("SCENE");
     }
 
+    getUserData(item, defaultValue) {
+        let data = localStorage.getItem(item);
+        if(!data && defaultValue) {
+            this.setUserData(item, defaultValue);
+            data = defaultValue;
+        }
+        return data;
+    }
+
+    setUserData(item, value) {        
+        localStorage.setItem(item, value);
+        this[item] = value;
+    }
+
     init() {   
-        this.devMode = parseInt(localStorage.getItem("devMode"));
-        
+        this.devMode = parseInt(this.getUserData("devMode", "0")); 
+        this.level = this.getUserData("level", "0");   
+        this.themeName = this.getUserData("theme", "Textarea");
+        this.soundOn = this.getUserData("soundOn", "1");
+
         this.tick = 0;
         this.tweening = true;
         this.gameOver = false;
         this.maxLevel = LEVELS.length - 1;
-
-        this.level = localStorage.getItem("level");
-        if(!this.level) this.level = "0";
-        let lvl = parseInt(this.level);
-        this.score = lvl * 120; //12 stars per level    
-
-        this.themeName = localStorage.getItem("theme");
-        if(!this.themeName) this.themeName = "Textarea"; //default
+        this.score = parseInt(this.level) * 120; //12 stars per level 
         this.theme = themes[this.themeName];
-
-        let mute = localStorage.getItem("mute");
-        if(mute) {
-            this.soundOn = mute === "false" ? true : false; 
-        } else {
-            this.soundOn = true; //default
-        }
     }
 
     preload() {          
         this.showLoadingScreen();
 
-        //sprites
-        this.load.spritesheet('asciiRain', 'assets/asciiRain.png', { 
-            frameWidth: 16.6, frameHeight: 2074
-        });     
-        this.load.spritesheet('dude', 'assets/dude.png', { 
-            frameWidth: 51.888, frameHeight: 98 
-        });
-        
-        //objects
-        this.load.image('rainBG', 'assets/rainBG.png');
+        // LOAD ASSETS
+
+        //tutorial and ui
         this.load.image('scroll', 'assets/scroll.png');
         this.load.image('scrollBG', 'assets/scrollBG.png');
         this.load.image('title', 'assets/title.png');
+
+        //player    
+        this.load.spritesheet('dude', 'assets/dude.png', { 
+            frameWidth: 51.888, frameHeight: 98 
+        });
+
+        //platforms
         this.load.image('ground', 'assets/ground.png');
         this.load.image('platform0', 'assets/platform0.png'); // !!!!!
         this.load.image('platform1', 'assets/platform1.png'); // &&&&&
@@ -63,11 +66,21 @@ export default class SCENE extends Phaser.Scene {
         this.load.image('platform5', 'assets/platform5.png'); // \\\\\
         this.load.image('platform6', 'assets/platform6.png'); // |_|_|_|
         this.load.image('platform7', 'assets/platform7.png'); // |_|_|_|_|_|_|
+
+        //coins
         this.load.image('coin', 'assets/coin.png');
-        this.load.image('healthPot', 'assets/healthPot.png');
+        
+        //mobs
+        //this.load.image('healthPot', 'assets/healthPot.png');
         this.load.image('mob0', 'assets/mob0.png');    
         this.load.image('mob1', 'assets/mob1.png');
         this.load.image('bomb', 'assets/bomb.png');
+        
+        //ascii rain
+        this.load.spritesheet('asciiRain', 'assets/asciiRain.png', { 
+            frameWidth: 16.6, frameHeight: 2074
+        }); 
+        this.load.image('rainBG', 'assets/rainBG.png');
 
         //art
         this.load.image('cloud0', 'assets/cloud0.png');
@@ -138,10 +151,10 @@ export default class SCENE extends Phaser.Scene {
         this.rainFX = this.sound.add('rain');
         this.coinFX = this.sound.add('coin');
         this.deathFX = this.sound.add('death');
-        if(this.soundOn) {
+        if(this.soundOn === "1") {
             this.rainFX.play();
         } else {
-            this.ui.toggleSound('true')
+            this.ui.toggleSound()
         }
     }
     
