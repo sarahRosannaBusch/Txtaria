@@ -47,67 +47,65 @@ export default class SCENE extends Phaser.Scene {
         // LOAD ASSETS
 
         //tutorial and ui
-        this.load.image('scroll', 'assets/scroll.png');
-        this.load.image('scrollBG', 'assets/scrollBG.png');
-        this.load.image('title', 'assets/title.png');
+        this.load.image('scroll', 'assets/tutorialUI/scroll.png');
+        this.load.image('scrollBG', 'assets/tutorialUI/scrollBG.png');
+        this.load.image('title', 'assets/tutorialUI/title.png');
 
         //player    
-        this.load.spritesheet('dude', 'assets/dude.png', { 
+        this.load.spritesheet('dude', 'assets/dude/dude.png', { 
             frameWidth: 51.888, frameHeight: 98 
         });
 
         //platforms
-        this.load.image('ground', 'assets/ground.png');
-        this.load.image('platform0', 'assets/platform0.png'); // !!!!!
-        this.load.image('platform1', 'assets/platform1.png'); // &&&&&
-        this.load.image('platform2', 'assets/platform2.png'); // %%%%%
-        this.load.image('platform3', 'assets/platform3.png'); // #####
-        this.load.image('platform4', 'assets/platform4.png'); // /////
-        this.load.image('platform5', 'assets/platform5.png'); // \\\\\
-        this.load.image('platform6', 'assets/platform6.png'); // |_|_|_|
-        this.load.image('platform7', 'assets/platform7.png'); // |_|_|_|_|_|_|
+        this.load.image('ground', 'assets/platforms/ground.png');
+        this.load.image('platform0', 'assets/platforms/platform0.png'); // !!!!!
+        this.load.image('platform1', 'assets/platforms/platform1.png'); // &&&&&
+        this.load.image('platform2', 'assets/platforms/platform2.png'); // %%%%%
+        this.load.image('platform3', 'assets/platforms/platform3.png'); // #####
+        this.load.image('platform4', 'assets/platforms/platform4.png'); // /////
+        this.load.image('platform5', 'assets/platforms/platform5.png'); // \\\\\
+        this.load.image('platform6', 'assets/platforms/platform6.png'); // |_|_|_|
+        this.load.image('platform7', 'assets/platforms/platform7.png'); // |_|_|_|_|_|_|
 
-        //coins
-        this.load.image('coin', 'assets/coin.png');
-        
         //mobs
+        this.load.image('coin', 'assets/mobs/coin.png');
+        this.load.image('mob0', 'assets/mobs/mob0.png');    
+        this.load.image('mob1', 'assets/mobs/mob1.png');
+        this.load.image('bomb', 'assets/mobs/bomb.png');
         //this.load.image('healthPot', 'assets/healthPot.png');
-        this.load.image('mob0', 'assets/mob0.png');    
-        this.load.image('mob1', 'assets/mob1.png');
-        this.load.image('bomb', 'assets/bomb.png');
         
         //ascii rain
-        this.load.spritesheet('asciiRain', 'assets/asciiRain.png', { 
+        this.load.spritesheet('asciiRain', 'assets/asciiRain/asciiRain.png', { 
             frameWidth: 16.6, frameHeight: 2074
         }); 
-        this.load.image('rainBG', 'assets/rainBG.png');
+        this.load.image('rainBG', 'assets/asciiRain/rainBG.png');
 
         //art
-        this.load.image('cloud0', 'assets/cloud0.png');
-        this.load.image('cloud1', 'assets/cloud1.png');
-        this.load.image('tree0', 'assets/tree0.png');
-        this.load.image('tree1', 'assets/tree1.png');
-        this.load.image('tree2', 'assets/tree2.png');
-        this.load.image('tree3', 'assets/tree3.png');
-        this.load.image('shrub0', 'assets/shrub0.png');
-        this.load.image('mushroom0', 'assets/mushroom0.png');
-        this.load.image('mushroom1', 'assets/mushroom1.png');
-        this.load.image('flower0', 'assets/flower0.png');
-        this.load.image('flower1', 'assets/flower1.png');
-        this.load.image('flower2', 'assets/flower2.png');
-        this.load.image('flower3', 'assets/flower3.png');
-        this.load.image('flower4', 'assets/flower4.png');
-        this.load.image('tower0', 'assets/tower0.png');
-        this.load.image('hut', 'assets/hut.png');
-        this.load.image('rat', 'assets/rat.png');
-        this.load.image('wagon', 'assets/wagon.png');
-        this.load.image('moon', 'assets/moon.png');
-        this.load.image('star', 'assets/star.png');
+        this.load.image('cloud0', 'assets/art/cloud0.png');
+        this.load.image('cloud1', 'assets/art/cloud1.png');
+        this.load.image('tree0', 'assets/art/tree0.png');
+        this.load.image('tree1', 'assets/art/tree1.png');
+        this.load.image('tree2', 'assets/art/tree2.png');
+        this.load.image('tree3', 'assets/art/tree3.png');
+        this.load.image('shrub0', 'assets/art/shrub0.png');
+        this.load.image('mushroom0', 'assets/art/mushroom0.png');
+        this.load.image('mushroom1', 'assets/art/mushroom1.png');
+        this.load.image('flower0', 'assets/art/flower0.png');
+        this.load.image('flower1', 'assets/art/flower1.png');
+        this.load.image('flower2', 'assets/art/flower2.png');
+        this.load.image('flower3', 'assets/art/flower3.png');
+        this.load.image('flower4', 'assets/art/flower4.png');
+        this.load.image('tower0', 'assets/art/tower0.png');
+        this.load.image('hut', 'assets/art/hut.png');
+        this.load.image('rat', 'assets/art/rat.png');
+        this.load.image('wagon', 'assets/art/wagon.png');
+        this.load.image('moon', 'assets/art/moon.png');
+        this.load.image('star', 'assets/art/star.png');
 
         //sounds
-        this.load.audio('rain', ['assets/asciiRain.mp3']);
-        this.load.audio('coin', ['assets/collectCoin.mp3']);
-        this.load.audio('death', ['assets/death.mp3']);
+        this.load.audio('rain', ['assets/soundFX/asciiRain.mp3']);
+        this.load.audio('coin', ['assets/soundFX/collectCoin.mp3']);
+        this.load.audio('death', ['assets/soundFX/death.mp3']);
     }
 
     create () {       
