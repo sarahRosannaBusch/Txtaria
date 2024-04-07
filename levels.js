@@ -35,8 +35,8 @@ export const LEVELS = [
         art: [
             {x: 100, y: 727, key: 'flower3'},
             {x: 825, y: 727, key: 'flower4'},
-            {x: 210, y: 200, key: 'flower1'},
-            {x: 680, y: 270, key: 'flower2'}
+            {x: 240, y: 200, key: 'flower1'},
+            {x: 715, y: 270, key: 'flower2'}
         ]
     }, { //lvl 3
         plats: [
