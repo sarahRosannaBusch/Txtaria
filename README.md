@@ -21,7 +21,7 @@ A single-pane ASCII-art platformer made with Phaser.io
 - Loads nicely even over slow connections
 
 ### Data
-- stored in localStorage: level, theme, soundOn, devMode
+- stored in localStorage: level, themeName, soundOn, devMode
 
 ### Dev Mode
 - `localStorage.setItem("devMode", 1);` in browser console to skip title screen and asciiRain tween

@@ -73,7 +73,7 @@
         <h2>Welcome to</h2>
         <h1><img src="./assets/title.svg" alt="TXTARIA [alpha]" height="92px"></h1>
         <h2 id="subtitle"></h2>
-        <button id="playBtn" style="opacity: 0" disabled> ... </button>
+        <button id="playBtn" style="opacity: 0"> PLAY </button>
         <div id="fineprint" style="opacity: 0">
             <p>A platformer made with Phaser.io</p>
             <p>By Ar0se Games</p>
@@ -128,9 +128,7 @@
 
         let devMode = parseInt(localStorage.getItem("devMode"));
 
-        window.onload = () => {             
-            playBtn.innerText = "PLAY";   
-            playBtn.disabled = false;   
+        window.onload = () => {            
             if(devMode) start(); 
         };
 

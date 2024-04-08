@@ -1,4 +1,4 @@
-import { themes } from "../../themes.js";
+import { themes } from "../themes.js";
 
 export default class UI {
     constructor(scene) {  
@@ -185,8 +185,7 @@ THEMES:`, fontStyle).setTint(tint);
     //modifies scene
     changeTheme(themeName) {
         let theme = this.scene.theme = themes[themeName];
-        this.scene.themeName = themeName;
-        this.scene.setUserData("theme", themeName);
+        this.scene.setUserData("themeName", themeName);
 
         this.scene.cameras.main.setBackgroundColor(theme.bg);
         this.changeTint();
@@ -198,7 +197,7 @@ THEMES:`, fontStyle).setTint(tint);
         if(this.scene.mobs) this.scene.mobs.setTint(theme.mobs);
         if(this.scene.pots) this.scene.pots.setTint(theme.pots);
 
-        if(this.scene.tutorial) this.scene.tutorial.changeTint();
+        if(this.scene.tutorial?.active) this.scene.tutorial.changeTint();
         if(this.scene.asciiRain) this.scene.asciiRain.changeTint();
 
         if(this.scene.art) {

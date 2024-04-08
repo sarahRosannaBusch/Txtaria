@@ -30,7 +30,7 @@ export default class SCENE extends Phaser.Scene {
     init() {   
         this.devMode = parseInt(this.getUserData("devMode", "0")); 
         this.level = this.getUserData("level", "0");   
-        this.themeName = this.getUserData("theme", "Textarea");
+        this.themeName = this.getUserData("themeName", "Textarea");
         this.soundOn = this.getUserData("soundOn", "1");
 
         this.tick = 0;
@@ -323,7 +323,7 @@ export default class SCENE extends Phaser.Scene {
     }
 
     demoLevel() {
-        if(this.tutorial) this.tutorial.destroy();
+        if(this.tutorial) this.tutorial.destroy(); //doesn't actually destroy, just sets .active to false
         if(this.platforms) this.platforms.clear(true, true);
         if(this.art) {
             let n = this.art.length;
