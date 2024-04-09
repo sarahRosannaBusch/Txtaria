@@ -4,6 +4,7 @@ export default class UI {
     constructor(scene) {  
         this.scene = scene;
         this.helpShowing = false;
+        this.fsBtnClicked = false;
 
         let fontStyle = { 
             fontSize: '24pt', 
@@ -27,10 +28,25 @@ export default class UI {
         });
 
         //fullscreen button
-        this.fsBtn = scene.add.text(1024 - 16, 16, '[+]', fontStyle).setOrigin(1, 0)
+        let fs = this.scene.scale.isFullscreen ? '[-]' : '[+]';
+        this.fsBtn = scene.add.text(1024 - 16, 16, fs, fontStyle).setOrigin(1, 0)
             .setInteractive().setTint(scene.theme.ui);
         this.fsBtn.on('pointerup', () => {
+            this.fsBtnClicked = true;
             this.toggleFullscreen();
+        });
+        document.addEventListener("fullscreenchange", (e) => { 
+            if(this.fsBtnClicked) {
+                this.fsBtnClicked = false;
+            } else {       
+                //user closed fs the default way (ESC, swipe, etc)
+                let fs = this.scene.scale.isFullscreen ? 'X' : ' ';
+                if(this.helpShowing) {
+                    this.optFS.setText(`[${fs}] fullscreen`);
+                }
+                fs = fs === ' ' ? "[+]" : "[-]";
+                this.fsBtn.setText(fs);
+            }
         });
 
         let container = scene.add.container(0, 0, [
@@ -51,16 +67,13 @@ export default class UI {
         let fs = this.scene.scale.isFullscreen ? ' ' : 'X';
         if(this.helpShowing) {
             this.optFS.setText(`[${fs}] fullscreen`);
-            console.log(fs);
         }
+        fs = fs === ' ' ? "[+]" : "[-]";
+        this.fsBtn.setText(fs);
         if(this.scene.scale.isFullscreen) {
             this.scene.scale.stopFullscreen();
-            this.fsBtn.setText("[+]");
-            fs = ' ';
         } else {
             this.scene.scale.startFullscreen();
-            this.fsBtn.setText("[-]");
-            fs = 'X';
         }
     }
 
@@ -68,7 +81,9 @@ export default class UI {
         if(show) {   
             let fontStyle = { fontSize: '24px', fill: '#FFF' };
             let tint = this.scene.theme.scroll;
-            //this.scene.physics.pause(); //todo: just pause the mobs instead
+            if(this.scene.level !== "0") { 
+                this.scene.physics.pause();
+            }
 
             this.helpBtn.setText("[X]");
             this.helpScrollBG = this.scene.add.image(512, 350, 'scrollBG')
@@ -99,6 +114,7 @@ OPTIONS:`, fontStyle).setTint(tint);
             this.optFS = this.scene.add.text(x, 230, `[${fs}] fullscreen`,
                 fontStyle).setInteractive().setTint(tint);
             this.optFS.on('pointerup', () => {
+                this.fsBtnClicked = true;
                 this.toggleFullscreen();
             });
 
