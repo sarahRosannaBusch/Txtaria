@@ -35,6 +35,7 @@ export default class SCENE extends Phaser.Scene {
 
         this.tick = 0;
         this.tweening = true;
+        this.tipsShowing = false;
         this.gameOver = false;
         this.maxLevel = LEVELS.length - 1;
         this.score = parseInt(this.level) * 120; //12 stars per level 
@@ -194,7 +195,7 @@ export default class SCENE extends Phaser.Scene {
             case 'mob0': //witchhazel
                 //player can kick mob0 from the sides,
                 //but landing on it's pointy hat is bad news
-                if(player.y + 50 < mob.y) {
+                if((player.x > mob.x-25) && (player.x < mob.x+25)) {
                     this.killPlayer(player, mob);
                 }
             break;
@@ -218,31 +219,45 @@ export default class SCENE extends Phaser.Scene {
     killPlayer(player, mob) {
         this.physics.pause(); //todo: this makes whole browser hang...
         this.deathFX.play();
-        player.setTint(this.theme.kill);
+        //player.setTint(this.theme.kill);
         player.anims.play('turn');
 
-        if(!this.gameOver) {
+        if(!this.gameOver && !this.tipsShowing) {
             this.showTips(mob);
         }
     }
 
-    showTips(mob) {          
-        this.add.image(512, 350, 'scrollBG').setDepth(97).setTint(this.theme.bg); 
-        this.add.image(512, 350, 'scroll').setDepth(98).setTint(this.theme.scroll);
+    showTips(mob) {  
+        this.tipsShowing = true;        
+        let tips = [];
+        tips.push(this.add.image(512, 350, 'scrollBG').setDepth(97).setTint(this.theme.bg));
+        tips.push(this.add.image(512, 350, 'scroll').setDepth(98).setTint(this.theme.scroll));
 
-        this.add.image(500, 250, mob.key).setDepth(99).setTint(this.theme.scroll)
-            .setOrigin(0.5, 0.5); 
-
-        this.add.text(350, 325, mob.tip, {
+        tips.push(this.add.image(500, 250, mob.key).setDepth(99).setTint(this.theme.scroll).setOrigin(0.5, 0.5)); 
+        tips.push(this.add.text(350, 325, mob.tip, {
             color:'white', fontSize:'xx-large',
-        }).setDepth(99).setTint(this.theme.scroll).setOrigin(0.5, 0.5); 
+        }).setDepth(99).setTint(this.theme.scroll).setOrigin(0.5, 0.5)); 
 
-        const button = this.add.text(435, 400, '[retry]', {
+        const retryBtn = this.add.text(330, 400, '[retry]', {
             color:'white', fontSize:'xx-large', 
         }).setInteractive().setDepth(99).setTint(this.theme.scroll);
-        button.on('pointerup', () => {
+        retryBtn.on('pointerup', () => {
             this.scene.restart();
         });
+        tips.push(retryBtn);
+
+        const payBtn = this.add.text(500, 400, `[${mob.button}]`, {
+            color:'white', fontSize:'xx-large', 
+        }).setInteractive().setDepth(99).setTint(this.theme.scroll);
+        payBtn.on('pointerup', () => {
+            this.score -= mob.fine;
+            this.ui.updateScore(this.score);
+            mob.destroy();
+            tips.forEach((t) => t.destroy());
+            this.physics.resume();
+            this.tipsShowing = false; 
+        });
+        tips.push(payBtn);
     }
 
     levelUp() { 
@@ -268,11 +283,18 @@ export default class SCENE extends Phaser.Scene {
         this.add.image(512, 350, 'scrollBG').setDepth(97).setTint(this.theme.bg); 
         this.add.image(512, 350, 'scroll').setDepth(98).setTint(this.theme.scroll); 
 
-        this.add.text(330, 280, 'Thanks for playing!', {
+        this.add.text(330, 210, `Thanks for playing!`, {
             color:'white', fontSize:'xx-large', 
         }).setDepth(99).setTint(this.theme.scroll);
 
-        const button = this.add.text(400, 350, '[play again]', {
+        this.add.text(200, 250, `
+If you want more levels, please
+leave a rating and a comment at
+https://ar0se.itch.io/txtaria`, {
+            color:'white', fontSize:'xx-large', 
+        }).setDepth(99).setTint(this.theme.scroll);
+
+        const button = this.add.text(400, 410, '[play again]', {
             color:'white', fontSize:'xx-large', 
         }).setInteractive().setDepth(99).setTint(this.theme.scroll);
         button.on('pointerup', () => {

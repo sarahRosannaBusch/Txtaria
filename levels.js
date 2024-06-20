@@ -46,7 +46,9 @@ export const LEVELS = [
             {x: 560, y: 580, key: 'platform3'}, // ###
         ],
         mobs: [
-            [950, 100, 'mob1']
+            [950, 100, 'mob1'],
+            [255, 430, 'mob0'], // %%%
+            [595, 180, 'mob0']  // &&&
         ],
         art: [
             {x: 200, y: 727, key: 'tree2'},
@@ -97,7 +99,7 @@ export const LEVELS = [
             {x: 400, y: 325, key: 'cloud1'},
             {x: 900, y: 150, key: 'star'}
         ]
-    }, { 
+    }, { // lvl 6
         plats: [
             {x: 345, y: 184, key: 'platform0'}, // !!!
             {x: 685, y: 265, key: 'platform0'}, // !!!
@@ -110,7 +112,7 @@ export const LEVELS = [
             [65, 290, 'mob1', 'right'],
             [485, 350, 'mob0'],
             [145, 700, 'mob0'],
-            [711, 700, 'mob0'],
+            //[711, 700, 'mob0'],
             [900, 700, 'mob0']
         ],
         art: [

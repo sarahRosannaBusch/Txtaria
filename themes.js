@@ -55,7 +55,7 @@ export const themes = {
         rain: 0x9400D3,
         art: 0x00BFFF 
     },
-    Paper: {
+    Parchment: {
         kill: 0xFF0000,
         player: 0x000000,
         base: 0x000000,

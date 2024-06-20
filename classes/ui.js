@@ -90,6 +90,19 @@ export default class UI {
                 .setTint(this.scene.theme.bg);
             this.helpScroll = this.scene.add.image(512, 350, 'scroll')
                 .setTint(tint);
+                
+            //manually clear browser data
+            this.clearData = this.scene.add.text(675, 120, ``, fontStyle).setTint(tint).setInteractive();
+            const addClearDataBtn = () => {
+                this.clearData.setText(`[Delete Data]`);
+                this.clearData.on('pointerup', () => {
+                    localStorage.clear();
+                    this.clearData.setText(``);
+                });
+            }
+            if(localStorage.length) {
+                addClearDataBtn();
+            }
 
             //left side
             this.controlsText = this.scene.add.text(200, 180, `
@@ -127,6 +140,7 @@ OPTIONS:`, fontStyle).setTint(tint);
                 this.optSound.setText(`[${s}] sound`);
                 this.scene.setUserData("soundOn", soundOn);
                 this.toggleSound();
+                addClearDataBtn();
             });
 
             this.themesText = this.scene.add.text(x, 300, `
@@ -143,6 +157,7 @@ THEMES:`, fontStyle).setTint(tint);
                     this.themeOpts[cur].setText(`[ ] ${cur}`);
                     this.themeOpts[name].setText(`[X] ${name}`);
                     this.changeTheme(name);
+                    addClearDataBtn();
                 });
             });
             
@@ -150,6 +165,7 @@ THEMES:`, fontStyle).setTint(tint);
                 this.helpScrollBG, 
                 this.helpScroll, 
                 this.controlsText, 
+                this.clearData,
                 this.optsText, 
                 this.optFS, 
                 this.optSound,
@@ -158,7 +174,7 @@ THEMES:`, fontStyle).setTint(tint);
                 this.themeOpts.Coding_Vibes,
                 this.themeOpts.Light_Bright,
                 this.themeOpts.Matrix_Mode,
-                this.themeOpts.Paper
+                this.themeOpts.Parchment
             ]);
             this.help.setDepth(100);
         } else {
@@ -188,6 +204,7 @@ THEMES:`, fontStyle).setTint(tint);
             this.helpScrollBG.setTint(colours.bg);
             this.helpScroll.setTint(colours.scroll);
             this.controlsText.setTint(colours.scroll);
+            this.clearData.setTint(colours.scroll);
             this.optsText.setTint(colours.scroll);
             this.optFS.setTint(colours.scroll);
             this.optSound.setTint(colours.scroll);
