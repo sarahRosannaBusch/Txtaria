@@ -94,7 +94,7 @@ export default class UI {
             //manually clear browser data
             this.clearData = this.scene.add.text(675, 120, ``, fontStyle).setTint(tint).setInteractive();
             const addClearDataBtn = () => {
-                this.clearData.setText(`[Delete Data]`);
+                this.clearData.setText(`[DELETE DATA]`);
                 this.clearData.on('pointerup', () => {
                     localStorage.clear();
                     this.clearData.setText(``);

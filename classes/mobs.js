@@ -18,10 +18,10 @@ export default class MOBS extends Phaser.Physics.Arcade.Group {
             case "mob0": //witchhazel
                 mob.setMass(1);
                 mob.tip = `
-                Witchazel is safe to kick around,
-                but its poisonous thorn is deadly!`;
+                 Witchazel is an invasive species.
+                Watch out for its poisonous thorn!`;
                 mob.fine = 100;
-                mob.button = `buy antidote`;
+                mob.button = `BUY ANTIDOTE`;
             break;
             case "mob1": //scuttlebot
                 let x = (dir === 'right') ? 75 : -75;
@@ -29,18 +29,18 @@ export default class MOBS extends Phaser.Physics.Arcade.Group {
                 mob.setMass(20);
                 mob.tip = `
                 Scuttlebots have a job to do, 
-                so stay out of their way!`;
+                  so stay out of their way!`;
                 mob.fine = 250;
-                mob.button = `pay fine`;
+                mob.button = `PAY FINE`;
             break;
             case "bomb":
                 mob.setCollideWorldBounds(true);
                 mob.setVelocity(-100, 50);
                 mob.tip = `
-                Spiky bombs don't explode,
-                but they'll shatter you to peices!`;
+                   Spiky bombs don't explode,
+                but they will crush your skull!`;
                 mob.fine = 500;
-                mob.button = `resurrect`;
+                mob.button = `RESURRECT`;
             break;
             default: break;
         }

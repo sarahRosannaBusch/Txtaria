@@ -238,17 +238,9 @@ export default class SCENE extends Phaser.Scene {
             color:'white', fontSize:'xx-large',
         }).setDepth(99).setTint(this.theme.scroll).setOrigin(0.5, 0.5)); 
 
-        const retryBtn = this.add.text(330, 400, '[retry]', {
+        const payBtn = this.add.text(512, 420, `[${mob.button}]`, {
             color:'white', fontSize:'xx-large', 
-        }).setInteractive().setDepth(99).setTint(this.theme.scroll);
-        retryBtn.on('pointerup', () => {
-            this.scene.restart();
-        });
-        tips.push(retryBtn);
-
-        const payBtn = this.add.text(500, 400, `[${mob.button}]`, {
-            color:'white', fontSize:'xx-large', 
-        }).setInteractive().setDepth(99).setTint(this.theme.scroll);
+        }).setInteractive().setDepth(99).setOrigin(0.5, 0.5).setTint(this.theme.scroll);
         payBtn.on('pointerup', () => {
             this.score -= mob.fine;
             this.ui.updateScore(this.score);
@@ -283,20 +275,34 @@ export default class SCENE extends Phaser.Scene {
         this.add.image(512, 350, 'scrollBG').setDepth(97).setTint(this.theme.bg); 
         this.add.image(512, 350, 'scroll').setDepth(98).setTint(this.theme.scroll); 
 
-        this.add.text(330, 210, `Thanks for playing!`, {
-            color:'white', fontSize:'xx-large', 
-        }).setDepth(99).setTint(this.theme.scroll);
+        let text = ``;
+        if(this.score > 0) {
+            text = `
+       Congratulations!
 
-        this.add.text(200, 250, `
-If you want more levels, please
-leave a rating and a comment at
-https://ar0se.itch.io/txtaria`, {
-            color:'white', fontSize:'xx-large', 
-        }).setDepth(99).setTint(this.theme.scroll);
+       You earned $${this.score} 
+by taking a walk in the park.
 
-        const button = this.add.text(400, 410, '[play again]', {
+      Welcome to Txtaria!`
+        } else {
+            text = `
+         Impressive!
+
+   In a world where money 
+     falls from the sky,
+you accumulated $${-this.score} in debt.
+
+     Welcome to Txtaria!`
+        }
+
+        this.add.text(512, 270, text, {
             color:'white', fontSize:'xx-large', 
-        }).setInteractive().setDepth(99).setTint(this.theme.scroll);
+        }).setDepth(99).setOrigin(0.5, 0.5).setTint(this.theme.scroll);
+
+
+        const button = this.add.text(512, 430, '[PLAY AGAIN]', {
+            color:'white', fontSize:'xx-large', 
+        }).setInteractive().setDepth(99).setOrigin(0.5, 0.5).setTint(this.theme.scroll);
         button.on('pointerup', () => {
             this.level = 0;
             localStorage.setItem("level", this.level);

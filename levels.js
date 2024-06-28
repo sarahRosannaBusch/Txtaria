@@ -51,11 +51,15 @@ export const LEVELS = [
             [595, 180, 'mob0']  // &&&
         ],
         art: [
-            {x: 200, y: 727, key: 'tree2'},
-            {x: 800, y: 727, key: 'tree3'},
-            {x: 680, y: 580, key: 'mushroom0'},
+            {x: 200, y: 727, key: 'tree2'}, //group 1
+            {x: 125, y: 727, key: 'mushroom0'},
+            {x: 800, y: 727, key: 'tree3'}, //group 2
+            {x: 850, y: 727, key: 'tree2'},
+            {x: 925, y: 727, key: 'tree3'},
+            {x: 680, y: 580, key: 'mushroom0'}, //platform  
             {x: 880, y: 580, key: 'mushroom1'},
-            {x: 100, y: 250, key: 'cloud1'}
+            {x: 215, y: 230, key: 'cloud1'}, //sky
+            {x: 75, y: 200, key: 'moon'}
         ]
     }, { //lvl 4
         plats: [
