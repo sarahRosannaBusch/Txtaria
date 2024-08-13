@@ -18,8 +18,8 @@ export default class MOBS extends Phaser.Physics.Arcade.Group {
             case "mob0": //witchhazel
                 mob.setMass(1);
                 mob.tip = `
-                 Witchazel is an invasive species.
-                Watch out for its poisonous thorn!`;
+                Witchazel is fun to kick around, but
+                 watch out for its poisonous thorn!`;
                 mob.fine = 100;
                 mob.button = `BUY ANTIDOTE`;
             break;
@@ -28,8 +28,8 @@ export default class MOBS extends Phaser.Physics.Arcade.Group {
                 mob.setVelocity(x, 0);
                 mob.setMass(20);
                 mob.tip = `
-                Scuttlebots have a job to do, 
-                  so stay out of their way!`;
+                Scuttlebots have a job to do. 
+                   Stay out of their way!`;
                 mob.fine = 250;
                 mob.button = `PAY FINE`;
             break;

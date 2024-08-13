@@ -5,8 +5,8 @@
     <title>TXTARIA</title>
     <meta name="description" content="ASCII art platformer made with Phaser.io" />
     <meta name='author' content='Sarah Rosanna Busch' />
-    <meta name='date' content='20 June 2024' />
-    <meta name='version' content='0.0.2' />
+    <meta name='date' content='13 Aug 2024' />
+    <meta name='version' content='0.2' />
     <meta name='viewport' content='width=device-width, initial-scale=1.0' /> 
     <link rel='icon shortcut' href='favicon.ico' />
     <style type="text/css">
@@ -113,9 +113,10 @@
                 } else {
                     clearInterval(timer);
                     playBtn.classList.add("fadeIn");
+                    playBtn.focus();
                     fineprint.className = "fadeIn delayed";
                 }
-                    frame++;
+                frame++;
             }
         }, 100);
     </script>

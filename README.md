@@ -8,7 +8,7 @@ A single-pane ASCII-art platformer made with Phaser.io
 - open http://localhost:9999/index.html
 
 ## Design
-- fully responsive
+- responsive
 - consistent experience in all browsers
 - accessible (both visual and auditory cues, big font, 5 colour themes)
 - toggle fullscreen and sound
@@ -22,6 +22,7 @@ A single-pane ASCII-art platformer made with Phaser.io
 
 ### Data
 - stored in localStorage: level, themeName, soundOn, devMode
+- `localStorage.clear();` in browser console to wipe memory
 
 ### Dev Mode
 - `localStorage.setItem("devMode", 1);` in browser console to skip title screen and asciiRain tween

@@ -1,5 +1,6 @@
 import TUTORIAL from "./tutorial.js";
 import UI from "./ui.js";
+import TIPS from "./tips.js";
 import PLAYER from "./player.js";
 import PLATFORMS from "./platforms.js";
 import COINS from "./coins.js";
@@ -114,6 +115,7 @@ export default class SCENE extends Phaser.Scene {
 
         this.cameras.main.setBackgroundColor(this.theme.bg);
         this.ui = new UI(this, this.level, this.score);
+        this.tips = new TIPS(this);
         
         this.base = this.physics.add.staticGroup();
         this.base.create(512, 748, 'ground').setDepth(75).setTint(this.theme.base);
@@ -213,43 +215,18 @@ export default class SCENE extends Phaser.Scene {
     }
 
     mobHit(mob1, mob2) {
-        console.log(mob1.key + " hit " + mob2.key);
+        //console.log(mob1.key + " hit " + mob2.key);
     }
 
     killPlayer(player, mob) {
-        this.physics.pause(); //todo: this makes whole browser hang...
+        this.physics.pause(); 
         this.deathFX.play();
         //player.setTint(this.theme.kill);
         player.anims.play('turn');
 
         if(!this.gameOver && !this.tipsShowing) {
-            this.showTips(mob);
+            this.tips.showTips(mob);
         }
-    }
-
-    showTips(mob) {  
-        this.tipsShowing = true;        
-        let tips = [];
-        tips.push(this.add.image(512, 350, 'scrollBG').setDepth(97).setTint(this.theme.bg));
-        tips.push(this.add.image(512, 350, 'scroll').setDepth(98).setTint(this.theme.scroll));
-
-        tips.push(this.add.image(500, 250, mob.key).setDepth(99).setTint(this.theme.scroll).setOrigin(0.5, 0.5)); 
-        tips.push(this.add.text(350, 325, mob.tip, {
-            color:'white', fontSize:'xx-large',
-        }).setDepth(99).setTint(this.theme.scroll).setOrigin(0.5, 0.5)); 
-
-        const payBtn = this.add.text(512, 420, `[${mob.button}]`, {
-            color:'white', fontSize:'xx-large', 
-        }).setInteractive().setDepth(99).setOrigin(0.5, 0.5).setTint(this.theme.scroll);
-        payBtn.on('pointerup', () => {
-            this.score -= mob.fine;
-            this.ui.updateScore(this.score);
-            mob.destroy();
-            tips.forEach((t) => t.destroy());
-            this.physics.resume();
-            this.tipsShowing = false; 
-        });
-        tips.push(payBtn);
     }
 
     levelUp() { 

@@ -178,7 +178,7 @@ THEMES:`, fontStyle).setTint(tint);
             ]);
             this.help.setDepth(100);
         } else {
-            this.scene.physics.resume();
+            if(!this.scene.tipsShowing) this.scene.physics.resume();
             this.helpBtn.setText("[?]");
             this.help.destroy();
         }
