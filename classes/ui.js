@@ -23,7 +23,7 @@ export default class UI {
         this.helpBtn.on('pointerup', () => {            
             this.showHelp(!this.helpShowing);
         });                
-        scene.input.keyboard.on('keydown-ESC', () => {
+        scene.input.keyboard.on('keydown-X', () => {
             this.showHelp(!this.helpShowing);
         });
 
