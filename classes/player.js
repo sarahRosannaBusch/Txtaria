@@ -151,7 +151,7 @@ export default class PLAYER extends Phaser.Physics.Arcade.Sprite {
             dir = 'right';
         }
 
-        if(this.cursors.up.isDown || this.wasd.W.isDown) {
+        if(Phaser.Input.Keyboard.JustDown(this.cursors.up) || Phaser.Input.Keyboard.JustDown(this.wasd.W)) {
             jump = true;
         } else if(this.cursors.down.isDown || this.wasd.S.isDown) {
             stomp = true;
