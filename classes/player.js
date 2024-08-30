@@ -76,7 +76,7 @@ export default class PLAYER extends Phaser.Physics.Arcade.Sprite {
         });
     }
 
-    playAnims(dir, jump, stomp) {
+    playAnims(dir, jump, stomp, touch) {
         if(dir === 'left') {
             this.setVelocityX(-260);
             if(jump) {
@@ -103,18 +103,22 @@ export default class PLAYER extends Phaser.Physics.Arcade.Sprite {
             }
         }        
     
-        if(jump && this.body.touching.down && 
-            (Phaser.Input.Keyboard.JustDown(this.cursors.up) || Phaser.Input.Keyboard.JustDown(this.wasd.W))){
-            this.setVelocityY(-400);
+        if(jump && this.body.touching.down){
+            if(touch || Phaser.Input.Keyboard.JustDown(this.cursors.up) || Phaser.Input.Keyboard.JustDown(this.wasd.W)) {
+                console.log('jumping');
+                this.setVelocityY(-400);
+            }
         }
     }
 
     //based on user input
     move() {
+        let touch = false; //track whether input is keyboard or touch
+
         let dirPointer = this.scene.input.pointer1;
         let jumpPointer = this.scene.input.pointer2;
     
-        let jump = jumpPointer.isDown ? true : false;
+        let jump = touch = jumpPointer.isDown ? true : false;
         let stomp = false;
         let dir;
     
@@ -124,7 +128,7 @@ export default class PLAYER extends Phaser.Physics.Arcade.Sprite {
             let y = dirPointer.position.y;
             if(this.scene.touchY === 0) {
                 this.scene.touchY = y;
-            } else if(y > this.scene.touchY) {                
+            } else if(y > this.scene.touchY + 50) {                
                 stomp = true;
                 //console.log('touchY: ' + this.touchY);
             } else {
@@ -140,7 +144,7 @@ export default class PLAYER extends Phaser.Physics.Arcade.Sprite {
             let dur = dirPointer.getDuration();
             if((this.click !== dur) && (dur > 0) && (dur < 150)) {
                 //if dirPointer isn't down and screen is tapped, jump
-                jump = true;
+                jump = touch = true;
                 this.click = dur; //to disable autojumping
             }
         }
@@ -154,10 +158,11 @@ export default class PLAYER extends Phaser.Physics.Arcade.Sprite {
 
         if(this.cursors.up.isDown || this.wasd.W.isDown) {
             jump = true;
+            touch = false;
         } else if(this.cursors.down.isDown || this.wasd.S.isDown) {
             stomp = true;
         }
     
-        this.playAnims(dir, jump, stomp);
+        this.playAnims(dir, jump, stomp, touch);
     }
 }

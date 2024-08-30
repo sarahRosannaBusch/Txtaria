@@ -26,13 +26,21 @@ export default class UI {
         scene.input.keyboard.on('keydown-X', () => {
             this.showHelp(!this.helpShowing);
         });
+        scene.input.keyboard.on('keydown-FORWARD_SLASH', () => {
+            this.showHelp(!this.helpShowing);
+        });
 
         //fullscreen button
         let fs = this.scene.scale.isFullscreen ? '[-]' : '[+]';
         this.fsBtn = scene.add.text(1024 - 16, 16, fs, fontStyle).setOrigin(1, 0)
             .setInteractive().setTint(scene.theme.ui);
         this.fsBtn.on('pointerup', () => {
-            this.fsBtnClicked = true;
+            this.toggleFullscreen();
+        });
+        scene.input.keyboard.on('keydown-PLUS', () => {
+            this.toggleFullscreen();
+        });
+        scene.input.keyboard.on('keydown-MINUS', () => {
             this.toggleFullscreen();
         });
         document.addEventListener("fullscreenchange", (e) => { 
@@ -63,7 +71,8 @@ export default class UI {
         this.levelText.setText(`level: ${level} / ${this.scene.maxLevel}`);
     }
 
-    toggleFullscreen() {
+    toggleFullscreen() {        
+        this.fsBtnClicked = true;
         let fs = this.scene.scale.isFullscreen ? ' ' : 'X';
         if(this.helpShowing) {
             this.optFS.setText(`[${fs}] fullscreen`);
@@ -127,7 +136,6 @@ OPTIONS:`, fontStyle).setTint(tint);
             this.optFS = this.scene.add.text(x, 230, `[${fs}] fullscreen`,
                 fontStyle).setInteractive().setTint(tint);
             this.optFS.on('pointerup', () => {
-                this.fsBtnClicked = true;
                 this.toggleFullscreen();
             });
 
