@@ -20,7 +20,7 @@ export default class MOBS extends Phaser.Physics.Arcade.Group {
                 mob.tip = `
                 Witchazel is fun to kick around, but
                  watch out for its poisonous thorn!`;
-                mob.fine = 100;
+                mob.fine = 5;
                 mob.button = `BUY ANTIDOTE`;
             break;
             case "mob1": //scuttlebot
@@ -28,9 +28,9 @@ export default class MOBS extends Phaser.Physics.Arcade.Group {
                 mob.setVelocity(x, 0);
                 mob.setMass(20);
                 mob.tip = `
-                Scuttlebots have a job to do. 
-                   Stay out of their way!`;
-                mob.fine = 250;
+                Scuttlebots have a job to do, 
+                  so stay out of their way!`;
+                mob.fine = 10;
                 mob.button = `PAY FINE`;
             break;
             case "bomb":
@@ -39,7 +39,7 @@ export default class MOBS extends Phaser.Physics.Arcade.Group {
                 mob.tip = `
                    Spiky bombs don't explode,
                 but they will crush your skull!`;
-                mob.fine = 500;
+                mob.fine = 15;
                 mob.button = `RESURRECT`;
             break;
             default: break;

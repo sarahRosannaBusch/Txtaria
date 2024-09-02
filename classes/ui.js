@@ -63,8 +63,32 @@ export default class UI {
         container.setDepth(100);
     }
     
-    updateScore(score) {        
-        this.scoreText.setText('score: $' + score);
+    updateScore(newScore) {   
+        let score = this.scene.score;  
+        this.scene.score = newScore;
+        let diff = (newScore - score);
+        let inc = diff < 0 ? -1 : 1;
+        let configs = [];         
+
+        let d = Math.abs(diff);
+        for(let i = 0; i < d; i++) {
+            configs.push({
+                targets: this.scoreText,
+                duration: 75,
+                scaleY: 1.01, //onStart doesn't get called without this
+                yoyo: true, //returns to original scale
+                onStart: () => {
+                    score += inc; 
+                    this.scoreText.setText('score: $' + score);
+                    this.scene.coinFX.play();
+                    //console.log(score);
+                } 
+            });
+        } 
+        
+        this.scene.tweens.chain({
+            tweens: configs
+        });
     }
 
     updateLevel(level) {

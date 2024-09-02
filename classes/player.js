@@ -105,7 +105,6 @@ export default class PLAYER extends Phaser.Physics.Arcade.Sprite {
     
         if(jump && this.body.touching.down){
             if(touch || Phaser.Input.Keyboard.JustDown(this.cursors.up) || Phaser.Input.Keyboard.JustDown(this.wasd.W)) {
-                console.log('jumping');
                 this.setVelocityY(-400);
             }
         }

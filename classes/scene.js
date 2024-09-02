@@ -39,7 +39,7 @@ export default class SCENE extends Phaser.Scene {
         this.tipsShowing = false;
         this.gameOver = false;
         this.maxLevel = LEVELS.length - 1;
-        this.score = parseInt(this.level) * 120; //12 stars per level 
+        this.score = parseInt(this.level) * 12; //12 stars per level 
         this.theme = themes[this.themeName];
     }
 
@@ -181,12 +181,10 @@ export default class SCENE extends Phaser.Scene {
     /////////////////////////////////////////////////////////////////////////////
 
     collectCoin(player, coin) {
-        this.coinFX.play();
         coin.disableBody(true, true);
     
         //  Add and update the score
-        this.score += 10;
-        this.ui.updateScore(this.score);
+        this.ui.updateScore(this.score + 1);
         if (!this.gameOver && this.coins.countActive(true) === 0) {
             this.levelUp();
         }
@@ -220,7 +218,7 @@ export default class SCENE extends Phaser.Scene {
 
     killPlayer(player, mob) {
         this.physics.pause(); 
-        this.deathFX.play();
+        this.deathFX.play({seek: 2.5}); //starts at 2.5s in
         //player.setTint(this.theme.kill);
         player.anims.play('turn');
 
