@@ -30,11 +30,14 @@ export default class TIPS {
         this.tips.push(payBtn);
     }
 
-    payFine() {          
-        this.scene.ui.updateScore(this.scene.score - this.mob.fine);
-        this.mob.destroy();
+    hideTips() {
         this.tips.forEach((t) => t.destroy());
         this.scene.physics.resume();
         this.scene.tipsShowing = false; 
+        this.mob.destroy();
+    }
+
+    payFine() {          
+        this.scene.ui.updateScore(this.scene.score - this.mob.fine);
     }
 }

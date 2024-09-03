@@ -87,7 +87,12 @@ export default class UI {
         } 
         
         this.scene.tweens.chain({
-            tweens: configs
+            tweens: configs,
+            onComplete: () => {
+                if(this.scene.tipsShowing) {
+                    this.scene.tips.hideTips();
+                }
+            }
         });
     }
 
