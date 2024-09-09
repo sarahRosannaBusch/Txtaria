@@ -12,7 +12,7 @@ export default class PLAYER extends Phaser.Physics.Arcade.Sprite {
 
         //  Input Events
         this.cursors = scene.input.keyboard.createCursorKeys();
-        this.wasd = scene.input.keyboard.addKeys('W,S,A,D');
+        this.wasd = scene.input.keyboard.addKeys('W,S,A,D,SPACE');
         scene.input.addPointer(1); //for multi-touch
         this.touchY = 0;
         this.click = 0; //duration of last click
@@ -104,7 +104,9 @@ export default class PLAYER extends Phaser.Physics.Arcade.Sprite {
         }        
     
         if(jump && this.body.touching.down){
-            if(touch || Phaser.Input.Keyboard.JustDown(this.cursors.up) || Phaser.Input.Keyboard.JustDown(this.wasd.W)) {
+            if(touch || Phaser.Input.Keyboard.JustDown(this.cursors.up) 
+                || Phaser.Input.Keyboard.JustDown(this.wasd.W)
+                || Phaser.Input.Keyboard.JustDown(this.wasd.SPACE)) {
                 this.setVelocityY(-400);
             }
         }
@@ -155,7 +157,7 @@ export default class PLAYER extends Phaser.Physics.Arcade.Sprite {
             dir = 'right';
         }
 
-        if(this.cursors.up.isDown || this.wasd.W.isDown) {
+        if(this.cursors.up.isDown || this.wasd.W.isDown || this.wasd.SPACE.isDown) {
             jump = true;
             touch = false;
         } else if(this.cursors.down.isDown || this.wasd.S.isDown) {

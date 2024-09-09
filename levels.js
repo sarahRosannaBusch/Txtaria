@@ -27,7 +27,7 @@ export const LEVELS = [
             {x: -75, y: 340, key: 'platform0'},
             {x: 90, y: 500, key: 'platform0'}
         ],
-        mobs: [
+        staticMobs: [
             [720, 500, 'mob0'],
             [210, 400, 'mob0'],
             [510, 300, 'mob0']
@@ -45,10 +45,12 @@ export const LEVELS = [
             {x: 90, y: 450, key: 'platform2'}, // %%%
             {x: 560, y: 580, key: 'platform3'}, // ###
         ],
-        mobs: [
-            [950, 100, 'mob1'],
+        staticMobs: [
             [255, 430, 'mob0'], // %%%
             [595, 180, 'mob0']  // &&&
+        ],
+        dynamicMobs: [
+            [950, 0, 'mob1']
         ],
         art: [
             {x: 200, y: 727, key: 'tree2'}, //group 1
@@ -68,7 +70,7 @@ export const LEVELS = [
             {x: 760, y: 440, key: 'platform3'},
             {x: 440, y: 580, key: 'platform0'},
         ],
-        mobs: [
+        dynamicMobs: [
             [512, 16, 'bomb'],
             [912, 16, 'bomb']
         ],
@@ -88,11 +90,13 @@ export const LEVELS = [
             {x: 480, y: 430, key: 'platform1'}, // &&&
             {x: 680, y: 580, key: 'platform2'}, // %%%
         ],
-        mobs: [
-            [312, 16, 'bomb'],
-            [912, 600, 'mob1'],
+        staticMobs: [
             [200, 700, 'mob0'],
             [900, 550, 'mob0']
+        ],
+        dynamicMobs:[
+            [312, 0, 'bomb'],
+            [1012, 640, 'mob1']
         ],
         art: [
             {x: 100, y: 727, key: 'tree0'},            
@@ -112,12 +116,13 @@ export const LEVELS = [
             {x: 275, y: 425, key: 'platform7'}, 
             {x: 8, y: 335, key: 'platform7'}, 
         ],
-        mobs: [
-            [65, 290, 'mob1', 'right'],
+        staticMobs: [
             [485, 350, 'mob0'],
             [145, 700, 'mob0'],
-            //[711, 700, 'mob0'],
             [900, 700, 'mob0']
+        ],
+        dynamicMobs: [
+            [0, 270, 'mob1', 'right']
         ],
         art: [
             {x: 605, y: 496, key: 'flower0'},            

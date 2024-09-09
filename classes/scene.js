@@ -310,9 +310,9 @@ you accumulated $${-this.score} in debt.
         }
     }
 
-    addMobs() {
+    addMobs(type) {
         let lvl = parseInt(this.level);   
-        let mobs = LEVELS[lvl].mobs;
+        let mobs = LEVELS[lvl][type];
         if(mobs) {
             let n = mobs.length;
             for(let i = 0; i < n; i++) {
@@ -394,7 +394,12 @@ you accumulated $${-this.score} in debt.
             }, {
                 at: 2500,
                 run: () => {
-                    this.addMobs();
+                    this.addMobs("staticMobs");
+                }
+            }, {
+                at: 4000,
+                run: () => {
+                    this.addMobs("dynamicMobs");
                 }
             });
         }
